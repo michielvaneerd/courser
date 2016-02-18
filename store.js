@@ -1,19 +1,13 @@
 (function(win) {
 
 	var defaultState = {
+	  inRequest : false,
     courseId : 0,
     screen : null,
-    courses : {
-    	1 : {
-    		id : 1,
-    		title : "Test 1"
-    	},
-    	2 : {
-    		id : 2,
-    		title : "Test 2"
-    	}
-    }
+    courses : {}
   };
+  
+  var storage = win.Storage;
 
 	var appReducer = function(state, action) {
 
@@ -22,18 +16,29 @@
     }
 
     switch (action.type) {
+      case "SELECT_COURSES":
+        storage.getCourses().then(function(courses) {
+          state.courses = courses;
+          Store.dispatch({
+            type : "SELECT_COURSE"
+          });
+        });
+        break;
       case "SELECT_COURSE":
       	state.courseId = action.value;
       	state.screen = state.courseId ? "COURSE_SCREEN" : null;
         break;
+      case "REQUEST_SAVE_COURSE":
+        storage.saveCourse(action.value).then(function(course) {
+          Store.dispatch({
+            type : "SAVE_COURSE",
+            value : course
+          });
+        });
+        break;
       case "SAVE_COURSE":
-      	if (!state.courseId) {
-      		state.courseId = Object.keys(state.courses).length
-      			? Math.max.apply(null, Object.keys(state.courses)) + 1 : 1;
-      		state.courses[state.courseId] = Object.assign({id : state.courseId}, action.value);
-      	}
-      	state.courses[state.courseId] = Object.assign({},
-      		state.courses[state.courseId], action.value);
+        state.courseId = action.value.id;
+        state.courses[state.courseId] = action.value;
         break;
       case "SHOW_COURSE_SCREEN":
       	state.screen = "COURSE_SCREEN";

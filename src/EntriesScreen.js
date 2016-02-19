@@ -1,19 +1,23 @@
 (function(win) {
 
+  var emptyEntry = {
+    id : 0,
+    src : "",
+    dest : ""
+  };
+
   win.EntriesScreen = React.createClass({
     getInitialState : function() {
-      return {
-        id : 0,
-        src : "",
-        dest : ""
-      };
+      return Object.assign({}, emptyEntry, this.props.entry);
+    },
+    componentWillReceiveProps : function(nextProps) {
+      this.setState(Object.assign({}, emptyEntry, nextProps.entry));
     },
     onSave : function() {
       this.props.store.dispatch({
         type : "REQUEST_SAVE_ENTRY",
         value : this.state
       });
-      this.setState(this.getInitialState());
     },
     onSrcChange : function(e) {
       this.setState({src : e.target.value});
@@ -22,32 +26,45 @@
       this.setState({dest : e.target.value});
     },
     onActivate : function(e) {
-      var entry = this.props.entries[e.currentTarget.dataset.id];
-      this.setState(Object.assign({}, entry));
+      this.props.store.dispatch({
+        type : "SELECT_ENTRY",
+        value : e.currentTarget.dataset.id
+      });
     },
     onBack : function() {
       this.props.store.dispatch({
         type : "SHOW_COURSE_SCREEN"
       });
     },
+    onDelete : function() {
+      this.props.store.dispatch({
+        type : "REQUEST_DELETE_ENTRY"
+      });
+    },
     render : function() {
+      var editOrCreateRow =
+        <tr key={this.props.entry.id || 0}>
+          <td><input type="text"
+            onChange={this.onSrcChange}
+            value={this.state.src} /></td>
+          <td><input type="text"
+            onChange={this.onDestChange}
+            value={this.state.dest} /></td>
+          <td>
+            <button onClick={this.onSave}>Save</button>
+            {this.props.entry.id
+              ? <button onClick={this.onDelete}>Delete</button> : null}
+          </td>
+        </tr>
       return (
         <div>
           <table>
             <tbody>
               {Object.keys(this.props.entries).map(function(entryId) {
                 var entry = this.props.entries[entryId];
-                var row = this.state.id == entryId
+                var row = this.props.entry.id == entryId
                   ?
-                  <tr key={entryId}>
-                    <td><input type="text"
-                      onChange={this.onSrcChange}
-                      value={this.state.src} /></td>
-                    <td><input type="text"
-                      onChange={this.onDestChange}
-                      value={this.state.dest} /></td>
-                    <td><button onClick={this.onSave}>Save</button></td>
-                  </tr>
+                  editOrCreateRow
                   :
                   <tr onClick={this.onActivate} data-id={entryId} key={entryId}>
                     <td>{entry.src}</td>
@@ -56,6 +73,9 @@
                   </tr>
                 return row;
               }, this)}
+              {this.props.entry.id
+                ? <tr><td></td><td></td><td></td></tr>
+                : editOrCreateRow}
             </tbody>
           </table>
           <button onClick={this.onBack}>Back</button>

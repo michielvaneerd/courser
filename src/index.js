@@ -25,6 +25,8 @@
       var screen = null;
       var course = this.state.courseId
         ? this.state.courses[this.state.courseId] : {};
+      var entry = this.state.entryId
+        ? this.state.entries[this.state.entryId] : {};
       var progressSpinner = this.state.inRequest
         ? <div id="inProgress">Busy!</div> : "";
       switch (this.state.screen) {
@@ -32,6 +34,7 @@
           screen = <EntriesScreen
             store={this.props.store}
             course={course}
+            entry={entry}
             entries={this.state.entries} />
           break;
         case "COURSE_SCREEN":

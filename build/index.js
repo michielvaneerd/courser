@@ -26,6 +26,7 @@
     render: function () {
       var screen = null;
       var course = this.state.courseId ? this.state.courses[this.state.courseId] : {};
+      var entry = this.state.entryId ? this.state.entries[this.state.entryId] : {};
       var progressSpinner = this.state.inRequest ? React.createElement(
         "div",
         { id: "inProgress" },
@@ -36,6 +37,7 @@
           screen = React.createElement(EntriesScreen, {
             store: this.props.store,
             course: course,
+            entry: entry,
             entries: this.state.entries });
           break;
         case "COURSE_SCREEN":

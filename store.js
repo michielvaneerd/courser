@@ -41,10 +41,12 @@
         break;
       case "SELECT_COURSE":
       	state.courseId = action.value;
+        state.entryId = 0;
       	state.screen = state.courseId ? "COURSE_SCREEN" : null;
         break;
       case "SELECT_ENTRIES":
         if (action.value) {
+          state.entryId = 0;
           state.entries = action.value;
           state.screen = "ENTRIES_SCREEN";
         } else {
@@ -72,6 +74,9 @@
         state.courseId = action.value.id;
         state.courses[state.courseId] = action.value;
         break;
+      case "SELECT_ENTRY":
+        state.entryId = action.value;
+        break;
       case "REQUEST_SAVE_ENTRY":
         suppressInRequest = true;
         storage.saveEntry(action.value, state.courseId).then(function(entry) {
@@ -83,7 +88,20 @@
         });
         break;
       case "SAVE_ENTRY":
-        state.entries[state.courseId][action.value.id] = action.value;
+        state.entries[action.value.id] = action.value;
+        state.entryId = 0;
+        break;
+      case "REQUEST_DELETE_ENTRY":
+        suppressInRequest = true;
+        storage.deleteEntry(state.entryId, state.courseId).then(function() {
+          state.inRequest = false;
+          Store.dispatch({
+            type : "DELETE_ENTRY"
+          });
+        });
+        break;
+      case "DELETE_ENTRY":
+        delete state.entries[state.entryId];
         state.entryId = 0;
         break;
       case "SHOW_COURSE_SCREEN":

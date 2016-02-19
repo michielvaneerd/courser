@@ -1,21 +1,25 @@
 (function (win) {
 
+  var emptyEntry = {
+    id: 0,
+    src: "",
+    dest: ""
+  };
+
   win.EntriesScreen = React.createClass({
     displayName: "EntriesScreen",
 
     getInitialState: function () {
-      return {
-        id: 0,
-        src: "",
-        dest: ""
-      };
+      return Object.assign({}, emptyEntry, this.props.entry);
+    },
+    componentWillReceiveProps: function (nextProps) {
+      this.setState(Object.assign({}, emptyEntry, nextProps.entry));
     },
     onSave: function () {
       this.props.store.dispatch({
         type: "REQUEST_SAVE_ENTRY",
         value: this.state
       });
-      this.setState(this.getInitialState());
     },
     onSrcChange: function (e) {
       this.setState({ src: e.target.value });
@@ -24,15 +28,54 @@
       this.setState({ dest: e.target.value });
     },
     onActivate: function (e) {
-      var entry = this.props.entries[e.currentTarget.dataset.id];
-      this.setState(Object.assign({}, entry));
+      this.props.store.dispatch({
+        type: "SELECT_ENTRY",
+        value: e.currentTarget.dataset.id
+      });
     },
     onBack: function () {
       this.props.store.dispatch({
         type: "SHOW_COURSE_SCREEN"
       });
     },
+    onDelete: function () {
+      this.props.store.dispatch({
+        type: "REQUEST_DELETE_ENTRY"
+      });
+    },
     render: function () {
+      var editOrCreateRow = React.createElement(
+        "tr",
+        { key: this.props.entry.id || 0 },
+        React.createElement(
+          "td",
+          null,
+          React.createElement("input", { type: "text",
+            onChange: this.onSrcChange,
+            value: this.state.src })
+        ),
+        React.createElement(
+          "td",
+          null,
+          React.createElement("input", { type: "text",
+            onChange: this.onDestChange,
+            value: this.state.dest })
+        ),
+        React.createElement(
+          "td",
+          null,
+          React.createElement(
+            "button",
+            { onClick: this.onSave },
+            "Save"
+          ),
+          this.props.entry.id ? React.createElement(
+            "button",
+            { onClick: this.onDelete },
+            "Delete"
+          ) : null
+        )
+      );
       return React.createElement(
         "div",
         null,
@@ -44,33 +87,7 @@
             null,
             Object.keys(this.props.entries).map(function (entryId) {
               var entry = this.props.entries[entryId];
-              var row = this.state.id == entryId ? React.createElement(
-                "tr",
-                { key: entryId },
-                React.createElement(
-                  "td",
-                  null,
-                  React.createElement("input", { type: "text",
-                    onChange: this.onSrcChange,
-                    value: this.state.src })
-                ),
-                React.createElement(
-                  "td",
-                  null,
-                  React.createElement("input", { type: "text",
-                    onChange: this.onDestChange,
-                    value: this.state.dest })
-                ),
-                React.createElement(
-                  "td",
-                  null,
-                  React.createElement(
-                    "button",
-                    { onClick: this.onSave },
-                    "Save"
-                  )
-                )
-              ) : React.createElement(
+              var row = this.props.entry.id == entryId ? editOrCreateRow : React.createElement(
                 "tr",
                 { onClick: this.onActivate, "data-id": entryId, key: entryId },
                 React.createElement(
@@ -86,7 +103,14 @@
                 React.createElement("td", null)
               );
               return row;
-            }, this)
+            }, this),
+            this.props.entry.id ? React.createElement(
+              "tr",
+              null,
+              React.createElement("td", null),
+              React.createElement("td", null),
+              React.createElement("td", null)
+            ) : editOrCreateRow
           )
         ),
         React.createElement(

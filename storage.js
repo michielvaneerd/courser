@@ -33,7 +33,7 @@
       return new Promise(function(resolve, reject) {
         setTimeout(function() {
           resolve(courses);
-        }, 1000);
+        }, 400);
       });
     },
     
@@ -71,12 +71,24 @@
     saveEntry : function(entry, courseId) {
       return new Promise(function(resolve, reject) {
         setTimeout(function() {
+          if (!(courseId in entries)) {
+            entries[courseId] = {};
+          }
           if (!entry.id) {
             entry.id = Object.keys(entries[courseId]).length
               ? Math.max.apply(null, Object.keys(entries[courseId])) + 1 : 1;
           }
           entries[courseId][entry.id] = Object.assign({id : entry.id}, entry);
           resolve(entries[courseId][entry.id]);
+        }, 200);
+      });
+    },
+
+    deleteEntry : function(entryId, courseId) {
+      return new Promise(function(resolve, reject) {
+        setTimeout(function() {
+          delete entries[courseId][entryId];
+          resolve();
         }, 200);
       });
     }

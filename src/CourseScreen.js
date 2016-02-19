@@ -17,11 +17,13 @@
     },
     onDelete : function() {
       this.props.store.dispatch({
-        type : "DELETE_COURSE"
+        type : "REQUEST_DELETE_COURSE"
       });
     },
     onEntries : function() {
-      
+      this.props.store.dispatch({
+        type : "SELECT_ENTRIES"
+      });
     },
     render : function() {
       var title = this.props.course.id

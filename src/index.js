@@ -25,7 +25,15 @@
       var screen = null;
       var course = this.state.courseId
         ? this.state.courses[this.state.courseId] : {};
+      var progressSpinner = this.state.inRequest
+        ? <div id="inProgress">Busy!</div> : "";
       switch (this.state.screen) {
+        case "ENTRIES_SCREEN":
+          screen = <EntriesScreen
+            store={this.props.store}
+            course={course}
+            entries={this.state.entries} />
+          break;
         case "COURSE_SCREEN":
           screen = <CourseScreen
             onMain={this.onMain}
@@ -38,7 +46,12 @@
             courses={this.state.courses} />
           break;
       }
-      return screen;
+      return (
+        <div>
+          {screen}
+          {progressSpinner}
+        </div>
+      );
     }
   });
   

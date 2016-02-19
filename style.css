@@ -1,3 +1,11 @@
 .active {
 	font-weight:bold;
 }
+
+#inProgress {
+  position:fixed;
+  padding:1rem;
+  background-color:yellow;
+  color:blue;
+  margin:1rem 20%;
+}

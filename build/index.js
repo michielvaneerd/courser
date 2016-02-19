@@ -26,7 +26,18 @@
     render: function () {
       var screen = null;
       var course = this.state.courseId ? this.state.courses[this.state.courseId] : {};
+      var progressSpinner = this.state.inRequest ? React.createElement(
+        "div",
+        { id: "inProgress" },
+        "Busy!"
+      ) : "";
       switch (this.state.screen) {
+        case "ENTRIES_SCREEN":
+          screen = React.createElement(EntriesScreen, {
+            store: this.props.store,
+            course: course,
+            entries: this.state.entries });
+          break;
         case "COURSE_SCREEN":
           screen = React.createElement(CourseScreen, {
             onMain: this.onMain,
@@ -39,7 +50,12 @@
             courses: this.state.courses });
           break;
       }
-      return screen;
+      return React.createElement(
+        "div",
+        null,
+        screen,
+        progressSpinner
+      );
     }
   });
 

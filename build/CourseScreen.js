@@ -19,10 +19,14 @@
     },
     onDelete: function () {
       this.props.store.dispatch({
-        type: "DELETE_COURSE"
+        type: "REQUEST_DELETE_COURSE"
       });
     },
-    onEntries: function () {},
+    onEntries: function () {
+      this.props.store.dispatch({
+        type: "SELECT_ENTRIES"
+      });
+    },
     render: function () {
       var title = this.props.course.id ? "Edit van course " + this.props.course.title : "Maken van course";
       return React.createElement(

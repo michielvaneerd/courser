@@ -1,5 +1,10 @@
 (function (win) {
 
+  var invalidity = {
+    invalidSrc: false,
+    invalidDest: false
+  };
+
   var emptyEntry = {
     id: 0,
     src: "",
@@ -13,19 +18,29 @@
       return Object.assign({}, emptyEntry, this.props.entry);
     },
     componentWillReceiveProps: function (nextProps) {
-      this.setState(Object.assign({}, emptyEntry, nextProps.entry));
+      this.setState(Object.assign({}, invalidity, emptyEntry, nextProps.entry));
     },
     onSave: function () {
+      var entry = Object.assign({}, this.state);
+      Object.keys(invalidity).forEach(function (key) {
+        delete entry[key];
+      });
       this.props.store.dispatch({
         type: "REQUEST_SAVE_ENTRY",
-        value: this.state
+        value: entry
       });
     },
     onSrcChange: function (e) {
-      this.setState({ src: e.target.value });
+      this.setState({
+        invalidSrc: e.target.value.length == 0,
+        src: e.target.value
+      });
     },
     onDestChange: function (e) {
-      this.setState({ dest: e.target.value });
+      this.setState({
+        invalidDest: e.target.value.length == 0,
+        dest: e.target.value
+      });
     },
     onActivate: function (e) {
       this.props.store.dispatch({
@@ -56,6 +71,7 @@
           "td",
           null,
           React.createElement("input", { type: "text",
+            required: !!this.props.entry.id || this.state.dest.length,
             onChange: this.onSrcChange,
             value: this.state.src })
         ),
@@ -63,6 +79,7 @@
           "td",
           null,
           React.createElement("input", { type: "text",
+            required: !!this.props.entry.id || this.state.src.length,
             onChange: this.onDestChange,
             value: this.state.dest })
         ),
@@ -71,7 +88,8 @@
           null,
           React.createElement(
             "button",
-            { onClick: this.onSave },
+            { disabled: !(this.state.src.length && this.state.dest.length),
+              onClick: this.onSave },
             "Save"
           ),
           this.props.entry.id ? React.createElement(

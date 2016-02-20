@@ -17,3 +17,8 @@
   background-color:red;
   color:white;
 }
+
+input:required:invalid, input:focus:invalid {
+  border-color:red;
+}
+

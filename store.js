@@ -1,6 +1,7 @@
 (function(win) {
 
 	var defaultState = {
+    sortOrder : null,
 	  inRequest : false,
     error : false,
     courseId : 0,
@@ -66,6 +67,14 @@
         }
         break;
       case "REQUEST_SAVE_COURSE":
+        if (action.value.title.length == 0) {
+          state.inRequest = false;
+          Store.dispatch({
+            type : "ERROR",
+            value : "Empty title!"
+          });
+          break;
+        }
         suppressInRequest = true;
         storage.saveCourse(action.value).then(function(course) {
           state.inRequest = false;
@@ -134,7 +143,7 @@
       	break;
       case "ERROR":
         state.error = action.value;
-        console.log(state.error);
+        console.log("er");
         break;
     }
     

@@ -1,20 +1,29 @@
 (function (win) {
 
+  var invalidity = {
+    invalidTitle: false
+  };
+
   win.CourseScreen = React.createClass({
     displayName: "CourseScreen",
 
     getInitialState: function () {
-      return Object.assign({}, this.props.course);
+      return Object.assign({}, invalidity, this.props.course);
     },
     onSave: function () {
+      var course = Object.assign({}, this.state);
+      Object.keys(invalidity).forEach(function (key) {
+        delete course[key];
+      });
       this.props.store.dispatch({
         type: "REQUEST_SAVE_COURSE",
-        value: this.state
+        value: course
       });
     },
     onTitleInputChange: function (e) {
       this.setState({
-        title: e.target.value
+        title: e.target.value,
+        invalidTitle: e.target.value.length == 0
       });
     },
     onDelete: function () {
@@ -37,11 +46,11 @@
           null,
           title
         ),
-        React.createElement("input", { type: "text", onChange: this.onTitleInputChange,
+        React.createElement("input", { required: true, type: "text", onChange: this.onTitleInputChange,
           value: this.state.title }),
         React.createElement(
           "button",
-          { onClick: this.onSave },
+          { disabled: this.state.invalidTitle, onClick: this.onSave },
           "Save"
         ),
         React.createElement(

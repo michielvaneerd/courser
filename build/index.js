@@ -3,6 +3,13 @@
   var App = React.createClass({
     displayName: "App",
 
+    propTypes: {
+      store: React.PropTypes.shape({
+        dispatch: React.PropTypes.func,
+        subscribe: React.PropTypes.func,
+        getState: React.PropTypes.func
+      })
+    },
     componentWillMount: function () {
       var me = this;
       this.props.store.subscribe(function () {

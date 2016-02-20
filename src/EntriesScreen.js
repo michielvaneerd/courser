@@ -41,6 +41,11 @@
         type : "REQUEST_DELETE_ENTRY"
       });
     },
+    onCancel : function() {
+      this.props.store.dispatch({
+        type : "SELECT_ENTRY"
+      });
+    },
     render : function() {
       var editOrCreateRow =
         <tr key={this.props.entry.id || 0}>
@@ -53,7 +58,12 @@
           <td>
             <button onClick={this.onSave}>Save</button>
             {this.props.entry.id
-              ? <button onClick={this.onDelete}>Delete</button> : null}
+              ? (
+                  <span>
+                    <button onClick={this.onDelete}>Delete</button>
+                    <button onClick={this.onCancel}>Cancel</button>
+                  </span>
+                ) : null}
           </td>
         </tr>
       return (

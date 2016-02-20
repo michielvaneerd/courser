@@ -2,6 +2,7 @@
 
 	var defaultState = {
 	  inRequest : false,
+    error : false,
     courseId : 0,
     entryId : 0,
     screen : null,
@@ -20,6 +21,10 @@
     if (state.inRequest) {
 	    return state;
 	  }
+
+    if (action.type != "ERROR") {
+      state.error = false;
+    }
 	  
 	  state.inRequest = true;
 	  var suppressInRequest = false;
@@ -67,6 +72,12 @@
           Store.dispatch({
             type : "SAVE_COURSE",
             value : course
+          });
+        }).catch(function(error) {
+          state.inRequest = false;
+          Store.dispatch({
+            type : "ERROR",
+            value : error
           });
         });
         break;
@@ -121,6 +132,10 @@
       	state.screen = null;
       	state.courseId = 0;
       	break;
+      case "ERROR":
+        state.error = action.value;
+        console.log(state.error);
+        break;
     }
     
     if (!suppressInRequest) {

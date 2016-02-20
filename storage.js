@@ -40,6 +40,10 @@
     saveCourse : function(course) {
       return new Promise(function(resolve, reject) {
         setTimeout(function() {
+          if (course.title == "") {
+            reject("Title can not be empty!");
+            return;
+          }
           if (!course.id) {
             course.id = Object.keys(courses).length
               ? Math.max.apply(null, Object.keys(courses)) + 1 : 1;

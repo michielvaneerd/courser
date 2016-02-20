@@ -32,6 +32,9 @@
         { id: "inProgress" },
         "Busy!"
       ) : "";
+      var errorDialog = this.state.error ? React.createElement(ErrorDialog, {
+        error: this.state.error,
+        store: this.props.store }) : "";
       switch (this.state.screen) {
         case "ENTRIES_SCREEN":
           screen = React.createElement(EntriesScreen, {
@@ -56,7 +59,8 @@
         "div",
         null,
         screen,
-        progressSpinner
+        progressSpinner,
+        errorDialog
       );
     }
   });

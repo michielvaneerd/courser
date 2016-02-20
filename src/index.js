@@ -29,6 +29,10 @@
         ? this.state.entries[this.state.entryId] : {};
       var progressSpinner = this.state.inRequest
         ? <div id="inProgress">Busy!</div> : "";
+      var errorDialog = this.state.error
+        ? <ErrorDialog
+            error={this.state.error}
+            store={this.props.store} /> : "";
       switch (this.state.screen) {
         case "ENTRIES_SCREEN":
           screen = <EntriesScreen
@@ -53,6 +57,7 @@
         <div>
           {screen}
           {progressSpinner}
+          {errorDialog}
         </div>
       );
     }

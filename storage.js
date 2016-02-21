@@ -91,6 +91,10 @@
           resolve();
         }, 200);
       });
+    },
+    
+    ready : function() {
+      return Promise.resolve();
     }
     
   };

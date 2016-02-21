@@ -72,5 +72,8 @@
     }
   });
 
-  ReactDOM.render(React.createElement(App, { store: win.Store }), win.document.getElementById("app"));
+  win.StorageDB.ready().then(function () {
+    win.initStore(win.StorageDB);
+    ReactDOM.render(React.createElement(App, { store: win.Store }), win.document.getElementById("app"));
+  });
 })(window);

@@ -11,7 +11,7 @@
     entries : {} // entryId => entry (only for active course)
   };
   
-  var storage = win.Storage;
+  var storage = null;
 
 	var appReducer = function(state, action) {
 
@@ -143,7 +143,6 @@
       	break;
       case "ERROR":
         state.error = action.value;
-        console.log("er");
         break;
     }
     
@@ -154,7 +153,10 @@
     return state;
 
   };
-  
-  win.Store = VerySimpleRedux.createStore(appReducer);
+
+  win.initStore = function(readyStorage) {
+    storage = readyStorage;
+    win.Store = VerySimpleRedux.createStore(appReducer);
+  };
 
 }(window));

@@ -69,15 +69,26 @@
     
     deleteCourse : function(id) {
       return new Promise(function(resolve, reject) {
-        var transaction = db.transaction(["course"], "readwrite");
+        var transaction = db.transaction(["course", "entry"], "readwrite");
         //transaction.oncomplete = function() {
         //  console.log("complete delete transaction");
         //};
-        // TODO: delete all entries.
-        var store = transaction.objectStore("course");
-        var request = store.delete(parseInt(id));
-        request.onsuccess = resolve;
-        request.onerror = reject;
+        var entryStore = transaction.objectStore("entry");
+        var entryIndex = entryStore.index("ind_course_id");
+        var entryRange = IDBKeyRange.only(parseInt(id));
+        var entryRequest = entryIndex.openKeyCursor(entryRange);
+        entryRequest.onsuccess = function() {
+          var cursor = entryRequest.result;
+          if (cursor) {
+            entryStore.delete(cursor.primaryKey);
+            cursor.continue();
+          } else {
+            var store = transaction.objectStore("course");
+            var request = store.delete(parseInt(id));
+            request.onsuccess = resolve;
+            request.onerror = reject;
+          }
+        };
       });
     },
     

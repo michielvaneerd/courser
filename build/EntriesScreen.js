@@ -8,7 +8,8 @@
   var emptyEntry = {
     id: 0,
     src: "",
-    dest: ""
+    dest: "",
+    phone: ""
   };
 
   win.EntriesScreen = React.createClass({
@@ -40,6 +41,11 @@
       this.setState({
         invalidDest: e.target.value.length == 0,
         dest: e.target.value
+      });
+    },
+    onPhoneChange: function (e) {
+      this.setState({
+        phone: e.target.value
       });
     },
     onActivate: function (e) {
@@ -82,6 +88,13 @@
             required: !!this.props.entry.id || this.state.src.length,
             onChange: this.onDestChange,
             value: this.state.dest })
+        ),
+        React.createElement(
+          "td",
+          null,
+          React.createElement("input", { type: "text",
+            onChange: this.onPhoneChange,
+            value: this.state.phone })
         ),
         React.createElement(
           "td",
@@ -132,6 +145,11 @@
                   null,
                   entry.dest
                 ),
+                React.createElement(
+                  "td",
+                  null,
+                  entry.phone
+                ),
                 React.createElement("td", null)
               );
               return row;
@@ -139,6 +157,7 @@
             this.props.entry.id ? React.createElement(
               "tr",
               null,
+              React.createElement("td", null),
               React.createElement("td", null),
               React.createElement("td", null),
               React.createElement("td", null)

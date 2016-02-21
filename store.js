@@ -12,6 +12,14 @@
   };
   
   var storage = null;
+  
+  var errorHandler = function(error, state) {
+    state.inRequest = false;
+    Store.dispatch({
+      type : "ERROR",
+      value : error.toString()
+    });
+  };
 
 	var appReducer = function(state, action) {
 
@@ -42,6 +50,8 @@
               type : "SELECT_COURSES",
               value : courses
             });
+          }).catch(function(error) {
+            errorHandler(error, state);
           });
         }
         break;
@@ -63,6 +73,8 @@
               type : "SELECT_ENTRIES",
               value : entries
             });
+          }).catch(function(error) {
+            errorHandler(error, state);
           });
         }
         break;
@@ -83,11 +95,7 @@
             value : course
           });
         }).catch(function(error) {
-          state.inRequest = false;
-          Store.dispatch({
-            type : "ERROR",
-            value : error
-          });
+          errorHandler(error, state);
         });
         break;
       case "SAVE_COURSE":
@@ -105,6 +113,8 @@
             type : "SAVE_ENTRY",
             value : entry
           });
+        }).catch(function(error) {
+          errorHandler(error, state);
         });
         break;
       case "SAVE_ENTRY":
@@ -118,6 +128,8 @@
           Store.dispatch({
             type : "DELETE_ENTRY"
           });
+        }).catch(function(error) {
+          errorHandler(error, state);
         });
         break;
       case "DELETE_ENTRY":
@@ -134,6 +146,8 @@
           Store.dispatch({
             type : "DELETE_COURSE"
           });
+        }).catch(function(error) {
+          errorHandler(error, state);
         });
         break;
       case "DELETE_COURSE":

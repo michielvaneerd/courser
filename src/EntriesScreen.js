@@ -8,7 +8,8 @@
   var emptyEntry = {
     id : 0,
     src : "",
-    dest : ""
+    dest : "",
+    phone : ""
   };
 
   win.EntriesScreen = React.createClass({
@@ -38,6 +39,11 @@
       this.setState({
         invalidDest : e.target.value.length == 0,
         dest : e.target.value
+      });
+    },
+    onPhoneChange : function(e) {
+      this.setState({
+        phone : e.target.value
       });
     },
     onActivate : function(e) {
@@ -72,6 +78,9 @@
             required={!!this.props.entry.id || this.state.src.length}
             onChange={this.onDestChange}
             value={this.state.dest} /></td>
+          <td><input type="text"
+            onChange={this.onPhoneChange}
+            value={this.state.phone} /></td>
           <td>
             <button disabled={!(this.state.src.length && this.state.dest.length)}
               onClick={this.onSave}>Save</button>
@@ -97,12 +106,13 @@
                   <tr onClick={this.onActivate} data-id={entryId} key={entryId}>
                     <td>{entry.src}</td>
                     <td>{entry.dest}</td>
+                    <td>{entry.phone}</td>
                     <td></td>
                   </tr>
                 return row;
               }, this)}
               {this.props.entry.id
-                ? <tr><td></td><td></td><td></td></tr>
+                ? <tr><td></td><td></td><td></td><td></td></tr>
                 : editOrCreateRow}
             </tbody>
           </table>

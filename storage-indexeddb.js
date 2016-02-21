@@ -6,7 +6,7 @@
   
     ready : function() {
       return new Promise(function(resolve, reject) {
-        var req = indexedDB.open("langlearn", 11);
+        var req = indexedDB.open("langlearn", 1);
         req.onerror = function(e) {
           console.log("onerror", e);
           reject();
@@ -86,7 +86,7 @@
           console.log("complete delete transaction");
         };
         var store = transaction.objectStore("course");
-        var request = store.delete(id);
+        var request = store.delete(parseInt(id));
         request.onsuccess = function() {
           console.log("success delete");
           resolve();
@@ -102,16 +102,57 @@
         var transaction = db.transaction(["entry"]);
         var store = transaction.objectStore("entry");
         var index = store.index("ind_course_id");
-        var request = index.openCursor();
+        var range = IDBKeyRange.only(parseInt(courseId));
+        var request = index.openCursor(range);
         var entries = {};
         request.onsuccess = function(e) {
           var cursor = e.target.result;
           if (cursor) {
-            entries[cursor.key] = cursor.value;
+            entries[cursor.value.id] = cursor.value;
             cursor.continue();
           } else {
             resolve(entries);
           }
+        };
+        request.onerror = function() {
+          reject();
+        };
+      });
+    },
+    
+    saveEntry : function(entry, courseId) {
+      if (("id" in entry) && !entry.id) {
+        delete entry.id;
+      }
+      return new Promise(function(resolve, reject) {
+        entry.course_id = parseInt(courseId);
+        var transaction = db.transaction(["entry"], "readwrite");
+        transaction.oncomplete = function(e) {
+          console.log("transaction.oncomplete", e);
+          // TODO: hier moet je eigenlijk een get(entry.id) doen.
+          resolve(entry);
+        };
+        var store = transaction.objectStore("entry");
+        var request = store.put(entry);
+        //request.onerror = 
+        request.onsuccess = function(e) {
+          entry.id = e.target.result;
+          console.log("request.onsuccess", e);
+        };
+      });
+    },
+    
+    deleteEntry : function(entryId, courseId) {
+      return new Promise(function(resolve, reject) {
+        var transaction = db.transaction(["entry"], "readwrite");
+        transaction.oncomplete = function() {
+          console.log("complete delete transaction");
+        };
+        var store = transaction.objectStore("entry");
+        var request = store.delete(parseInt(entryId));
+        request.onsuccess = function() {
+          console.log("success delete");
+          resolve();
         };
         request.onerror = function() {
           reject();

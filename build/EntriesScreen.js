@@ -128,6 +128,30 @@
           "table",
           null,
           React.createElement(
+            "thead",
+            null,
+            React.createElement(
+              "tr",
+              null,
+              React.createElement(
+                "th",
+                null,
+                "Source"
+              ),
+              React.createElement(
+                "th",
+                null,
+                "Destination"
+              ),
+              React.createElement(
+                "th",
+                null,
+                "Phonetic"
+              ),
+              React.createElement("th", null)
+            )
+          ),
+          React.createElement(
             "tbody",
             null,
             Object.keys(this.props.entries).map(function (entryId) {

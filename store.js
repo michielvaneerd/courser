@@ -42,6 +42,9 @@
       case "SELECT_COURSES":
         if (action.value) {
           state.courses = action.value;
+          state.courseId = 0;
+          state.entryId = 0;
+          state.screen = null;
         } else {
           suppressInRequest = true;
           storage.getCourses().then(function(courses) {
@@ -55,11 +58,11 @@
           });
         }
         break;
-      case "SELECT_COURSE":
-      	state.courseId = action.value;
-        state.entryId = 0;
-      	state.screen = state.courseId ? "COURSE_SCREEN" : null;
-        break;
+      //case "SELECT_COURSE":
+      //	state.courseId = action.value;
+      //  state.entryId = 0;
+      //	state.screen = state.courseId ? "COURSE_SCREEN" : null;
+      //  break;
       case "SELECT_ENTRIES":
         if (action.value) {
           state.entryId = 0;

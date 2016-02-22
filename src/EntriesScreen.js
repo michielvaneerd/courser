@@ -96,6 +96,14 @@
       return (
         <div>
           <table>
+            <thead>
+              <tr>
+                <th>Source</th>
+                <th>Destination</th>
+                <th>Phonetic</th>
+                <th></th>
+              </tr>
+            </thead>
             <tbody>
               {Object.keys(this.props.entries).map(function(entryId) {
                 var entry = this.props.entries[entryId];

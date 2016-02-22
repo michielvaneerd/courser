@@ -31,7 +31,10 @@
                 "a",
                 { onClick: this.onCourseClick, "data-id": courseId,
                   href: "#" },
-                course.title
+                course.title,
+                " (",
+                course.count,
+                ")"
               )
             );
           }, this)

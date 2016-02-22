@@ -26,8 +26,7 @@
     },
     onMain: function () {
       this.props.store.dispatch({
-        type: "SELECT_COURSE",
-        value: 0
+        type: "SELECT_COURSES"
       });
     },
     render: function () {

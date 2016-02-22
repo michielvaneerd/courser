@@ -12,7 +12,7 @@
         };
         req.onsuccess = function(e) {
           db = e.target.result;
-          resolve();
+          resolve(e.target.result);
         };
         req.onupgradeneeded = function(e) {
           var db = e.target.result;
@@ -33,22 +33,46 @@
       });
     },
     
+    // Not sure if it's better to open a db connection for each command
+    // or just rely on the global one as a transaction is only valid while
+    // not returning to the event loop.
+    // See: https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB#Adding_data_to_the_database
+    //getCourses : function() {
+    //  var me = this;
+    //  return me.ready()
+    //    .then(function(db) {
+    //      return me.getCoursesOld(db);
+    //    });
+    //},
+    
+    // Also get count of entries per course
+    // Use cursor on index ind_course_id, as this will sort entries on the index
     getCourses : function() {
       return new Promise(function(resolve, reject) {
-        var transaction = db.transaction(["course"]);
-        var store = transaction.objectStore("course");
-        var request = store.openCursor();
+        var transaction = db.transaction(["course", "entry"]);
+        var entryCursor = null;
+        transaction.oncomplete = function() {
+          resolve(courses);
+        };
+        transaction.onerror = reject;
         var courses = {};
-        request.onsuccess = function(e) {
-          var cursor = e.target.result;
-          if (cursor) {
-            courses[cursor.key] = cursor.value;
-            cursor.continue();
+        transaction.objectStore("course").openCursor().onsuccess = function(e) {
+          var courseCursor = e.target.result;
+          if (courseCursor) {
+            courses[courseCursor.key] = courseCursor.value;
+            courses[courseCursor.key].count = 0;
+            courseCursor.continue();
           } else {
-            resolve(courses);
+            transaction.objectStore("entry").index("ind_course_id").openKeyCursor().onsuccess = function(e) {
+              var entryCursor = e.target.result;
+              if (entryCursor) {
+                courses[entryCursor.key].count += 1;
+                entryCursor.continue();
+              }
+            };
           }
         };
-        request.onerror = reject;
+        
       });
     },
     

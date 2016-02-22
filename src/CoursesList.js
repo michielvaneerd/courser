@@ -21,7 +21,7 @@
               var course = this.props.courses[courseId];
               return <li key={course.id}>
                   <a onClick={this.onCourseClick} data-id={courseId}
-                    href="#">{course.title}</a>
+                    href="#">{course.title} ({course.count})</a>
                 </li>
             }, this)}
           </ul>

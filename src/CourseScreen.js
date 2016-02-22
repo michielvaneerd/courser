@@ -37,15 +37,17 @@
     render : function() {
       var title = this.props.course.id
         ? "Edit van course " + this.props.course.title : "Maken van course";
+      var deleteButton = this.props.course.id
+        ? <button onClick={this.onDelete}>Delete</button> : "";
       return (
         <div>
           <h3>{title}</h3>
           <input required={true} type="text" onChange={this.onTitleInputChange}
             value={this.state.title} />
-          <button disabled={this.state.invalidTitle} onClick={this.onSave}>Save</button>
+          <button disabled={!!!this.state.title} onClick={this.onSave}>Save</button>
           <button onClick={this.props.onMain}>Back</button>
-          <button onClick={this.onEntries}>Show entries</button>
-          <button onClick={this.onDelete}>Delete</button>
+          <button disabled={!!!this.props.course.id} onClick={this.onEntries}>Show entries</button>
+          {deleteButton}
         </div>
       );
     }

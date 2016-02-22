@@ -38,6 +38,11 @@
     },
     render: function () {
       var title = this.props.course.id ? "Edit van course " + this.props.course.title : "Maken van course";
+      var deleteButton = this.props.course.id ? React.createElement(
+        "button",
+        { onClick: this.onDelete },
+        "Delete"
+      ) : "";
       return React.createElement(
         "div",
         null,
@@ -50,7 +55,7 @@
           value: this.state.title }),
         React.createElement(
           "button",
-          { disabled: this.state.invalidTitle, onClick: this.onSave },
+          { disabled: !!!this.state.title, onClick: this.onSave },
           "Save"
         ),
         React.createElement(
@@ -60,14 +65,10 @@
         ),
         React.createElement(
           "button",
-          { onClick: this.onEntries },
+          { disabled: !!!this.props.course.id, onClick: this.onEntries },
           "Show entries"
         ),
-        React.createElement(
-          "button",
-          { onClick: this.onDelete },
-          "Delete"
-        )
+        deleteButton
       );
     }
   });

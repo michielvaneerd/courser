@@ -164,7 +164,7 @@
       	break;
       case "REQUEST_DO_COURSE":        
         suppressInRequest = true;
-        storage.getEntries(state.courseId).then(function(entries) {
+        storage.getEntries(state.courseId, true).then(function(entries) {
           state.inRequest = false;
           Store.dispatch({
             type : "DO_COURSE",
@@ -179,15 +179,10 @@
         state.entries = action.value;
         break;
       case "REQUEST_SAVE_ANSWER":
-        if (action.value.answer != action.value.dest) {
-          errorHandler("Fout!", state);
-          return state;
-        }
         if (!("attempt_success" in action.value)) {
           action.value.attempt_success = 0;
         }
         action.value.attempt_success += 1;
-        delete action.value.answer;
         suppressInRequest = true;
         storage.saveEntry(action.value).then(function(entry) {
           state.inRequest = false;

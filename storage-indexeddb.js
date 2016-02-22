@@ -6,7 +6,7 @@
   
     ready : function() {
       return new Promise(function(resolve, reject) {
-        var req = indexedDB.open("langlearn", 1);
+        var req = indexedDB.open("langlearn", 3);
         req.onerror = function(e) {
           reject(e.target.error);
         };
@@ -27,7 +27,11 @@
             {keyPath : "id", autoIncrement : true});
           var entryCourse = db.createObjectStore("entry",
             {keyPath : "id", autoIncrement : true});
-          entryCourse.createIndex("ind_course_id", "course_id",
+          entryCourse.createIndex("ind_course_id",
+            "course_id",
+            {unique : false});
+          entryCourse.createIndex("ind_attempt_success",
+            ["course_id", "attempt_success"],
             {unique : false});
         };
       });
@@ -52,6 +56,7 @@
         var transaction = db.transaction(["course", "entry"]);
         var entryCursor = null;
         transaction.oncomplete = function() {
+          console.log(courses);
           resolve(courses);
         };
         transaction.onerror = reject;
@@ -61,12 +66,16 @@
           if (courseCursor) {
             courses[courseCursor.key] = courseCursor.value;
             courses[courseCursor.key].count = 0;
+            courses[courseCursor.key].count_attempt_success = 0;
             courseCursor.continue();
           } else {
-            transaction.objectStore("entry").index("ind_course_id").openKeyCursor().onsuccess = function(e) {
+            transaction.objectStore("entry").index("ind_course_id").openCursor().onsuccess = function(e) {
               var entryCursor = e.target.result;
               if (entryCursor) {
                 courses[entryCursor.key].count += 1;
+                if (entryCursor.value.attempt_success > 0) {
+                  courses[entryCursor.key].count_attempt_success += 1;
+                }
                 entryCursor.continue();
               }
             };
@@ -87,6 +96,7 @@
         request.onerror = reject;
         request.onsuccess = function(e) {
           course.id = e.target.result;
+          course.count = course.count || 0;
         };
       });
     },
@@ -116,12 +126,19 @@
       });
     },
     
-    getEntries : function(courseId) {
+    getEntries : function(courseId, onlyNonSuccess) {
+      courseId = parseInt(courseId);
       return new Promise(function(resolve, reject) {
         var transaction = db.transaction(["entry"]);
         var store = transaction.objectStore("entry");
-        var index = store.index("ind_course_id");
-        var range = IDBKeyRange.only(parseInt(courseId));
+        var index, range = null;
+        if (onlyNonSuccess) {
+          index = store.index("ind_attempt_success");
+          range = IDBKeyRange.only([courseId, 0]);
+        } else {
+          index = store.index("ind_course_id");
+          range = IDBKeyRange.only(courseId);
+        }
         var request = index.openCursor(range);
         var entries = {};
         request.onsuccess = function(e) {
@@ -130,6 +147,7 @@
             entries[cursor.value.id] = cursor.value;
             cursor.continue();
           } else {
+            console.log(entries);
             resolve(entries);
           }
         };

@@ -34,6 +34,8 @@
                 course.title,
                 " (",
                 course.count,
+                " / ",
+                course.count_attempt_success,
                 ")"
               )
             );

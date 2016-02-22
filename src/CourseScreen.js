@@ -35,7 +35,9 @@
       });
     },
     onDo : function() {
-    
+      this.props.store.dispatch({
+        type : "REQUEST_DO_COURSE"
+      });
     },
     render : function() {
       var title = this.props.course.id

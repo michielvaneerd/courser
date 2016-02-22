@@ -55,6 +55,12 @@
             store: this.props.store,
             course: course });
           break;
+        case "DO_COURSE_SCREEN":
+          screen = React.createElement(DoCourseScreen, {
+            store: this.props.store,
+            entries: this.state.entries,
+            course: course });
+          break;
         default:
           screen = React.createElement(CoursesList, {
             store: this.props.store,

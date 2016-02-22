@@ -53,6 +53,12 @@
             store={this.props.store}
             course={course} />
           break;
+        case "DO_COURSE_SCREEN":
+          screen = <DoCourseScreen
+            store={this.props.store}
+            entries={this.state.entries}
+            course={course} />
+          break;
         default:
           screen = <CoursesList
             store={this.props.store}

@@ -6,7 +6,7 @@
   
     ready : function() {
       return new Promise(function(resolve, reject) {
-        var req = indexedDB.open("langlearn", 2);
+        var req = indexedDB.open("langlearn", 1);
         req.onerror = function(e) {
           reject(e.target.error);
         };
@@ -144,7 +144,8 @@
         delete entry.id;
       }
       return new Promise(function(resolve, reject) {
-        entry.course_id = parseInt(courseId);
+        entry.course_id = entry.course_id
+          ? parseInt(entry.course_id) : parseInt(courseId);
         var transaction = db.transaction(["entry"], "readwrite");
         transaction.oncomplete = function(e) {
           resolve(entry);

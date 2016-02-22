@@ -36,7 +36,11 @@
         type: "SELECT_ENTRIES"
       });
     },
-    onDo: function () {},
+    onDo: function () {
+      this.props.store.dispatch({
+        type: "REQUEST_DO_COURSE"
+      });
+    },
     render: function () {
       var title = this.props.course.id ? "Edit van course " + this.props.course.title : "Maken van course";
       var deleteButton = this.props.course.id ? React.createElement(

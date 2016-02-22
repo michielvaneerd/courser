@@ -58,11 +58,11 @@
           });
         }
         break;
-      //case "SELECT_COURSE":
-      //	state.courseId = action.value;
-      //  state.entryId = 0;
-      //	state.screen = state.courseId ? "COURSE_SCREEN" : null;
-      //  break;
+      case "SELECT_COURSE":
+      	state.courseId = action.value;
+        state.entryId = 0;
+      	state.screen = state.courseId ? "COURSE_SCREEN" : null;
+        break;
       case "SELECT_ENTRIES":
         if (action.value) {
           state.entryId = 0;
@@ -121,6 +121,9 @@
         });
         break;
       case "SAVE_ENTRY":
+        if (!(action.value.id in state.entries)) {
+          state.courses[state.courseId].count += 1;
+        }
         state.entries[action.value.id] = action.value;
         state.entryId = 0;
         break;
@@ -137,6 +140,7 @@
         break;
       case "DELETE_ENTRY":
         delete state.entries[state.entryId];
+        state.courses[state.courseId].count -= 1;
         state.entryId = 0;
         break;
       case "SHOW_COURSE_SCREEN":

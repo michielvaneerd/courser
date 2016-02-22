@@ -36,12 +36,18 @@
         type: "SELECT_ENTRIES"
       });
     },
+    onDo: function () {},
     render: function () {
       var title = this.props.course.id ? "Edit van course " + this.props.course.title : "Maken van course";
       var deleteButton = this.props.course.id ? React.createElement(
         "button",
         { onClick: this.onDelete },
         "Delete"
+      ) : "";
+      var doButton = this.props.course.count ? React.createElement(
+        "button",
+        { onClick: this.onDo },
+        "Do"
       ) : "";
       return React.createElement(
         "div",
@@ -65,9 +71,10 @@
         ),
         React.createElement(
           "button",
-          { disabled: !!!this.props.course.id, onClick: this.onEntries },
+          { disabled: !this.props.course.id, onClick: this.onEntries },
           "Show entries"
         ),
+        doButton,
         deleteButton
       );
     }

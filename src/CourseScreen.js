@@ -34,11 +34,16 @@
         type : "SELECT_ENTRIES"
       });
     },
+    onDo : function() {
+    
+    },
     render : function() {
       var title = this.props.course.id
         ? "Edit van course " + this.props.course.title : "Maken van course";
       var deleteButton = this.props.course.id
         ? <button onClick={this.onDelete}>Delete</button> : "";
+      var doButton = this.props.course.count
+        ? <button onClick={this.onDo}>Do</button> : "";
       return (
         <div>
           <h3>{title}</h3>
@@ -46,7 +51,8 @@
             value={this.state.title} />
           <button disabled={!!!this.state.title} onClick={this.onSave}>Save</button>
           <button onClick={this.props.onMain}>Back</button>
-          <button disabled={!!!this.props.course.id} onClick={this.onEntries}>Show entries</button>
+          <button disabled={!(this.props.course.id)} onClick={this.onEntries}>Show entries</button>
+          {doButton}
           {deleteButton}
         </div>
       );

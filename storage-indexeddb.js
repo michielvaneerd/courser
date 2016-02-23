@@ -6,7 +6,7 @@
   
     ready : function() {
       return new Promise(function(resolve, reject) {
-        var req = indexedDB.open("langlearn", 3);
+        var req = indexedDB.open("langlearn", 1);
         req.onerror = function(e) {
           reject(e.target.error);
         };
@@ -33,6 +33,9 @@
           entryCourse.createIndex("ind_attempt_success",
             ["course_id", "attempt_success"],
             {unique : false});
+          entryCourse.createIndex("ind_attempt_failure",
+            ["course_id", "attempt_failure"],
+            {unique : false});
         };
       });
     },
@@ -56,7 +59,6 @@
         var transaction = db.transaction(["course", "entry"]);
         var entryCursor = null;
         transaction.oncomplete = function() {
-          console.log(courses);
           resolve(courses);
         };
         transaction.onerror = reject;
@@ -67,6 +69,7 @@
             courses[courseCursor.key] = courseCursor.value;
             courses[courseCursor.key].count = 0;
             courses[courseCursor.key].count_attempt_success = 0;
+            courses[courseCursor.key].count_attempt_failure = 0;
             courseCursor.continue();
           } else {
             transaction.objectStore("entry").index("ind_course_id").openCursor().onsuccess = function(e) {
@@ -75,6 +78,9 @@
                 courses[entryCursor.key].count += 1;
                 if (entryCursor.value.attempt_success > 0) {
                   courses[entryCursor.key].count_attempt_success += 1;
+                }
+                if (entryCursor.value.attempt_failure > 0) {
+                  courses[entryCursor.key].count_attempt_failure += 1;
                 }
                 entryCursor.continue();
               }
@@ -126,6 +132,8 @@
       });
     },
     
+    // See: https://hacks.mozilla.org/2014/06/breaking-the-borders-of-indexeddb/
+    // for maybe some betters ways
     getEntries : function(courseId, onlyNonSuccess) {
       courseId = parseInt(courseId);
       return new Promise(function(resolve, reject) {
@@ -147,11 +155,39 @@
             entries[cursor.value.id] = cursor.value;
             cursor.continue();
           } else {
-            console.log(entries);
             resolve(entries);
           }
         };
         request.onerror = reject;
+      });
+    },
+    
+    resetCourse : function(courseId) {
+      return new Promise(function(resolve, reject) {
+        var entries = {};
+        var transaction = db.transaction(["entry"], "readwrite");
+        transaction.oncomplete = function() {
+          resolve(entries);
+        };
+        transaction.onerror = reject;
+        var store = transaction.objectStore("entry");
+        var index = store.index("ind_course_id");
+        var range = IDBKeyRange.only(parseInt(courseId));
+        var request = index.openCursor(range);
+        request.onsuccess = function(e) {
+          var cursor = e.target.result;
+          if (cursor) {
+            entries[cursor.primaryKey] = cursor.value;
+            cursor.continue();
+          } else {
+            Object.keys(entries).forEach(function(entryId) {
+              var entry = entries[entryId];
+              entry.attempt_success = 0;
+              entry.attempt_failure = 0;
+              store.put(entry);
+            });
+          }
+        };
       });
     },
     

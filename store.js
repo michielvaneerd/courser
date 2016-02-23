@@ -162,9 +162,26 @@
       	state.screen = null;
       	state.courseId = 0;
       	break;
+      case "REQUEST_RESET":
+        suppressInRequest = true;
+        storage.resetCourse(state.courseId).then(function(entries) {
+          state.inRequest = false;
+          Store.dispatch({
+            type : "RESET",
+            value : entries
+          });
+        }).catch(function(error) {
+          errorHandler(error, state);
+        });
+        break;
+      case "RESET":
+        state.entries = action.value;
+        state.courses[state.courseId].count_attempt_success = 0;
+        state.courses[state.courseId].count_attempt_failure = 0;
+        break;
       case "REQUEST_DO_COURSE":        
         suppressInRequest = true;
-        storage.getEntries(state.courseId, true).then(function(entries) {
+        storage.getEntries(state.courseId).then(function(entries) {
           state.inRequest = false;
           Store.dispatch({
             type : "DO_COURSE",
@@ -179,16 +196,18 @@
         state.entries = action.value;
         break;
       case "REQUEST_SAVE_ANSWER":
-        if (!("attempt_success" in action.value)) {
-          action.value.attempt_success = 0;
+        if (action.success) {
+          action.value.attempt_success += 1;
+        } else {
+          action.value.attempt_failure += 1;
         }
-        action.value.attempt_success += 1;
         suppressInRequest = true;
         storage.saveEntry(action.value).then(function(entry) {
           state.inRequest = false;
           Store.dispatch({
             type : "SAVE_ANSWER",
-            value : entry
+            value : entry,
+            success : action.success
           });
         }).catch(function(error) {
           errorHandler(error, state);
@@ -196,6 +215,9 @@
         break;
       case "SAVE_ANSWER":
         state.entries[action.value.id] = action.value;
+        if (!action.success) {
+          state.error = "Wrong answer";
+        }
         break;
       case "ERROR":
         state.error = action.value;

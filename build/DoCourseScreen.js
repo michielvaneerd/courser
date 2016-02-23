@@ -4,32 +4,32 @@
     displayName: "DoCourseScreen",
 
     getEntry: function (entries) {
+      var ids = [];
       for (var key in entries) {
-        if (!entries[key].attempt_success) {
-          return entries[key];
+        if (!entries[key].attempt_success || entries[key].attempt_success < entries[key].attempt_failure) {
+          ids.push(key);
         }
       }
-      return {};
+      if (ids.length) {
+        var index = Math.floor(Math.random() * ids.length);
+        return entries[ids[index]];
+      }
+      return { id: 0 };
     },
     getInitialState: function () {
-      return Object.assign({ id: 0, answer: "" }, this.getEntry(this.props.entries));
+      return Object.assign({ answer: "" }, this.getEntry(this.props.entries));
     },
     componentWillReceiveProps: function (nextProps) {
-      this.setState(Object.assign({ id: 0, answer: "" }, this.getEntry(nextProps.entries)));
+      this.setState(Object.assign({ answer: "" }, this.getEntry(nextProps.entries)));
     },
     onSave: function () {
-      if (this.state.answer != this.state.dest) {
-        this.props.store.dispatch({
-          type: "ERROR",
-          value: "Wrong answer"
-        });
-        return;
-      }
       var entry = Object.assign({}, this.state);
+      var success = entry.answer == entry.dest;
       delete entry.answer;
       this.props.store.dispatch({
         type: "REQUEST_SAVE_ANSWER",
-        value: entry
+        value: entry,
+        success: success
       });
     },
     onChange: function (e) {
@@ -38,6 +38,11 @@
     onBack: function () {
       this.props.store.dispatch({
         type: "SHOW_COURSE_SCREEN"
+      });
+    },
+    onReset: function () {
+      this.props.store.dispatch({
+        type: "REQUEST_RESET"
       });
     },
     render: function () {
@@ -58,7 +63,16 @@
       ) : React.createElement(
         "div",
         null,
-        "Course finished!"
+        React.createElement(
+          "div",
+          null,
+          "Course finished!"
+        ),
+        React.createElement(
+          "button",
+          { onClick: this.onReset },
+          "Reset"
+        )
       );
       return React.createElement(
         "div",

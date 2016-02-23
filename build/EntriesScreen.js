@@ -10,7 +10,8 @@
     src: "",
     dest: "",
     phone: "",
-    attempt_success: 0
+    attempt_success: 0,
+    attempt_failure: 0
   };
 
   win.EntriesScreen = React.createClass({

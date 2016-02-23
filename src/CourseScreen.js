@@ -49,7 +49,7 @@
       return (
         <div>
           <h3>{title}</h3>
-          <input required={true} type="text" onChange={this.onTitleInputChange}
+          <input autoFocus={true} required={true} type="text" onChange={this.onTitleInputChange}
             value={this.state.title} />
           <button disabled={!!!this.state.title} onClick={this.onSave}>Save</button>
           <button onClick={this.props.onMain}>Back</button>

@@ -61,7 +61,7 @@
           null,
           title
         ),
-        React.createElement("input", { required: true, type: "text", onChange: this.onTitleInputChange,
+        React.createElement("input", { autoFocus: true, required: true, type: "text", onChange: this.onTitleInputChange,
           value: this.state.title }),
         React.createElement(
           "button",

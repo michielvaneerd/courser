@@ -44,10 +44,18 @@
       });
     },
     render : function() {
+      var successMessage = this.props.success
+        ? <div id="successMessage">OK!</div> : "";
       var editArea = this.state.id
         ? <div>
             <div>{this.state.src}</div>
-            <input type="text" onChange={this.onChange} value={this.state.answer} />
+            <input autoFocus={true} type="text"
+              ref={function(el) {
+                if (el) {
+                  el.focus();
+                }
+              }}
+              onChange={this.onChange} value={this.state.answer} />
             <button onClick={this.onSave}>Save</button>
           </div>
         : <div>
@@ -58,6 +66,7 @@
         <div>
           <div>{this.props.course.title}</div>
           {editArea}
+          {successMessage}
           <button onClick={this.onBack}>Back</button>
         </div>
       );

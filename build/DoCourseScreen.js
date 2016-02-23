@@ -46,6 +46,11 @@
       });
     },
     render: function () {
+      var successMessage = this.props.success ? React.createElement(
+        "div",
+        { id: "successMessage" },
+        "OK!"
+      ) : "";
       var editArea = this.state.id ? React.createElement(
         "div",
         null,
@@ -54,7 +59,13 @@
           null,
           this.state.src
         ),
-        React.createElement("input", { type: "text", onChange: this.onChange, value: this.state.answer }),
+        React.createElement("input", { autoFocus: true, type: "text",
+          ref: function (el) {
+            if (el) {
+              el.focus();
+            }
+          },
+          onChange: this.onChange, value: this.state.answer }),
         React.createElement(
           "button",
           { onClick: this.onSave },
@@ -83,6 +94,7 @@
           this.props.course.title
         ),
         editArea,
+        successMessage,
         React.createElement(
           "button",
           { onClick: this.onBack },

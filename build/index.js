@@ -59,6 +59,7 @@
           screen = React.createElement(DoCourseScreen, {
             store: this.props.store,
             entries: this.state.entries,
+            success: this.state.success,
             course: course });
           break;
         default:

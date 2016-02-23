@@ -50,13 +50,14 @@
         case "COURSE_SCREEN":
           screen = <CourseScreen
             onMain={this.onMain}
-            store={this.props.store}
+            store={this.props.store}            
             course={course} />
           break;
         case "DO_COURSE_SCREEN":
           screen = <DoCourseScreen
             store={this.props.store}
             entries={this.state.entries}
+            success={this.state.success}
             course={course} />
           break;
         default:

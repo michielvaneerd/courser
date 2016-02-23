@@ -1,6 +1,7 @@
 (function(win) {
 
 	var defaultState = {
+	  success : false,
     sortOrder : null,
 	  inRequest : false,
     error : false,
@@ -34,6 +35,8 @@
     if (action.type != "ERROR") {
       state.error = false;
     }
+    
+    state.success = false;
 	  
 	  state.inRequest = true;
 	  var suppressInRequest = false;
@@ -217,6 +220,8 @@
         state.entries[action.value.id] = action.value;
         if (!action.success) {
           state.error = "Wrong answer";
+        } else {
+          state.success = true;
         }
         break;
       case "ERROR":

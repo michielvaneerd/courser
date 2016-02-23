@@ -70,9 +70,20 @@
       });
     },
     render : function() {
+      var me = this;
       var editOrCreateRow =
         <tr key={this.props.entry.id || 0}>
           <td><input type="text"
+            autoFocus={true}
+            ref={function(el) {
+              // autofocus does not work after saving a new item...
+              // not sure why
+              if (el && !me.state.src.length && !me.state.dest.length
+                && !me.state.phone.length)
+              {
+                el.focus();
+              }
+            }}
             required={!!this.props.entry.id || this.state.dest.length}
             onChange={this.onSrcChange}
             value={this.state.src} /></td>
@@ -117,7 +128,7 @@
                     <td>{entry.src}</td>
                     <td>{entry.dest}</td>
                     <td>{entry.phone}</td>
-                    <td></td>
+                    <td>{entry.attempt_success} / {entry.attempt_failure}</td>
                   </tr>
                 return row;
               }, this)}

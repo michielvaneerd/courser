@@ -41,12 +41,16 @@
       var errorDialog = this.state.error ? React.createElement(ErrorDialog, {
         error: this.state.error,
         store: this.props.store }) : "";
+      var successDialog = this.state.success ? React.createElement(SuccessDialog, {
+        success: this.state.success,
+        store: this.props.store }) : "";
       switch (this.state.screen) {
         case "ENTRIES_SCREEN":
           screen = React.createElement(EntriesScreen, {
             store: this.props.store,
             course: course,
             entry: entry,
+            onMain: this.onMain,
             entries: this.state.entries });
           break;
         case "COURSE_SCREEN":
@@ -58,6 +62,7 @@
         case "DO_COURSE_SCREEN":
           screen = React.createElement(DoCourseScreen, {
             store: this.props.store,
+            onMain: this.onMain,
             entries: this.state.entries,
             success: this.state.success,
             course: course });
@@ -73,7 +78,8 @@
         null,
         screen,
         progressSpinner,
-        errorDialog
+        errorDialog,
+        successDialog
       );
     }
   });

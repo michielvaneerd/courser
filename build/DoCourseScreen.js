@@ -36,9 +36,13 @@
       this.setState({ answer: e.target.value });
     },
     onBack: function () {
-      this.props.store.dispatch({
-        type: "SHOW_COURSE_SCREEN"
-      });
+      if (this.props.course.id) {
+        this.props.store.dispatch({
+          type: "SHOW_COURSE_SCREEN"
+        });
+      } else {
+        this.props.onMain();
+      }
     },
     onReset: function () {
       this.props.store.dispatch({
@@ -46,11 +50,6 @@
       });
     },
     render: function () {
-      var successMessage = this.props.success ? React.createElement(
-        "div",
-        { id: "successMessage" },
-        "OK!"
-      ) : "";
       var editArea = this.state.id ? React.createElement(
         "div",
         null,
@@ -94,7 +93,6 @@
           this.props.course.title
         ),
         editArea,
-        successMessage,
         React.createElement(
           "button",
           { onClick: this.onBack },

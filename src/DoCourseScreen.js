@@ -34,9 +34,13 @@
       this.setState({answer : e.target.value});
     },
     onBack : function() {
-      this.props.store.dispatch({
-        type : "SHOW_COURSE_SCREEN"
-      });
+      if (this.props.course.id) {
+        this.props.store.dispatch({
+          type : "SHOW_COURSE_SCREEN"
+        });
+      } else {
+        this.props.onMain();
+      }
     },
     onReset : function() {
       this.props.store.dispatch({
@@ -44,8 +48,6 @@
       });
     },
     render : function() {
-      var successMessage = this.props.success
-        ? <div id="successMessage">OK!</div> : "";
       var editArea = this.state.id
         ? <div>
             <div>{this.state.src}</div>
@@ -66,7 +68,6 @@
         <div>
           <div>{this.props.course.title}</div>
           {editArea}
-          {successMessage}
           <button onClick={this.onBack}>Back</button>
         </div>
       );

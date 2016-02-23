@@ -13,6 +13,20 @@
         type : "SHOW_COURSE_SCREEN"
       });
     },
+    onEntriesClick : function(e) {
+      e.preventDefault();
+      this.props.store.dispatch({
+        type : "REQUEST_SELECT_ENTRIES",
+        value : e.currentTarget.dataset.id
+      });
+    },
+    onDoClick : function(e) {
+      e.preventDefault();
+      this.props.store.dispatch({
+        type : "REQUEST_DO_COURSE",
+        value : e.currentTarget.dataset.id
+      });
+    },
     render : function() {
       return (
         <div>
@@ -21,7 +35,9 @@
               var course = this.props.courses[courseId];
               return <li key={course.id}>
                   <a onClick={this.onCourseClick} data-id={courseId}
-                    href="#">{course.title} ({course.count} / {course.count_attempt_success})</a>
+                    href="#"><strong>{course.title}</strong></a> (<a href="#" data-id={courseId}
+                    onClick={this.onEntriesClick}>{course.count} entries</a>, <a href="#" data-id={courseId}
+                    onClick={this.onDoClick}>{course.count_attempt_success} done</a>)
                 </li>
             }, this)}
           </ul>

@@ -15,6 +15,20 @@
         type: "SHOW_COURSE_SCREEN"
       });
     },
+    onEntriesClick: function (e) {
+      e.preventDefault();
+      this.props.store.dispatch({
+        type: "REQUEST_SELECT_ENTRIES",
+        value: e.currentTarget.dataset.id
+      });
+    },
+    onDoClick: function (e) {
+      e.preventDefault();
+      this.props.store.dispatch({
+        type: "REQUEST_DO_COURSE",
+        value: e.currentTarget.dataset.id
+      });
+    },
     render: function () {
       return React.createElement(
         "div",
@@ -31,13 +45,29 @@
                 "a",
                 { onClick: this.onCourseClick, "data-id": courseId,
                   href: "#" },
-                course.title,
-                " (",
+                React.createElement(
+                  "strong",
+                  null,
+                  course.title
+                )
+              ),
+              " (",
+              React.createElement(
+                "a",
+                { href: "#", "data-id": courseId,
+                  onClick: this.onEntriesClick },
                 course.count,
-                " / ",
+                " entries"
+              ),
+              ", ",
+              React.createElement(
+                "a",
+                { href: "#", "data-id": courseId,
+                  onClick: this.onDoClick },
                 course.count_attempt_success,
-                ")"
-              )
+                " done"
+              ),
+              ")"
             );
           }, this)
         ),

@@ -31,6 +31,8 @@
     if (state.inRequest) {
 	    return state;
 	  }
+	  
+	  var me = this;
 
     if (action.type != "ERROR") {
       state.error = false;
@@ -52,7 +54,7 @@
           suppressInRequest = true;
           storage.getCourses().then(function(courses) {
             state.inRequest = false;
-            Store.dispatch({
+            me.dispatch({
               type : "SELECT_COURSES",
               value : courses
             });
@@ -66,43 +68,52 @@
         state.entryId = 0;
       	state.screen = state.courseId ? "COURSE_SCREEN" : null;
         break;
-      case "SELECT_ENTRIES":
-        if (action.value) {
-          state.entryId = 0;
-          state.entries = action.value;
-          state.screen = "ENTRIES_SCREEN";
-        } else {
-          suppressInRequest = true;
-          storage.getEntries(state.courseId).then(function(entries) {
+      case "REQUEST_SELECT_ENTRIES":
+        suppressInRequest = true;
+          storage.getEntries(action.value).then(function(entries) {
             state.inRequest = false;
-            Store.dispatch({
+            //state.courseId = action.value;
+            me.dispatch({
               type : "SELECT_ENTRIES",
               value : entries
             });
           }).catch(function(error) {
             errorHandler(error, state);
           });
-        }
+        break;
+      case "SELECT_ENTRIES":
+        //if (action.value) {
+          state.entryId = 0;
+          state.entries = action.value;
+          state.screen = "ENTRIES_SCREEN";
+        // } else {
+//           suppressInRequest = true;
+//           storage.getEntries(state.courseId).then(function(entries) {
+//             state.inRequest = false;
+//             me.dispatch({
+//               type : "SELECT_ENTRIES",
+//               value : entries
+//             });
+//           }).catch(function(error) {
+//             errorHandler(error, state);
+//           });
+//         }
         break;
       case "REQUEST_SAVE_COURSE":
-        if (action.value.title.length == 0) {
-          state.inRequest = false;
-          Store.dispatch({
-            type : "ERROR",
-            value : "Empty title!"
+        if (!action.value.title || action.value.title.length == 0) {
+          state.error = "Enter title";
+        } else {
+          suppressInRequest = true;
+          storage.saveCourse(action.value).then(function(course) {
+            state.inRequest = false;
+            me.dispatch({
+              type : "SAVE_COURSE",
+              value : course
+            });
+          }).catch(function(error) {
+            errorHandler(error, state);
           });
-          break;
         }
-        suppressInRequest = true;
-        storage.saveCourse(action.value).then(function(course) {
-          state.inRequest = false;
-          Store.dispatch({
-            type : "SAVE_COURSE",
-            value : course
-          });
-        }).catch(function(error) {
-          errorHandler(error, state);
-        });
         break;
       case "SAVE_COURSE":
         state.courseId = action.value.id;
@@ -115,7 +126,7 @@
         suppressInRequest = true;
         storage.saveEntry(action.value, state.courseId).then(function(entry) {
           state.inRequest = false;
-          Store.dispatch({
+          me.dispatch({
             type : "SAVE_ENTRY",
             value : entry
           });
@@ -134,7 +145,7 @@
         suppressInRequest = true;
         storage.deleteEntry(state.entryId, state.courseId).then(function() {
           state.inRequest = false;
-          Store.dispatch({
+          me.dispatch({
             type : "DELETE_ENTRY"
           });
         }).catch(function(error) {
@@ -153,7 +164,7 @@
         suppressInRequest = true;
         storage.deleteCourse(state.courseId).then(function() {
           state.inRequest = false;
-          Store.dispatch({
+          me.dispatch({
             type : "DELETE_COURSE"
           });
         }).catch(function(error) {
@@ -169,7 +180,7 @@
         suppressInRequest = true;
         storage.resetCourse(state.courseId).then(function(entries) {
           state.inRequest = false;
-          Store.dispatch({
+          me.dispatch({
             type : "RESET",
             value : entries
           });
@@ -184,9 +195,10 @@
         break;
       case "REQUEST_DO_COURSE":        
         suppressInRequest = true;
-        storage.getEntries(state.courseId).then(function(entries) {
+        storage.getEntries(action.value).then(function(entries) {
           state.inRequest = false;
-          Store.dispatch({
+          //state.courseId = action.value;
+          me.dispatch({
             type : "DO_COURSE",
             value : entries
           });
@@ -207,7 +219,7 @@
         suppressInRequest = true;
         storage.saveEntry(action.value).then(function(entry) {
           state.inRequest = false;
-          Store.dispatch({
+          me.dispatch({
             type : "SAVE_ANSWER",
             value : entry,
             success : action.success
@@ -221,11 +233,14 @@
         if (!action.success) {
           state.error = "Wrong answer";
         } else {
-          state.success = true;
+          state.success = "OK!";
         }
         break;
       case "ERROR":
         state.error = action.value;
+        break;
+      case "SUCCESS":
+        state.success = action.value;
         break;
     }
     

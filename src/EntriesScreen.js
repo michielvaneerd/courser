@@ -55,9 +55,13 @@
       });
     },
     onBack : function() {
-      this.props.store.dispatch({
-        type : "SHOW_COURSE_SCREEN"
-      });
+      if (this.props.course.id) {
+        this.props.store.dispatch({
+          type : "SHOW_COURSE_SCREEN"
+        });
+      } else {
+        this.props.onMain();
+      }
     },
     onDelete : function() {
       this.props.store.dispatch({

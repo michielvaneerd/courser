@@ -39,12 +39,17 @@
         ? <ErrorDialog
             error={this.state.error}
             store={this.props.store} /> : "";
+      var successDialog = this.state.success
+        ? <SuccessDialog
+            success={this.state.success}
+            store={this.props.store} /> : "";
       switch (this.state.screen) {
         case "ENTRIES_SCREEN":
           screen = <EntriesScreen
             store={this.props.store}
             course={course}
             entry={entry}
+            onMain={this.onMain}
             entries={this.state.entries} />
           break;
         case "COURSE_SCREEN":
@@ -56,6 +61,7 @@
         case "DO_COURSE_SCREEN":
           screen = <DoCourseScreen
             store={this.props.store}
+            onMain={this.onMain}
             entries={this.state.entries}
             success={this.state.success}
             course={course} />
@@ -71,6 +77,7 @@
           {screen}
           {progressSpinner}
           {errorDialog}
+          {successDialog}
         </div>
       );
     }

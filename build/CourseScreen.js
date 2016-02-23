@@ -10,6 +10,9 @@
     getInitialState: function () {
       return Object.assign({}, invalidity, this.props.course);
     },
+    componentWillReceiveProps: function (nextProps) {
+      this.setState(Object.assign({}, invalidity, nextProps.course));
+    },
     onSave: function () {
       var course = Object.assign({}, this.state);
       Object.keys(invalidity).forEach(function (key) {
@@ -33,12 +36,14 @@
     },
     onEntries: function () {
       this.props.store.dispatch({
-        type: "SELECT_ENTRIES"
+        type: "REQUEST_SELECT_ENTRIES",
+        value: this.props.course.id
       });
     },
     onDo: function () {
       this.props.store.dispatch({
-        type: "REQUEST_DO_COURSE"
+        type: "REQUEST_DO_COURSE",
+        value: this.props.course.id
       });
     },
     render: function () {
@@ -65,7 +70,7 @@
           value: this.state.title }),
         React.createElement(
           "button",
-          { disabled: !!!this.state.title, onClick: this.onSave },
+          { disaled: !!!this.state.title, onClick: this.onSave },
           "Save"
         ),
         React.createElement(

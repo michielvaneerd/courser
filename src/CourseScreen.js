@@ -8,6 +8,9 @@
     getInitialState : function() {
       return Object.assign({}, invalidity, this.props.course);
     },
+    componentWillReceiveProps : function(nextProps) {
+      this.setState(Object.assign({}, invalidity, nextProps.course));
+    },
     onSave : function() {
       var course = Object.assign({}, this.state);
       Object.keys(invalidity).forEach(function(key) {
@@ -31,12 +34,14 @@
     },
     onEntries : function() {
       this.props.store.dispatch({
-        type : "SELECT_ENTRIES"
+        type : "REQUEST_SELECT_ENTRIES",
+        value : this.props.course.id
       });
     },
     onDo : function() {
       this.props.store.dispatch({
-        type : "REQUEST_DO_COURSE"
+        type : "REQUEST_DO_COURSE",
+        value : this.props.course.id
       });
     },
     render : function() {
@@ -51,7 +56,7 @@
           <h3>{title}</h3>
           <input autoFocus={true} required={true} type="text" onChange={this.onTitleInputChange}
             value={this.state.title} />
-          <button disabled={!!!this.state.title} onClick={this.onSave}>Save</button>
+          <button disaled={!!!this.state.title} onClick={this.onSave}>Save</button>
           <button onClick={this.props.onMain}>Back</button>
           <button disabled={!(this.props.course.id)} onClick={this.onEntries}>Show entries</button>
           {doButton}

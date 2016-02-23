@@ -18,7 +18,7 @@
   color:white;
 }
 
-#successMessage {
+#successDialog {
   position:fixed;
   padding:1rem;
   margin:1rem auto;

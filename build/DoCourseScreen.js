@@ -46,7 +46,8 @@
     },
     onReset: function () {
       this.props.store.dispatch({
-        type: "REQUEST_RESET"
+        type: "REQUEST_RESET",
+        value: this.props.course.id || this.props.implicitCourseId
       });
     },
     render: function () {

@@ -64,6 +64,7 @@
             onMain={this.onMain}
             entries={this.state.entries}
             success={this.state.success}
+            implicitCourseId={this.state.implicitCourseId}
             course={course} />
           break;
         default:

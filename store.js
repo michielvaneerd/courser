@@ -178,11 +178,13 @@
       	break;
       case "REQUEST_RESET":
         suppressInRequest = true;
-        storage.resetCourse(state.courseId).then(function(entries) {
+        console.log(action.value);
+        storage.resetCourse(action.value).then(function(entries) {
           state.inRequest = false;
           me.dispatch({
             type : "RESET",
-            value : entries
+            value : entries,
+            courseId : action.value
           });
         }).catch(function(error) {
           errorHandler(error, state);
@@ -190,8 +192,8 @@
         break;
       case "RESET":
         state.entries = action.value;
-        state.courses[state.courseId].count_attempt_success = 0;
-        state.courses[state.courseId].count_attempt_failure = 0;
+        state.courses[action.courseId].count_attempt_success = 0;
+        state.courses[action.courseId].count_attempt_failure = 0;
         break;
       case "REQUEST_DO_COURSE":        
         suppressInRequest = true;
@@ -200,7 +202,8 @@
           //state.courseId = action.value;
           me.dispatch({
             type : "DO_COURSE",
-            value : entries
+            value : entries,
+            courseId : action.value
           });
         }).catch(function(error) {
           errorHandler(error, state);
@@ -209,6 +212,7 @@
       case "DO_COURSE":
         state.screen = "DO_COURSE_SCREEN";
         state.entries = action.value;
+        state.implicitCourseId = action.courseId;
         break;
       case "REQUEST_SAVE_ANSWER":
         if (action.success) {

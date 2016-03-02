@@ -47,6 +47,7 @@
       switch (this.state.screen) {
         case "ENTRIES_SCREEN":
           screen = React.createElement(EntriesScreen, {
+            forceBackToMainScreen: this.state.forceBackToMainScreen,
             store: this.props.store,
             course: course,
             entry: entry,
@@ -61,6 +62,7 @@
           break;
         case "DO_COURSE_SCREEN":
           screen = React.createElement(DoCourseScreen, {
+            forceBackToMainScreen: this.state.forceBackToMainScreen,
             store: this.props.store,
             onMain: this.onMain,
             entries: this.state.entries,

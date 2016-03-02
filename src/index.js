@@ -46,6 +46,7 @@
       switch (this.state.screen) {
         case "ENTRIES_SCREEN":
           screen = <EntriesScreen
+            forceBackToMainScreen={this.state.forceBackToMainScreen}
             store={this.props.store}
             course={course}
             entry={entry}
@@ -60,6 +61,7 @@
           break;
         case "DO_COURSE_SCREEN":
           screen = <DoCourseScreen
+            forceBackToMainScreen={this.state.forceBackToMainScreen}
             store={this.props.store}
             onMain={this.onMain}
             entries={this.state.entries}

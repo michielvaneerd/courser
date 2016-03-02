@@ -27,14 +27,15 @@
       this.props.store.dispatch({
         type : "REQUEST_SAVE_ANSWER",
         value : entry,
-        success : success
+        success : success,
+        forceBackToMainScreen : this.props.forceBackToMainScreen
       });
     },
     onChange : function(e) {
       this.setState({answer : e.target.value});
     },
     onBack : function() {
-      if (this.props.course.id) {
+      if (!this.props.forceBackToMainScreen) {
         this.props.store.dispatch({
           type : "SHOW_COURSE_SCREEN"
         });
@@ -45,7 +46,8 @@
     onReset : function() {
       this.props.store.dispatch({
         type : "REQUEST_RESET",
-        value : this.props.course.id || this.props.implicitCourseId
+        value : this.props.course.id,
+        forceBackToMainScreen : this.props.forceBackToMainScreen
       });
     },
     render : function() {

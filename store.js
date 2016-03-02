@@ -6,6 +6,7 @@
 	  inRequest : false,
     error : false,
     courseId : 0,
+    forceBackToMainScreen : false,
     entryId : 0,
     screen : null,
     courses : {}, // courseId => course
@@ -36,6 +37,10 @@
 
     if (action.type != "ERROR") {
       state.error = false;
+    }
+    
+    if (action.type != "ERROR" && action.type != "SUCCESS") {
+      state.forceBackToMainScreen = action.forceBackToMainScreen;
     }
     
     state.success = false;
@@ -70,34 +75,22 @@
         break;
       case "REQUEST_SELECT_ENTRIES":
         suppressInRequest = true;
-          storage.getEntries(action.value).then(function(entries) {
-            state.inRequest = false;
-            //state.courseId = action.value;
-            me.dispatch({
-              type : "SELECT_ENTRIES",
-              value : entries
-            });
-          }).catch(function(error) {
-            errorHandler(error, state);
+        storage.getEntries(action.value).then(function(entries) {
+          state.inRequest = false;
+          state.courseId = action.value;
+          me.dispatch({
+            type : "SELECT_ENTRIES",
+            value : entries,
+            forceBackToMainScreen : action.forceBackToMainScreen
           });
+        }).catch(function(error) {
+          errorHandler(error, state);
+        });
         break;
       case "SELECT_ENTRIES":
-        //if (action.value) {
-          state.entryId = 0;
-          state.entries = action.value;
-          state.screen = "ENTRIES_SCREEN";
-        // } else {
-//           suppressInRequest = true;
-//           storage.getEntries(state.courseId).then(function(entries) {
-//             state.inRequest = false;
-//             me.dispatch({
-//               type : "SELECT_ENTRIES",
-//               value : entries
-//             });
-//           }).catch(function(error) {
-//             errorHandler(error, state);
-//           });
-//         }
+        state.entryId = 0;
+        state.entries = action.value;
+        state.screen = "ENTRIES_SCREEN";
         break;
       case "REQUEST_SAVE_COURSE":
         if (!action.value.title || action.value.title.length == 0) {
@@ -128,7 +121,8 @@
           state.inRequest = false;
           me.dispatch({
             type : "SAVE_ENTRY",
-            value : entry
+            value : entry,
+            forceBackToMainScreen : action.forceBackToMainScreen
           });
         }).catch(function(error) {
           errorHandler(error, state);
@@ -146,7 +140,8 @@
         storage.deleteEntry(state.entryId, state.courseId).then(function() {
           state.inRequest = false;
           me.dispatch({
-            type : "DELETE_ENTRY"
+            type : "DELETE_ENTRY",
+            forceBackToMainScreen : action.forceBackToMainScreen
           });
         }).catch(function(error) {
           errorHandler(error, state);
@@ -178,13 +173,13 @@
       	break;
       case "REQUEST_RESET":
         suppressInRequest = true;
-        console.log(action.value);
         storage.resetCourse(action.value).then(function(entries) {
           state.inRequest = false;
           me.dispatch({
             type : "RESET",
             value : entries,
-            courseId : action.value
+            courseId : action.value,
+            forceBackToMainScreen : action.forceBackToMainScreen
           });
         }).catch(function(error) {
           errorHandler(error, state);
@@ -199,11 +194,12 @@
         suppressInRequest = true;
         storage.getEntries(action.value).then(function(entries) {
           state.inRequest = false;
-          //state.courseId = action.value;
+          state.courseId = action.value;
           me.dispatch({
             type : "DO_COURSE",
             value : entries,
-            courseId : action.value
+            courseId : action.value,
+            forceBackToMainScreen : action.forceBackToMainScreen
           });
         }).catch(function(error) {
           errorHandler(error, state);
@@ -226,7 +222,8 @@
           me.dispatch({
             type : "SAVE_ANSWER",
             value : entry,
-            success : action.success
+            success : action.success,
+            forceBackToMainScreen : action.forceBackToMainScreen
           });
         }).catch(function(error) {
           errorHandler(error, state);

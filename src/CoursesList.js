@@ -17,14 +17,16 @@
       e.preventDefault();
       this.props.store.dispatch({
         type : "REQUEST_SELECT_ENTRIES",
-        value : e.currentTarget.dataset.id
+        value : e.currentTarget.dataset.id,
+        forceBackToMainScreen : true
       });
     },
     onDoClick : function(e) {
       e.preventDefault();
       this.props.store.dispatch({
         type : "REQUEST_DO_COURSE",
-        value : e.currentTarget.dataset.id
+        value : e.currentTarget.dataset.id,
+        forceBackToMainScreen : true
       });
     },
     render : function() {

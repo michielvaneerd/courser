@@ -28,7 +28,8 @@
       });
       this.props.store.dispatch({
         type : "REQUEST_SAVE_ENTRY",
-        value : entry
+        value : entry,
+        forceBackToMainScreen : this.props.forceBackToMainScreen
       });
     },
     onSrcChange : function(e) {
@@ -51,11 +52,12 @@
     onActivate : function(e) {
       this.props.store.dispatch({
         type : "SELECT_ENTRY",
-        value : e.currentTarget.dataset.id
+        value : e.currentTarget.dataset.id,
+        forceBackToMainScreen : this.props.forceBackToMainScreen
       });
     },
     onBack : function() {
-      if (this.props.course.id) {
+      if (!this.props.forceBackToMainScreen) {
         this.props.store.dispatch({
           type : "SHOW_COURSE_SCREEN"
         });
@@ -65,12 +67,14 @@
     },
     onDelete : function() {
       this.props.store.dispatch({
-        type : "REQUEST_DELETE_ENTRY"
+        type : "REQUEST_DELETE_ENTRY",
+        forceBackToMainScreen : this.props.forceBackToMainScreen
       });
     },
     onCancel : function() {
       this.props.store.dispatch({
-        type : "SELECT_ENTRY"
+        type : "SELECT_ENTRY",
+        forceBackToMainScreen : this.props.forceBackToMainScreen
       });
     },
     render : function() {

@@ -70,7 +70,7 @@
           value: this.state.title }),
         React.createElement(
           "button",
-          { disaled: !!!this.state.title, onClick: this.onSave },
+          { disabled: !!!this.state.title, onClick: this.onSave },
           "Save"
         ),
         React.createElement(

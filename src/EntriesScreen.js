@@ -49,12 +49,15 @@
         phone : e.target.value
       });
     },
-    onActivate : function(e) {
+    selectEntry : function(id) {
       this.props.store.dispatch({
         type : "SELECT_ENTRY",
-        value : e.currentTarget.dataset.id,
+        value : id,
         forceBackToMainScreen : this.props.forceBackToMainScreen
       });
+    },
+    onActivate : function(e) {
+      this.selectEntry(e.currentTarget.dataset.id);
     },
     onBack : function() {
       if (!this.props.forceBackToMainScreen) {
@@ -77,6 +80,50 @@
         forceBackToMainScreen : this.props.forceBackToMainScreen
       });
     },
+    onKeyDown : function(e) {
+      switch (e.keyCode) {
+        case 13: // ENTER
+          e.preventDefault();
+          if (this.state.src.length && this.state.dest.length) {
+            this.onSave();
+          }
+        break;
+        case 27: // ESC
+          e.preventDefault();
+          if (this.state.id) {
+            this.onCancel();
+          } else {
+            this.onBack();
+          }
+        break;
+        case 40: // DOWN
+          e.preventDefault();
+          if (this.state.id) {
+            var ids = Object.keys(this.props.entries);
+            var index = ids.indexOf(this.state.id.toString());
+            if (index + 1 == ids.length) {
+              this.onCancel();
+            } else {
+              this.selectEntry(ids[index + 1]);
+            }
+          }
+        break;
+        case 38: // UP
+          e.preventDefault();
+          var ids = Object.keys(this.props.entries);
+          if (ids.length) {
+            if (this.state.id) {
+              var index = ids.indexOf(this.state.id.toString());
+              if (index > 0) {
+                this.selectEntry(ids[index - 1]);
+              }
+            } else {
+              this.selectEntry(ids[ids.length - 1]);
+            }
+          }
+        break;
+      }
+    },
     render : function() {
       var me = this;
       var editOrCreateRow =
@@ -92,15 +139,18 @@
                 el.focus();
               }
             }}
+            onKeyDown={this.onKeyDown}
             required={!!this.props.entry.id || this.state.dest.length}
             onChange={this.onSrcChange}
             value={this.state.src} /></td>
           <td><input type="text"
             required={!!this.props.entry.id || this.state.src.length}
             onChange={this.onDestChange}
+            onKeyDown={this.onKeyDown}
             value={this.state.dest} /></td>
           <td><input type="text"
             onChange={this.onPhoneChange}
+            onKeyDown={this.onKeyDown}
             value={this.state.phone} /></td>
           <td>
             <button disabled={!(this.state.src.length && this.state.dest.length)}

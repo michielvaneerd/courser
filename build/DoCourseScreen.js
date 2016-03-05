@@ -1,8 +1,14 @@
 (function (win) {
 
+  var testTypes = ["SRC_DEST", "DEST_SRC"];
+
   win.DoCourseScreen = React.createClass({
     displayName: "DoCourseScreen",
 
+    getTestType: function () {
+      var index = Math.floor(Math.random() * testTypes.length);
+      return testTypes[index];
+    },
     getEntry: function (entries) {
       var ids = [];
       for (var key in entries) {
@@ -17,15 +23,30 @@
       return { id: 0 };
     },
     getInitialState: function () {
-      return Object.assign({ answer: "" }, this.getEntry(this.props.entries));
+      return Object.assign({
+        answer: "",
+        testType: this.getTestType()
+      }, this.getEntry(this.props.entries));
     },
     componentWillReceiveProps: function (nextProps) {
-      this.setState(Object.assign({ answer: "" }, this.getEntry(nextProps.entries)));
+      this.setState(Object.assign({
+        answer: "",
+        testType: this.getTestType()
+      }, this.getEntry(nextProps.entries)));
     },
     onSave: function () {
       var entry = Object.assign({}, this.state);
-      var success = entry.answer == entry.dest;
+      var success = false;
+      switch (this.state.testType) {
+        case "SRC_DEST":
+          success = entry.answer == entry.dest;
+          break;
+        case "DEST_SRC":
+          success = entry.answer == entry.src;
+          break;
+      }
       delete entry.answer;
+      delete entry.testType;
       this.props.store.dispatch({
         type: "REQUEST_SAVE_ANSWER",
         value: entry,
@@ -53,55 +74,89 @@
       });
     },
     render: function () {
-      var editArea = this.state.id ? React.createElement(
-        "div",
-        null,
-        React.createElement(
+      if (this.state.id) {
+        var editArea = null;
+        switch (this.state.testType) {
+          case "SRC_DEST":
+            editArea = React.createElement(
+              "div",
+              null,
+              React.createElement(
+                "div",
+                null,
+                "SRC: ",
+                this.state.src
+              ),
+              React.createElement("input", { autoFocus: true, type: "text",
+                ref: function (el) {
+                  if (el) {
+                    el.focus();
+                  }
+                },
+                onChange: this.onChange, value: this.state.answer }),
+              React.createElement(
+                "button",
+                { onClick: this.onSave },
+                "Save"
+              )
+            );
+            break;
+          case "DEST_SRC":
+            editArea = React.createElement(
+              "div",
+              null,
+              React.createElement(
+                "div",
+                null,
+                "DEST: ",
+                this.state.dest
+              ),
+              React.createElement("input", { autoFocus: true, type: "text",
+                ref: function (el) {
+                  if (el) {
+                    el.focus();
+                  }
+                },
+                onChange: this.onChange, value: this.state.answer }),
+              React.createElement(
+                "button",
+                { onClick: this.onSave },
+                "Save"
+              )
+            );
+            break;
+        }
+        return React.createElement(
           "div",
           null,
-          this.state.src
-        ),
-        React.createElement("input", { autoFocus: true, type: "text",
-          ref: function (el) {
-            if (el) {
-              el.focus();
-            }
-          },
-          onChange: this.onChange, value: this.state.answer }),
-        React.createElement(
-          "button",
-          { onClick: this.onSave },
-          "Save"
-        )
-      ) : React.createElement(
-        "div",
-        null,
-        React.createElement(
+          React.createElement(
+            "div",
+            null,
+            this.props.course.title
+          ),
+          editArea,
+          React.createElement(
+            "button",
+            { onClick: this.onBack },
+            "Back"
+          )
+        );
+      } else {
+        return React.createElement(
           "div",
           null,
-          "Course finished!"
-        ),
-        React.createElement(
-          "button",
-          { onClick: this.onReset },
-          "Reset"
-        )
-      );
-      return React.createElement(
-        "div",
-        null,
-        React.createElement(
-          "div",
-          null,
-          this.props.course.title
-        ),
-        editArea,
-        React.createElement(
-          "button",
-          { onClick: this.onBack },
-          "Back"
-        )
-      );
+          React.createElement(
+            "div",
+            null,
+            "Course finished!"
+          ),
+          React.createElement(
+            "button",
+            { onClick: this.onReset },
+            "Reset"
+          )
+        );
+      }
     }
   });
 })(window);

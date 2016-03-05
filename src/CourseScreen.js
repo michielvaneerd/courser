@@ -56,7 +56,7 @@
           <h3>{title}</h3>
           <input autoFocus={true} required={true} type="text" onChange={this.onTitleInputChange}
             value={this.state.title} />
-          <button disaled={!!!this.state.title} onClick={this.onSave}>Save</button>
+          <button disabled={!!!this.state.title} onClick={this.onSave}>Save</button>
           <button onClick={this.props.onMain}>Back</button>
           <button disabled={!(this.props.course.id)} onClick={this.onEntries}>Show entries</button>
           {doButton}

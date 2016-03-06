@@ -40,6 +40,17 @@
           null,
           Object.keys(this.props.courses).map(function (courseId) {
             var course = this.props.courses[courseId];
+            var doLink = course.count > 4 ? React.createElement(
+              "a",
+              { href: "#", "data-id": courseId,
+                onClick: this.onDoClick },
+              course.count_attempt_success,
+              " done"
+            ) : React.createElement(
+              "span",
+              null,
+              "Do course after 5 items"
+            );
             return React.createElement(
               "li",
               { key: course.id },
@@ -62,13 +73,7 @@
                 " entries"
               ),
               ", ",
-              React.createElement(
-                "a",
-                { href: "#", "data-id": courseId,
-                  onClick: this.onDoClick },
-                course.count_attempt_success,
-                " done"
-              ),
+              doLink,
               ")"
             );
           }, this)

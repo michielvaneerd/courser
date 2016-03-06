@@ -211,10 +211,15 @@
         state.implicitCourseId = action.courseId;
         break;
       case "REQUEST_SAVE_ANSWER":
+        // TODO: after saving answer, maybe I can better
+        // fetch the course also from the database, so I do not
+        // have to set count_attempt_[success|failure] here
         if (action.success) {
           action.value.attempt_success += 1;
+          state.courses[state.courseId].count_attempt_success += 1;
         } else {
           action.value.attempt_failure += 1;
+          state.courses[state.courseId].count_attempt_failure += 1;
         }
         suppressInRequest = true;
         storage.saveEntry(action.value).then(function(entry) {

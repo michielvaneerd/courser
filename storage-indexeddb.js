@@ -57,7 +57,6 @@
     getCourses : function() {
       return new Promise(function(resolve, reject) {
         var transaction = db.transaction(["course", "entry"]);
-        var entryCursor = null;
         transaction.oncomplete = function() {
           resolve(courses);
         };
@@ -88,6 +87,17 @@
           }
         };
         
+      });
+    },
+    
+    getCourse : function(id) {
+      return new Promise(function(resolve, reject) {
+        var transaction = db.transaction(["course"]);
+        var store = transaction.objectStore("course");
+        var request = store.get(id);
+        request.onsuccess = function(e) {
+          resolve(e.target.result);
+        };
       });
     },
     

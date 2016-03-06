@@ -53,11 +53,6 @@
         { onClick: this.onDelete },
         "Delete"
       ) : "";
-      var doButton = this.props.course.count ? React.createElement(
-        "button",
-        { onClick: this.onDo },
-        "Do"
-      ) : "";
       return React.createElement(
         "div",
         null,
@@ -83,7 +78,11 @@
           { disabled: !this.props.course.id, onClick: this.onEntries },
           "Show entries"
         ),
-        doButton,
+        React.createElement(
+          "button",
+          { disabled: this.props.course.count < 5, onClick: this.onDo },
+          "Do"
+        ),
         deleteButton
       );
     }

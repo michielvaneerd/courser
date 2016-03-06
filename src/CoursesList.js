@@ -35,11 +35,14 @@
           <ul>
             {Object.keys(this.props.courses).map(function(courseId) {
               var course = this.props.courses[courseId];
+              var doLink = course.count > 4
+                ? <a href="#" data-id={courseId}
+                    onClick={this.onDoClick}>{course.count_attempt_success} done</a>
+                : <span>Do course after 5 items</span>
               return <li key={course.id}>
                   <a onClick={this.onCourseClick} data-id={courseId}
                     href="#"><strong>{course.title}</strong></a> (<a href="#" data-id={courseId}
-                    onClick={this.onEntriesClick}>{course.count} entries</a>, <a href="#" data-id={courseId}
-                    onClick={this.onDoClick}>{course.count_attempt_success} done</a>)
+                    onClick={this.onEntriesClick}>{course.count} entries</a>, {doLink})
                 </li>
             }, this)}
           </ul>

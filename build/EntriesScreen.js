@@ -221,7 +221,11 @@
                 null,
                 "Phonetic"
               ),
-              React.createElement("th", null)
+              React.createElement(
+                "th",
+                null,
+                "success / error"
+              )
             )
           ),
           React.createElement(

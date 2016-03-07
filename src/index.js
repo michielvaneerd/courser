@@ -61,6 +61,12 @@
           break;
         case "DO_COURSE_SCREEN":
           screen = <DoCourseScreen
+            answer={this.state.answer}
+            doCourseEntryId={this.state.doCourseEntryId}
+            doCourseAnswerEntryIds={this.state.doCourseAnswerEntryIds}
+            doCourseTestType={this.state.doCourseTestType}
+            answerEntryId={this.state.answerEntryId}
+            doCourseSuccess={this.state.doCourseSuccess}
             forceBackToMainScreen={this.state.forceBackToMainScreen}
             store={this.props.store}
             onMain={this.onMain}

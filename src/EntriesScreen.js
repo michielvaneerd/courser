@@ -172,7 +172,7 @@
                 <th>Source</th>
                 <th>Destination</th>
                 <th>Phonetic</th>
-                <th></th>
+                <th>success / error</th>
               </tr>
             </thead>
             <tbody>

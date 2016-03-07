@@ -30,12 +30,12 @@ input:required:invalid, input:focus:invalid {
   border-color:red;
 }
 
-button.success {
+input.success, button.success {
   background-color:green;
   color:white;
 }
 
-button.wrong {
+input.wrong, button.wrong {
   background-color:red;
   color:white;
 }

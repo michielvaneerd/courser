@@ -173,32 +173,32 @@
       	break;
       case "REQUEST_RESET":
         suppressInRequest = true;
-        storage.resetCourse(action.value).then(function(entries) {
+        storage.resetCourse(state.courseId).then(function(entries) {
           state.inRequest = false;
           me.dispatch({
-            type : "RESET",
-            value : entries,
-            courseId : action.value,
+            type : "REQUEST_DO_COURSE",
+            value : state.courseId,
+            testEntryId : action.entryId,
+            testAnswerEntryIds : action.entryIds,
+            testType : action.testType,
             forceBackToMainScreen : action.forceBackToMainScreen
           });
         }).catch(function(error) {
           errorHandler(error, state);
         });
         break;
-      case "RESET":
-        state.entries = action.value;
-        state.courses[action.courseId].count_attempt_success = 0;
-        state.courses[action.courseId].count_attempt_failure = 0;
-        break;
       case "REQUEST_DO_COURSE":        
         suppressInRequest = true;
         storage.getEntries(action.value).then(function(entries) {
           state.inRequest = false;
           state.courseId = action.value;
+          state.entries = entries;
+          state.doCourseEntryId = action.testEntryId;
+          state.doCourseAnswerEntryIds = action.testAnswerEntryIds;
+          state.doCourseTestType = action.testType;
           me.dispatch({
             type : "DO_COURSE",
             value : entries,
-            courseId : action.value,
             forceBackToMainScreen : action.forceBackToMainScreen
           });
         }).catch(function(error) {
@@ -207,27 +207,34 @@
         break;
       case "DO_COURSE":
         state.screen = "DO_COURSE_SCREEN";
-        state.entries = action.value;
-        state.implicitCourseId = action.courseId;
+        state.answerEntryId = 0;
+        state.answer = "";
+        break;
+      case "DO_COURSE_NEW_RANDOM_ITEM":
+        state.answerEntryId = 0;
+        state.answer = "";
+        state.doCourseSuccess = null; // false / true / null
+        state.doCourseEntryId = action.entryId;
+        state.doCourseAnswerEntryIds = action.answerEntryIds;
+        state.doCourseTestType = action.testType;
         break;
       case "REQUEST_SAVE_ANSWER":
-        // TODO: after saving answer, maybe I can better
-        // fetch the course also from the database, so I do not
-        // have to set count_attempt_[success|failure] here
-        if (action.success) {
-          action.value.attempt_success += 1;
-          state.courses[state.courseId].count_attempt_success += 1;
+        var doCourseEntry = Object.assign({}, state.entries[state.doCourseEntryId]);
+        if (action.doCourseSuccess) {
+          doCourseEntry.attempt_success += 1;
         } else {
-          action.value.attempt_failure += 1;
-          state.courses[state.courseId].count_attempt_failure += 1;
+          doCourseEntry.attempt_failure += 1;
         }
         suppressInRequest = true;
-        storage.saveEntry(action.value).then(function(entry) {
+        state.answer = action.answer;
+        storage.saveEntry(doCourseEntry).then(function(entry) {
           state.inRequest = false;
           me.dispatch({
             type : "SAVE_ANSWER",
-            value : entry,
-            success : action.success,
+            doCourseEntry : entry,
+            answer : action.answer,
+            answerEntryId : action.answerEntryId,
+            doCourseSuccess : action.doCourseSuccess,
             forceBackToMainScreen : action.forceBackToMainScreen
           });
         }).catch(function(error) {
@@ -235,12 +242,15 @@
         });
         break;
       case "SAVE_ANSWER":
-        state.entries[action.value.id] = action.value;
-        if (!action.success) {
-          state.error = "Wrong answer";
+        if (action.doCourseSuccess) {
+          state.courses[state.courseId].count_attempt_success += 1;
         } else {
-          state.success = "OK!";
+          state.courses[state.courseId].count_attempt_failure += 1;
         }
+        state.answerEntryId = action.answerEntryId;
+        state.entries[state.doCourseEntryId] = action.doCourseEntry;
+        state.doCourseSuccess = action.doCourseSuccess;
+        state.answer = action.answer
         break;
       case "ERROR":
         state.error = action.value;

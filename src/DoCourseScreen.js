@@ -21,63 +21,51 @@
       }
       return {id : 0};
     },
-    getAnswerEntries : function(id, entries) {
+    getAnswerEntryIds : function(id, entries) {
       var i, index;
-      var answerEntries = [];
+      var answerEntryIds = [];
       var ids = Object.keys(entries);
       ids.splice(ids.indexOf(id.toString()), 1);
       for (i = 0; i < 3; i++) {
         index = Math.floor(Math.random() * ids.length);
-        answerEntries.push(entries[ids[index]]);
+        answerEntryIds.push(ids[index]);
         ids.splice(index, 1);
       }
-      var insertIndex = Math.floor(Math.random() * answerEntries.length + 1);
-      answerEntries.splice(insertIndex, 0, entries[id]);
-      return answerEntries;
+      var insertIndex = Math.floor(Math.random() * answerEntryIds.length + 1);
+      answerEntryIds.splice(insertIndex, 0, id);
+      return answerEntryIds;
     },
-    getInitialState : function() {
+    getNewTest : function() {
       var entry = this.getEntry(this.props.entries);
       return Object.assign({
-        answerEntry : null,
-        answer : "",
-        answerEntries : this.getAnswerEntries(entry.id, this.props.entries),
+        answerEntryId : 0,
+        entryId : entry.id,
+        answerEntryIds : this.getAnswerEntryIds(entry.id, this.props.entries),
         testType : this.getTestType()
       }, entry);
     },
+    getInitialState : function() {
+      return {answer : ""};
+    },
+    componentDidMount : function() {
+      // Force a rerender with first set of random item + possible answers.
+      this.dispatchNewItem();
+    },
     componentWillReceiveProps : function(nextProps) {
-      var entry = this.getEntry(nextProps.entries);
-      this.setState(Object.assign({
-        answerEntry : null,
-        answer : "",  
-        answerEntries : this.getAnswerEntries(entry.id, nextProps.entries),
-        testType : this.getTestType()
-      }, entry));
+      this.setState({answer : nextProps.answer || ""});
     },
-    onSave : function() {
-      var entry = Object.assign({}, this.state);
-      var success = this.getSuccess();
-      delete entry.answer;
-      delete entry.testType;
-      delete entry.answerEntries;
-      delete entry.answerEntry;
-      this.props.store.dispatch({
-        type : "REQUEST_SAVE_ANSWER",
-        value : entry,
-        success : success,
-        forceBackToMainScreen : this.props.forceBackToMainScreen
-      });
-    },
-    getSuccess : function() {
-      switch (this.state.testType) {
+    getSuccess : function(entry) {
+      var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
+      switch (this.props.doCourseTestType) {
         case "SRC_DEST_CHOOSE":
-          return this.state.answerEntry.dest == this.state.dest;
+          return entry.dest == doCourseEntry.dest;
         break;
         case "DEST_SRC_CHOOSE":
-          return this.state.answerEntry.src == this.state.src;
+          return entry.src == doCourseEntry.src;
         case "SRC_DEST_WRITE":
-          return this.state.answer == this.state.dest;
+          return this.state.answer == doCourseEntry.dest;
         case "DEST_SRC_WRITE":
-          return this.state.answer == this.state.src;
+          return this.state.answer == doCourseEntry.src;
         break;
       }
       return null;
@@ -94,93 +82,143 @@
         this.props.onMain();
       }
     },
+    dispatchNewItem : function() {
+      this.props.store.dispatch(Object.assign(
+        this.getNewTest(),
+        {type : "DO_COURSE_NEW_RANDOM_ITEM",
+        forceBackToMainScreen : this.props.forceBackToMainScreen})
+      );
+    },
     onReset : function() {
+      // Geef hierin ook meteen een random entry en entries mee,
+      var ids = Object.keys(this.props.entries);
+      var newEntryId = ids[Math.floor(Math.random() * ids.length)];
+      var entryIds = this.getAnswerEntryIds(newEntryId, this.props.entries);
+      var testType = this.getTestType();
       this.props.store.dispatch({
         type : "REQUEST_RESET",
-        value : this.props.course.id,
+        entryId : newEntryId,
+        entryIds : entryIds,
+        testType : testType,
+        forceBackToMainScreen : this.props.forceBackToMainScreen
+      });
+    },
+    onSave : function() {
+      var success = this.getSuccess();
+      this.props.store.dispatch({
+        type : "REQUEST_SAVE_ANSWER",
+        answer : this.state.answer,
+        doCourseSuccess : success,
         forceBackToMainScreen : this.props.forceBackToMainScreen
       });
     },
     answerClick : function(e) {
       var id = e.target.dataset.id;
-      var entry = this.props.entries[id];      
-      this.setState({
-        answerEntry : entry
+      var answerEntry = this.props.entries[id];
+      var success = this.getSuccess(answerEntry);
+      this.props.store.dispatch({
+        type : "REQUEST_SAVE_ANSWER",
+        answerEntryId : id,
+        doCourseSuccess : success,
+        forceBackToMainScreen : this.props.forceBackToMainScreen
       });
     },
     render : function() {
-      if (this.state.id) {
+      if (this.props.doCourseEntryId) {
+        var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
         var editArea = null;
-        switch (this.state.testType) {
+        switch (this.props.doCourseTestType) {
           case "SRC_DEST_CHOOSE":
             editArea = (
               <div>
-                <div>SRC: {this.state.src}</div>
+                <div>SRC: {doCourseEntry.src}</div>
                 <div>
-                {this.state.answerEntries.map(function(entry) {
+                {this.props.doCourseAnswerEntryIds.map(function(entryId) {
                   var cName = "";
-                  if (this.state.answerEntry) {
-                    if (this.state.answerEntry.id == entry.id) {
-                      cName = this.getSuccess() ? "success" : "wrong";
+                  if (this.props.answerEntryId) {
+                    if (this.props.answerEntryId == entryId) {
+                      cName = this.props.doCourseSuccess ? "success" : "wrong";
                     }
                   }
                   return (
-                    <button className={cName} key={entry.id} data-id={entry.id} onClick={this.answerClick}>{entry.dest}</button>
+                    <button className={cName}
+                      key={entryId} data-id={entryId}
+                      onClick={this.answerClick}>{this.props.entries[entryId].dest}</button>
                   );
                 }, this)}
                 </div>
-                <button disabled={!!!this.state.answerEntry} onClick={this.onSave}>Next</button>
+                <button disabled={this.props.doCourseSuccess === null}
+                  onClick={this.dispatchNewItem}>Next</button>
               </div>
             );
           break;
           case "DEST_SRC_CHOOSE":
             editArea = (
               <div>
-                <div>DEST: {this.state.dest}</div>
+                <div>DEST: {doCourseEntry.dest}</div>
                 <div>
-                {this.state.answerEntries.map(function(entry) {
+                {this.props.doCourseAnswerEntryIds.map(function(entryId) {
                   var cName = "";
-                  if (this.state.answerEntry) {
-                    if (this.state.answerEntry.id == entry.id) {
-                      cName = this.getSuccess() ? "success" : "wrong";
+                  if (this.props.answerEntryId) {
+                    if (this.props.answerEntryId == entryId) {
+                      cName = this.props.doCourseSuccess ? "success" : "wrong";
                     }
                   }
                   return (
-                    <button className={cName} key={entry.id} data-id={entry.id} onClick={this.answerClick}>{entry.src}</button>
+                    <button className={cName}
+                      key={entryId} data-id={entryId}
+                      onClick={this.answerClick}>{this.props.entries[entryId].src}</button>
                   );
                 }, this)}
                 </div>
-                <button disabled={!!!this.state.answerEntry} onClick={this.onSave}>Next</button>
+                <button disabled={this.props.doCourseSuccess === null}
+                  onClick={this.dispatchNewItem}>Next</button>
               </div>
             );
           break;
           case "SRC_DEST_WRITE":
+            var cName = "";
+            if (this.props.doCourseSuccess === true) {
+              cName = "success";
+            } else if (this.props.doCourseSuccess === false) {
+              cName = "wrong";
+            }
             editArea = (
               <div>
-                <div>SRC: {this.state.src}</div>
-                <input placeholder="dest" autoFocus={true} type="text"
+                <div>SRC: {doCourseEntry.src}</div>
+                <input className={cName} placeholder="dest" autoFocus={true} type="text"
                   ref={function(el) {
                     if (el) {
                       el.focus();
                     }
                   }}
                   onChange={this.onChange} value={this.state.answer} />
-                <button onClick={this.onSave}>Next</button>
+                <button disabled={this.state.answer.length == 0} onClick={this.onSave}>Save</button>
+                <button disabled={this.props.doCourseSuccess === null}
+                  onClick={this.dispatchNewItem}>Next</button>
               </div>
             );
           break;
           case "DEST_SRC_WRITE":
+            var cName = "";
+            if (this.props.doCourseSuccess === true) {
+              cName = "success";
+            } else if (this.props.doCourseSuccess === false) {
+              cName = "wrong";
+            }
             editArea = (
               <div>
-                <div>DEST: {this.state.dest}</div>
-                <input placeholder="src" autoFocus={true} type="text"
+                <div>DEST: {doCourseEntry.dest}</div>
+                <input className={cName} placeholder="dest" autoFocus={true} type="text"
                   ref={function(el) {
                     if (el) {
                       el.focus();
                     }
                   }}
                   onChange={this.onChange} value={this.state.answer} />
-                <button onClick={this.onSave}>Next</button>
+                <button disabled={this.state.answer.length == 0} onClick={this.onSave}>Save</button>
+                <button disabled={this.props.doCourseSuccess === null}
+                  onClick={this.dispatchNewItem}>Next</button>
               </div>
             );
           break;

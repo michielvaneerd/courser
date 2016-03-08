@@ -27,6 +27,13 @@
         invalidTitle : e.target.value.length == 0
       });
     },
+    onTestTypeChange : function(e) {
+      var o = {};
+      var key = e.currentTarget.dataset.id;
+      var checked = e.currentTarget.checked;
+      o[key] = checked;
+      this.setState(o);
+    },
     onDelete : function() {
       this.props.store.dispatch({
         type : "REQUEST_DELETE_COURSE"
@@ -45,6 +52,7 @@
       });
     },
     render : function() {
+      console.log(JSON.stringify(this.state));
       var title = this.props.course.id
         ? "Edit van course " + this.props.course.title : "Maken van course";
       var deleteButton = this.props.course.id
@@ -52,12 +60,26 @@
       return (
         <div>
           <h3>{title}</h3>
-          <input autoFocus={true} required={true} type="text" onChange={this.onTitleInputChange}
-            value={this.state.title} />
+          <div>
+            <input placeholder="Title" autoFocus={true} required={true}
+              type="text" onChange={this.onTitleInputChange}
+              value={this.state.title} />
+          </div>
+          <div>
+            <h3>Test types</h3>
+            {win.Constants.testTypes.map(function(testType) {
+              return (
+                <div key={testType}>
+                  <input checked={this.state[testType]} onChange={this.onTestTypeChange} data-id={testType} type="checkbox" id={testType} />
+                  <label htmlFor={testType}>{win.Language[testType]}</label>
+                </div>
+              );
+            }, this)}
+          </div>
           <button disabled={!!!this.state.title} onClick={this.onSave}>Save</button>
           <button onClick={this.props.onMain}>Back</button>
           <button disabled={!(this.props.course.id)} onClick={this.onEntries}>Show entries</button>
-          <button disabled={this.props.course.count < 5} onClick={this.onDo}>Do</button>
+          <button disabled={!this.props.course.id || this.props.course.count < 5} onClick={this.onDo}>Do</button>
           {deleteButton}
         </div>
       );

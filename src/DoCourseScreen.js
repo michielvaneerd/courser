@@ -1,6 +1,6 @@
 (function(win) {
   
-  var testTypes = ["SRC_DEST_CHOOSE", "DEST_SRC_CHOOSE", "SRC_DEST_WRITE", "DEST_SRC_WRITE"];
+  var testTypes = win.Constants.testTypes;
 
   win.DoCourseScreen = React.createClass({
     getTestType : function() {
@@ -90,7 +90,6 @@
       );
     },
     onReset : function() {
-      // Geef hierin ook meteen een random entry en entries mee,
       var ids = Object.keys(this.props.entries);
       var newEntryId = ids[Math.floor(Math.random() * ids.length)];
       var entryIds = this.getAnswerEntryIds(newEntryId, this.props.entries);

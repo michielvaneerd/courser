@@ -1,5 +1,22 @@
 (function(win) {
 
+  // Constants - maybe separate file...
+  win.Constants = {
+    testTypes : [
+      "SRC_DEST_CHOOSE",
+      "DEST_SRC_CHOOSE",
+      "SRC_DEST_WRITE",
+      "DEST_SRC_WRITE"
+    ]
+  };
+  
+  win.Language = {
+    "SRC_DEST_CHOOSE" : "Show source, choose one of 4 possible destinations",
+    "DEST_SRC_CHOOSE" : "Show destination, choose one of 4 possible sources",
+    "SRC_DEST_WRITE" : "Show source, enter destination",
+    "DEST_SRC_WRITE" : "Show destination, enter source"
+  };
+
 	var defaultState = {
 	  success : false,
     sortOrder : null,

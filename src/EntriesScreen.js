@@ -153,26 +153,32 @@
             onKeyDown={this.onKeyDown}
             value={this.state.phone} /></td>
           <td>
-            <button disabled={!(this.state.src.length && this.state.dest.length)}
-              onClick={this.onSave}>Save</button>
-            {this.props.entry.id
-              ? (
-                  <span>
-                    <button onClick={this.onDelete}>Delete</button>
-                    <button onClick={this.onCancel}>Cancel</button>
-                  </span>
-                ) : null}
+            <div className="smallToolbar">
+              <button disabled={!(this.state.src.length && this.state.dest.length)}
+                onClick={this.onSave}>Save</button>
+              {this.props.entry.id
+                ? (
+                    <span>
+                      <button className="deleteButton" onClick={this.onDelete}>Delete</button>
+                      <button onClick={this.onCancel}>Cancel</button>
+                    </span>
+                  ) : null}
+            </div>
           </td>
         </tr>
       return (
         <div>
+          <div className="toolbar topToolbar">
+            <button onClick={this.props.onMain}>Back</button>
+          </div>
+          <h2>Entries of {this.props.course.title}</h2>
           <table>
             <thead>
               <tr>
-                <th>Source</th>
-                <th>Destination</th>
-                <th>Phonetic</th>
-                <th>success / error</th>
+                <th>{this.props.course.source_title}</th>
+                <th>{this.props.course.destination_title}</th>
+                <th>Pronunciation</th>
+                <th>Test result</th>
               </tr>
             </thead>
             <tbody>
@@ -195,7 +201,6 @@
                 : editOrCreateRow}
             </tbody>
           </table>
-          <button onClick={this.onBack}>Back</button>
         </div>
       );
     }

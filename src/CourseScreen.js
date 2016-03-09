@@ -6,7 +6,10 @@
 
   win.CourseScreen = React.createClass({
     getInitialState : function() {
-      return Object.assign({}, invalidity, this.props.course);
+      return Object.assign({
+        source_title : "Source",
+        destination_title : "Destination"
+      }, invalidity, this.props.course);
     },
     componentWillReceiveProps : function(nextProps) {
       this.setState(Object.assign({}, invalidity, nextProps.course));
@@ -39,60 +42,72 @@
         type : "REQUEST_DELETE_COURSE"
       });
     },
-    onEntries : function() {
-      this.props.store.dispatch({
-        type : "REQUEST_SELECT_ENTRIES",
-        value : this.props.course.id
-      });
-    },
-    onDo : function() {
-      this.props.store.dispatch({
-        type : "REQUEST_DO_COURSE",
-        value : this.props.course.id
-      });
-    },
     onTestOkSuccessCountChange : function(e) {
       this.setState({
         test_ok_success_count : e.target.value
       });
     },
+    onSourceTitleInputChange : function(e) {
+      this.setState({
+        source_title : e.target.value
+      });
+    },
+    onDestinationTitleInputChange : function(e) {
+      this.setState({
+        destination_title : e.target.value
+      });
+    },
     render : function() {
-      console.log(JSON.stringify(this.state));
-      var title = this.props.course.id
-        ? "Edit van course " + this.props.course.title : "Maken van course";
       var deleteButton = this.props.course.id
-        ? <button onClick={this.onDelete}>Delete</button> : "";
+        ? <button className="deleteButton" onClick={this.onDelete}>Delete</button> : "";
       return (
         <div>
-          <h1>{title}</h1>
-          <div>
+          <div className="toolbar topToolbar">
+            <button onClick={this.props.onMain}>Back</button>
+          </div>
+          <h2>{this.props.course.id
+            ? ("Edit " + this.props.course.title) : "Create course"}</h2>
+          <div className="formRow formLabelInputPair">
             <label htmlFor="courseTitleInput">Title</label>
             <input id="courseTitleInput" placeholder="Title" autoFocus={true} required={true}
               type="text" onChange={this.onTitleInputChange}
               value={this.state.title} />
           </div>
-          <div>
-            <h3>Test success count</h3>
-            <input type="number"
+          <div className="formRow formLabelInputPair">
+            <label htmlFor="courseSourceTitleInput">Source title</label>
+            <input id="courseSourceTitleInput" placeholder="Source title" required={true}
+              type="text" onChange={this.onSourceTitleInputChange}
+              value={this.state.source_title} />
+          </div>
+          <div className="formRow formLabelInputPair">
+            <label htmlFor="courseDestinationTitleInput">Destination title</label>
+            <input id="courseDestinationTitleInput" placeholder="Destination title" required={true}
+              type="text" onChange={this.onDestinationTitleInputChange}
+              value={this.state.destination_title} />
+          </div>
+          <div className="formRow formLabelInputPair">
+            <label htmlFor="courseTestOkSuccessCountInput">Test success count</label>
+            <input id="courseTestOkSuccessCountInput" type="number"
               value={this.state.test_ok_success_count}
               onChange={this.onTestOkSuccessCountChange} />
           </div>
-          <div>
-            <h3>Test types</h3>
+          <div className="formRow">
             {win.Constants.testTypes.map(function(testType) {
+              var text = win.Language[testType]
+                .replace("%source%", this.props.course.source_title || this.state.source_title)
+                .replace("%destination%", this.props.course.destination_title || this.state.destination_title)
               return (
-                <div key={testType}>
+                <div className="formInputLabelPair" key={testType}>
                   <input checked={this.state[testType]} onChange={this.onTestTypeChange} data-id={testType} type="checkbox" id={testType} />
-                  <label htmlFor={testType}>{win.Language[testType]}</label>
+                  <label htmlFor={testType}>{text}</label>
                 </div>
               );
             }, this)}
           </div>
-          <button disabled={!!!this.state.title} onClick={this.onSave}>Save</button>
-          <button onClick={this.props.onMain}>Back</button>
-          <button disabled={!(this.props.course.id)} onClick={this.onEntries}>Show entries</button>
-          <button disabled={!this.props.course.id || this.props.course.count < 5} onClick={this.onDo}>Do</button>
-          {deleteButton}
+          <div className="toolbar bottomToolbar">
+            <button disabled={!!!this.state.title} onClick={this.onSave}>Save</button>
+            {deleteButton}
+          </div>
         </div>
       );
     }

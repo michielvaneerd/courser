@@ -36,51 +36,64 @@
         "div",
         null,
         React.createElement(
-          "ul",
+          "h2",
           null,
-          Object.keys(this.props.courses).map(function (courseId) {
-            var course = this.props.courses[courseId];
-            var doLink = course.count > 4 ? React.createElement(
-              "a",
-              { href: "#", "data-id": courseId,
-                onClick: this.onDoClick },
-              course.count_attempt_success,
-              " done"
-            ) : React.createElement(
-              "span",
-              null,
-              "Do course after 5 items"
-            );
-            return React.createElement(
-              "li",
-              { key: course.id },
-              React.createElement(
-                "a",
-                { onClick: this.onCourseClick, "data-id": courseId,
-                  href: "#" },
+          "Courses"
+        ),
+        React.createElement(
+          "table",
+          null,
+          React.createElement(
+            "tbody",
+            null,
+            Object.keys(this.props.courses).map(function (courseId) {
+              var course = this.props.courses[courseId];
+              return React.createElement(
+                "tr",
+                { key: course.id },
                 React.createElement(
-                  "strong",
+                  "td",
                   null,
-                  course.title
+                  React.createElement(
+                    "a",
+                    { onClick: this.onCourseClick, "data-id": courseId,
+                      href: "#" },
+                    React.createElement(
+                      "strong",
+                      null,
+                      course.title
+                    )
+                  )
+                ),
+                React.createElement(
+                  "td",
+                  null,
+                  React.createElement(
+                    "a",
+                    { href: "#", "data-id": courseId,
+                      onClick: this.onEntriesClick },
+                    course.count,
+                    " entries"
+                  )
+                ),
+                React.createElement(
+                  "td",
+                  null,
+                  course.count > 4 ? React.createElement(
+                    "a",
+                    { href: "#", "data-id": courseId,
+                      onClick: this.onDoClick },
+                    course.count_attempt_success,
+                    " done"
+                  ) : ""
                 )
-              ),
-              " (",
-              React.createElement(
-                "a",
-                { href: "#", "data-id": courseId,
-                  onClick: this.onEntriesClick },
-                course.count,
-                " entries"
-              ),
-              ", ",
-              doLink,
-              ")"
-            );
-          }, this)
+              );
+            }, this)
+          )
         ),
         React.createElement(
           "div",
-          null,
+          { className: "bottomToolbar" },
           React.createElement(
             "button",
             { onClick: this.onCreateCourse },

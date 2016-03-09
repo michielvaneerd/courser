@@ -173,30 +173,49 @@
           "td",
           null,
           React.createElement(
-            "button",
-            { disabled: !(this.state.src.length && this.state.dest.length),
-              onClick: this.onSave },
-            "Save"
-          ),
-          this.props.entry.id ? React.createElement(
-            "span",
-            null,
+            "div",
+            { className: "smallToolbar" },
             React.createElement(
               "button",
-              { onClick: this.onDelete },
-              "Delete"
+              { disabled: !(this.state.src.length && this.state.dest.length),
+                onClick: this.onSave },
+              "Save"
             ),
-            React.createElement(
-              "button",
-              { onClick: this.onCancel },
-              "Cancel"
-            )
-          ) : null
+            this.props.entry.id ? React.createElement(
+              "span",
+              null,
+              React.createElement(
+                "button",
+                { className: "deleteButton", onClick: this.onDelete },
+                "Delete"
+              ),
+              React.createElement(
+                "button",
+                { onClick: this.onCancel },
+                "Cancel"
+              )
+            ) : null
+          )
         )
       );
       return React.createElement(
         "div",
         null,
+        React.createElement(
+          "div",
+          { className: "toolbar topToolbar" },
+          React.createElement(
+            "button",
+            { onClick: this.props.onMain },
+            "Back"
+          )
+        ),
+        React.createElement(
+          "h2",
+          null,
+          "Entries of ",
+          this.props.course.title
+        ),
         React.createElement(
           "table",
           null,
@@ -209,22 +228,22 @@
               React.createElement(
                 "th",
                 null,
-                "Source"
+                this.props.course.source_title
               ),
               React.createElement(
                 "th",
                 null,
-                "Destination"
+                this.props.course.destination_title
               ),
               React.createElement(
                 "th",
                 null,
-                "Phonetic"
+                "Pronunciation"
               ),
               React.createElement(
                 "th",
                 null,
-                "success / error"
+                "Test result"
               )
             )
           ),
@@ -270,11 +289,6 @@
               React.createElement("td", null)
             ) : editOrCreateRow
           )
-        ),
-        React.createElement(
-          "button",
-          { onClick: this.onBack },
-          "Back"
         )
       );
     }

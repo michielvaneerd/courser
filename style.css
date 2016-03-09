@@ -40,3 +40,48 @@ input.wrong, button.wrong {
   color:white;
 }
 
+.formRow {
+  margin:0 0 1rem 0;
+}
+
+.formLabelInputPair label {
+  display:block;
+}
+
+.formLabelInputPair input {
+  
+}
+
+.formInputLabelPair label {
+  
+}
+
+.formInputLabelPair input {
+  
+}
+
+.toolbar, .smallToolbar {
+  overflow:hidden;
+}
+
+.toolbar button, .smallToolbar button {
+  display:block;
+  float:left;
+  margin-right:1rem;
+}
+
+.smallToolbar button {
+  margin-right:.2rem;
+}
+
+.bottomToolbar {
+  
+}
+
+.topToolbar {
+  
+}
+
+.deleteButton {
+  color:red;
+}

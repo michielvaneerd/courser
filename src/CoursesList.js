@@ -32,21 +32,33 @@
     render : function() {
       return (
         <div>
-          <ul>
-            {Object.keys(this.props.courses).map(function(courseId) {
-              var course = this.props.courses[courseId];
-              var doLink = course.count > 4
-                ? <a href="#" data-id={courseId}
-                    onClick={this.onDoClick}>{course.count_attempt_success} done</a>
-                : <span>Do course after 5 items</span>
-              return <li key={course.id}>
-                  <a onClick={this.onCourseClick} data-id={courseId}
-                    href="#"><strong>{course.title}</strong></a> (<a href="#" data-id={courseId}
-                    onClick={this.onEntriesClick}>{course.count} entries</a>, {doLink})
-                </li>
-            }, this)}
-          </ul>
-          <div>
+          <h2>Courses</h2>
+          <table>
+            <tbody>
+              {Object.keys(this.props.courses).map(function(courseId) {
+                var course = this.props.courses[courseId];
+                return (
+                  <tr key={course.id}>
+                    <td>
+                      <a onClick={this.onCourseClick} data-id={courseId}
+                        href="#"><strong>{course.title}</strong></a>
+                    </td>
+                    <td>
+                      <a href="#" data-id={courseId}
+                        onClick={this.onEntriesClick}>{course.count} entries</a>
+                    </td>
+                    <td>
+                      {course.count > 4
+                        ? <a href="#" data-id={courseId}
+                            onClick={this.onDoClick}>{course.count_attempt_success} done</a>
+                        : ""}
+                    </td>
+                  </tr>
+                );
+              }, this)}
+            </tbody>
+          </table>
+          <div className="bottomToolbar">
             <button onClick={this.onCreateCourse}>Create course</button>
           </div>
         </div>

@@ -1,9 +1,13 @@
 (function(win) {
-  
-  var testTypes = win.Constants.testTypes;
 
   win.DoCourseScreen = React.createClass({
     getTestType : function() {
+      var testTypes = [];
+      win.Constants.testTypes.forEach(function(testType) {
+        if (this.props.course[testType]) {
+          testTypes.push(testType);
+        }
+      }, this);
       var index = Math.floor(Math.random() * testTypes.length);
       return testTypes[index];
     },

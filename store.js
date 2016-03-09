@@ -11,10 +11,10 @@
   };
   
   win.Language = {
-    "SRC_DEST_CHOOSE" : "Show source, choose one of 4 possible destinations",
-    "DEST_SRC_CHOOSE" : "Show destination, choose one of 4 possible sources",
-    "SRC_DEST_WRITE" : "Show source, enter destination",
-    "DEST_SRC_WRITE" : "Show destination, enter source"
+    "SRC_DEST_CHOOSE" : "Show %source% item, select one of 4 possible %destination% items",
+    "DEST_SRC_CHOOSE" : "Show %destination% item, select one of 4 possible %source% items",
+    "SRC_DEST_WRITE" : "Show %source% item, enter %destination%",
+    "DEST_SRC_WRITE" : "Show %destination% item, enter %source%"
   };
 
 	var defaultState = {

@@ -53,6 +53,11 @@
         value: this.props.course.id
       });
     },
+    onTestOkSuccessCountChange: function (e) {
+      this.setState({
+        test_ok_success_count: e.target.value
+      });
+    },
     render: function () {
       console.log(JSON.stringify(this.state));
       var title = this.props.course.id ? "Edit van course " + this.props.course.title : "Maken van course";
@@ -65,16 +70,33 @@
         "div",
         null,
         React.createElement(
-          "h3",
+          "h1",
           null,
           title
         ),
         React.createElement(
           "div",
           null,
-          React.createElement("input", { placeholder: "Title", autoFocus: true, required: true,
+          React.createElement(
+            "label",
+            { htmlFor: "courseTitleInput" },
+            "Title"
+          ),
+          React.createElement("input", { id: "courseTitleInput", placeholder: "Title", autoFocus: true, required: true,
             type: "text", onChange: this.onTitleInputChange,
             value: this.state.title })
+        ),
+        React.createElement(
+          "div",
+          null,
+          React.createElement(
+            "h3",
+            null,
+            "Test success count"
+          ),
+          React.createElement("input", { type: "number",
+            value: this.state.test_ok_success_count,
+            onChange: this.onTestOkSuccessCountChange })
         ),
         React.createElement(
           "div",

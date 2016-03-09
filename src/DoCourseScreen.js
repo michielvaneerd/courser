@@ -11,6 +11,7 @@
       var ids = [];
       for (var key in entries) {
         if (!entries[key].attempt_success
+          || entries[key].attempt_success < this.props.course.test_ok_success_count
           || entries[key].attempt_success < entries[key].attempt_failure) {
           ids.push(key);
         }

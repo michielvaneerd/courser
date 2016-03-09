@@ -51,6 +51,11 @@
         value : this.props.course.id
       });
     },
+    onTestOkSuccessCountChange : function(e) {
+      this.setState({
+        test_ok_success_count : e.target.value
+      });
+    },
     render : function() {
       console.log(JSON.stringify(this.state));
       var title = this.props.course.id
@@ -59,11 +64,18 @@
         ? <button onClick={this.onDelete}>Delete</button> : "";
       return (
         <div>
-          <h3>{title}</h3>
+          <h1>{title}</h1>
           <div>
-            <input placeholder="Title" autoFocus={true} required={true}
+            <label htmlFor="courseTitleInput">Title</label>
+            <input id="courseTitleInput" placeholder="Title" autoFocus={true} required={true}
               type="text" onChange={this.onTitleInputChange}
               value={this.state.title} />
+          </div>
+          <div>
+            <h3>Test success count</h3>
+            <input type="number"
+              value={this.state.test_ok_success_count}
+              onChange={this.onTestOkSuccessCountChange} />
           </div>
           <div>
             <h3>Test types</h3>

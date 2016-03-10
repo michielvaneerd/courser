@@ -78,17 +78,23 @@ input:required:invalid, input:focus:invalid {
   color:red;
 }
 
-.doCourseSource {
-  overflow:hidden;
+.doCourseQuestion {
+
 }
 
-.doCourseSource > div:first-child {
+.doCourseQuestionTitle {
   display:block;
   margin-bottom:.4rem;
   font-weight:bold;
 }
 
-.doCourseOptions {
+.doCourseQuestionEntry {
+  display:block;
+  margin-bottom:.4rem;
+  font-weight:bold;
+}
+
+.doCourseOptions, .doCourseInput {
   position:relative;
   width:200px;
   overflow:hidden;

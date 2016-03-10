@@ -140,9 +140,9 @@
       }
       return (
         <div>
-          <div className="doCourseSource">
-            <div>{this.props.course[key + "_title"]}</div>
-            {doCourseEntry[key]}
+          <div className="doCourseQuestion">
+            <div className="doCourseQuestionTitle">{this.props.course[key + "_title"]}</div>
+            <div className="doCourseQuestionEntry">{doCourseEntry[key]}</div>
           </div>
           <div className="doCourseInput">
             <input className={cName} placeholder={this.props.course[key + "_title"]}
@@ -154,8 +154,10 @@
               }}
               onChange={this.onChange} value={this.state.answer} />
           </div>
-          <div>
+          <div className="toolbar bottomToolbar">
             <button disabled={this.state.answer.length == 0} onClick={this.onSave}>Save</button>
+            <button disabled={this.props.doCourseSuccess === null}
+              onClick={this.dispatchNewItem}>Next</button>
           </div>
         </div>
       );
@@ -167,9 +169,9 @@
       var otherKey = key == "source" ? "destination" : "source";
       return (
         <div>
-          <div className="doCourseSource">
-            <div>{this.props.course[key + "_title"]}</div>
-            {doCourseEntry[key]}
+          <div className="doCourseQuestion">
+            <div className="doCourseQuestionTitle">{this.props.course[key + "_title"]}</div>
+            <div className="doCourseQuestionEntry">{doCourseEntry[key]}</div>
           </div>
           <div className="doCourseOptions">
           {this.props.doCourseAnswerEntryIds.map(function(entryId) {
@@ -185,6 +187,10 @@
                 onClick={this.answerClick}>{this.props.entries[entryId][otherKey]}</button>
             );
           }, this)}
+          </div>
+          <div className="toolbar bottomToolbar">
+            <button disabled={this.props.doCourseSuccess === null}
+              onClick={this.dispatchNewItem}>Next</button>
           </div>
         </div>
       );
@@ -213,10 +219,6 @@
             </div>
             <h2>Test of {this.props.course.title}</h2>
             {editArea}
-            <div className="toolbar bottomToolbar">
-              <button disabled={this.props.doCourseSuccess === null}
-                onClick={this.dispatchNewItem}>Next</button>
-            </div>
           </div>
         );
       } else {

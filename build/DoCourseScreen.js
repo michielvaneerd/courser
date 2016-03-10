@@ -139,13 +139,17 @@
         null,
         React.createElement(
           "div",
-          { className: "doCourseSource" },
+          { className: "doCourseQuestion" },
           React.createElement(
             "div",
-            null,
+            { className: "doCourseQuestionTitle" },
             this.props.course[key + "_title"]
           ),
-          doCourseEntry[key]
+          React.createElement(
+            "div",
+            { className: "doCourseQuestionEntry" },
+            doCourseEntry[key]
+          )
         ),
         React.createElement(
           "div",
@@ -161,11 +165,17 @@
         ),
         React.createElement(
           "div",
-          null,
+          { className: "toolbar bottomToolbar" },
           React.createElement(
             "button",
             { disabled: this.state.answer.length == 0, onClick: this.onSave },
             "Save"
+          ),
+          React.createElement(
+            "button",
+            { disabled: this.props.doCourseSuccess === null,
+              onClick: this.dispatchNewItem },
+            "Next"
           )
         )
       );
@@ -179,13 +189,17 @@
         null,
         React.createElement(
           "div",
-          { className: "doCourseSource" },
+          { className: "doCourseQuestion" },
           React.createElement(
             "div",
-            null,
+            { className: "doCourseQuestionTitle" },
             this.props.course[key + "_title"]
           ),
-          doCourseEntry[key]
+          React.createElement(
+            "div",
+            { className: "doCourseQuestionEntry" },
+            doCourseEntry[key]
+          )
         ),
         React.createElement(
           "div",
@@ -205,6 +219,16 @@
               this.props.entries[entryId][otherKey]
             );
           }, this)
+        ),
+        React.createElement(
+          "div",
+          { className: "toolbar bottomToolbar" },
+          React.createElement(
+            "button",
+            { disabled: this.props.doCourseSuccess === null,
+              onClick: this.dispatchNewItem },
+            "Next"
+          )
         )
       );
     },
@@ -247,17 +271,7 @@
             "Test of ",
             this.props.course.title
           ),
-          editArea,
-          React.createElement(
-            "div",
-            { className: "toolbar bottomToolbar" },
-            React.createElement(
-              "button",
-              { disabled: this.props.doCourseSuccess === null,
-                onClick: this.dispatchNewItem },
-              "Next"
-            )
-          )
+          editArea
         );
       } else {
         return React.createElement(

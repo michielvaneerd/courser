@@ -192,6 +192,8 @@
         suppressInRequest = true;
         storage.resetCourse(state.courseId).then(function(entries) {
           state.inRequest = false;
+          state.courses[state.courseId].count_attempt_success = 0;
+          state.courses[state.courseId].count_attempt_failure = 0;
           me.dispatch({
             type : "REQUEST_DO_COURSE",
             value : state.courseId,
@@ -213,6 +215,7 @@
           state.doCourseEntryId = action.testEntryId;
           state.doCourseAnswerEntryIds = action.testAnswerEntryIds;
           state.doCourseTestType = action.testType;
+          state.doCourseSuccess = null;
           me.dispatch({
             type : "DO_COURSE",
             value : entries,

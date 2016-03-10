@@ -62,15 +62,15 @@
     getSuccess: function (entry) {
       var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
       switch (this.props.doCourseTestType) {
-        case "SRC_DEST_CHOOSE":
-          return entry.dest == doCourseEntry.dest;
+        case "SOURCE_DESTINATION_CHOOSE":
+          return entry.destination == doCourseEntry.destination;
           break;
-        case "DEST_SRC_CHOOSE":
-          return entry.src == doCourseEntry.src;
-        case "SRC_DEST_WRITE":
-          return this.state.answer == doCourseEntry.dest;
-        case "DEST_SRC_WRITE":
-          return this.state.answer == doCourseEntry.src;
+        case "DESTINATION_SOURCE_CHOOSE":
+          return entry.source == doCourseEntry.source;
+        case "SOURCE_DESTINATION_WRITE":
+          return this.state.answer == doCourseEntry.destination;
+        case "DESTINATION_SOURCE_WRITE":
+          return this.state.answer == doCourseEntry.source;
           break;
       }
       return null;
@@ -124,156 +124,102 @@
         forceBackToMainScreen: this.props.forceBackToMainScreen
       });
     },
+    showWrite: function () {
+      var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
+      var key = this.props.doCourseTestType == "SOURCE_DESTINATION_CHOOSE" ? "source" : "destination";
+      var otherKey = key == "source" ? "destination" : "source";
+      var cName = "";
+      if (this.props.doCourseSuccess === true) {
+        cName = "success";
+      } else if (this.props.doCourseSuccess === false) {
+        cName = "wrong";
+      }
+      return React.createElement(
+        "div",
+        null,
+        React.createElement(
+          "div",
+          { className: "doCourseSource" },
+          React.createElement(
+            "div",
+            null,
+            this.props.course[key + "_title"]
+          ),
+          doCourseEntry[key]
+        ),
+        React.createElement(
+          "div",
+          { className: "doCourseInput" },
+          React.createElement("input", { className: cName, placeholder: this.props.course[key + "_title"],
+            autoFocus: true, type: "text",
+            ref: function (el) {
+              if (el) {
+                el.focus();
+              }
+            },
+            onChange: this.onChange, value: this.state.answer })
+        ),
+        React.createElement(
+          "div",
+          null,
+          React.createElement(
+            "button",
+            { disabled: this.state.answer.length == 0, onClick: this.onSave },
+            "Save"
+          )
+        )
+      );
+    },
+    showOptions: function () {
+      var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
+      var key = this.props.doCourseTestType == "SOURCE_DESTINATION_CHOOSE" ? "source" : "destination";
+      var otherKey = key == "source" ? "destination" : "source";
+      return React.createElement(
+        "div",
+        null,
+        React.createElement(
+          "div",
+          { className: "doCourseSource" },
+          React.createElement(
+            "div",
+            null,
+            this.props.course[key + "_title"]
+          ),
+          doCourseEntry[key]
+        ),
+        React.createElement(
+          "div",
+          { className: "doCourseOptions" },
+          this.props.doCourseAnswerEntryIds.map(function (entryId) {
+            var cName = "";
+            if (this.props.answerEntryId) {
+              if (this.props.answerEntryId == entryId) {
+                cName = this.props.doCourseSuccess ? "success" : "wrong";
+              }
+            }
+            return React.createElement(
+              "button",
+              { className: cName,
+                key: entryId, "data-id": entryId,
+                onClick: this.answerClick },
+              this.props.entries[entryId][otherKey]
+            );
+          }, this)
+        )
+      );
+    },
     render: function () {
       if (this.props.doCourseEntryId) {
         var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
         var editArea = null;
         switch (this.props.doCourseTestType) {
-          case "SRC_DEST_CHOOSE":
-            editArea = React.createElement(
-              "div",
-              null,
-              React.createElement(
-                "div",
-                null,
-                "SRC: ",
-                doCourseEntry.src
-              ),
-              React.createElement(
-                "div",
-                null,
-                this.props.doCourseAnswerEntryIds.map(function (entryId) {
-                  var cName = "";
-                  if (this.props.answerEntryId) {
-                    if (this.props.answerEntryId == entryId) {
-                      cName = this.props.doCourseSuccess ? "success" : "wrong";
-                    }
-                  }
-                  return React.createElement(
-                    "button",
-                    { className: cName,
-                      key: entryId, "data-id": entryId,
-                      onClick: this.answerClick },
-                    this.props.entries[entryId].dest
-                  );
-                }, this)
-              ),
-              React.createElement(
-                "button",
-                { disabled: this.props.doCourseSuccess === null,
-                  onClick: this.dispatchNewItem },
-                "Next"
-              )
-            );
+          case "SOURCE_DESTINATION_CHOOSE":
+          case "DESTINATION_SOURCE_CHOOSE":
+            editArea = this.showOptions();
             break;
-          case "DEST_SRC_CHOOSE":
-            editArea = React.createElement(
-              "div",
-              null,
-              React.createElement(
-                "div",
-                null,
-                "DEST: ",
-                doCourseEntry.dest
-              ),
-              React.createElement(
-                "div",
-                null,
-                this.props.doCourseAnswerEntryIds.map(function (entryId) {
-                  var cName = "";
-                  if (this.props.answerEntryId) {
-                    if (this.props.answerEntryId == entryId) {
-                      cName = this.props.doCourseSuccess ? "success" : "wrong";
-                    }
-                  }
-                  return React.createElement(
-                    "button",
-                    { className: cName,
-                      key: entryId, "data-id": entryId,
-                      onClick: this.answerClick },
-                    this.props.entries[entryId].src
-                  );
-                }, this)
-              ),
-              React.createElement(
-                "button",
-                { disabled: this.props.doCourseSuccess === null,
-                  onClick: this.dispatchNewItem },
-                "Next"
-              )
-            );
-            break;
-          case "SRC_DEST_WRITE":
-            var cName = "";
-            if (this.props.doCourseSuccess === true) {
-              cName = "success";
-            } else if (this.props.doCourseSuccess === false) {
-              cName = "wrong";
-            }
-            editArea = React.createElement(
-              "div",
-              null,
-              React.createElement(
-                "div",
-                null,
-                "SRC: ",
-                doCourseEntry.src
-              ),
-              React.createElement("input", { className: cName, placeholder: "dest", autoFocus: true, type: "text",
-                ref: function (el) {
-                  if (el) {
-                    el.focus();
-                  }
-                },
-                onChange: this.onChange, value: this.state.answer }),
-              React.createElement(
-                "button",
-                { disabled: this.state.answer.length == 0, onClick: this.onSave },
-                "Save"
-              ),
-              React.createElement(
-                "button",
-                { disabled: this.props.doCourseSuccess === null,
-                  onClick: this.dispatchNewItem },
-                "Next"
-              )
-            );
-            break;
-          case "DEST_SRC_WRITE":
-            var cName = "";
-            if (this.props.doCourseSuccess === true) {
-              cName = "success";
-            } else if (this.props.doCourseSuccess === false) {
-              cName = "wrong";
-            }
-            editArea = React.createElement(
-              "div",
-              null,
-              React.createElement(
-                "div",
-                null,
-                "DEST: ",
-                doCourseEntry.dest
-              ),
-              React.createElement("input", { className: cName, placeholder: "dest", autoFocus: true, type: "text",
-                ref: function (el) {
-                  if (el) {
-                    el.focus();
-                  }
-                },
-                onChange: this.onChange, value: this.state.answer }),
-              React.createElement(
-                "button",
-                { disabled: this.state.answer.length == 0, onClick: this.onSave },
-                "Save"
-              ),
-              React.createElement(
-                "button",
-                { disabled: this.props.doCourseSuccess === null,
-                  onClick: this.dispatchNewItem },
-                "Next"
-              )
-            );
+          case "SOURCE_DESTINATION_WRITE":
+          case "DESTINATION_SOURCE_WRITE":
+            editArea = this.showWrite();
             break;
         }
         return React.createElement(
@@ -281,21 +227,36 @@
           null,
           React.createElement(
             "div",
+            { className: "toolbar topToolbar" },
+            React.createElement(
+              "button",
+              { onClick: this.onBack },
+              "Back"
+            ),
+            React.createElement(
+              "button",
+              {
+                disabled: this.props.course.count_attempt_success == 0 && this.props.course.count_attempt_failure == 0,
+                onClick: this.onReset },
+              "Reset"
+            )
+          ),
+          React.createElement(
+            "h2",
             null,
+            "Test of ",
             this.props.course.title
           ),
           editArea,
           React.createElement(
-            "button",
-            { onClick: this.onBack },
-            "Back"
-          ),
-          React.createElement(
-            "button",
-            {
-              disabled: this.props.course.count_attempt_success == 0 && this.props.course.count_attempt_failure == 0,
-              onClick: this.onReset },
-            "Reset"
+            "div",
+            { className: "toolbar bottomToolbar" },
+            React.createElement(
+              "button",
+              { disabled: this.props.doCourseSuccess === null,
+                onClick: this.dispatchNewItem },
+              "Next"
+            )
           )
         );
       } else {

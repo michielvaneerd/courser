@@ -30,15 +30,7 @@ input:required:invalid, input:focus:invalid {
   border-color:red;
 }
 
-input.success, button.success {
-  background-color:green;
-  color:white;
-}
 
-input.wrong, button.wrong {
-  background-color:red;
-  color:white;
-}
 
 .formRow {
   margin:0 0 1rem 0;
@@ -84,4 +76,47 @@ input.wrong, button.wrong {
 
 .deleteButton {
   color:red;
+}
+
+.doCourseSource {
+  overflow:hidden;
+}
+
+.doCourseSource > div:first-child {
+  display:block;
+  margin-bottom:.4rem;
+  font-weight:bold;
+}
+
+.doCourseOptions {
+  position:relative;
+  width:200px;
+  overflow:hidden;
+  margin-bottom:1rem;
+}
+
+.doCourseOptions button {
+  position:relative;
+  display:table-cell;
+  float:left;
+  width:80px;
+  height:80px;
+  border:1px solid black;
+  margin:10px;
+  padding:0;
+  box-sizing:border-box;
+  vertical-align:middle;
+  text-align:center;
+  font-weight:bold;
+  background-color:#e0e0e0;
+}
+
+input.success, .doCourseOptions button.success {
+  background-color:green;
+  color:white;
+}
+
+input.wrong, .doCourseOptions button.wrong {
+  background-color:red;
+  color:white;
 }

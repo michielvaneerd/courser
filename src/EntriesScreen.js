@@ -7,8 +7,8 @@
 
   var emptyEntry = {
     id : 0,
-    src : "",
-    dest : "",
+    source : "",
+    destination : "",
     phone : "",
     attempt_success : 0,
     attempt_failure : 0
@@ -35,13 +35,13 @@
     onSrcChange : function(e) {
       this.setState({
         invalidSrc : e.target.value.length == 0,
-        src : e.target.value
+        source : e.target.value
       });
     },
     onDestChange : function(e) {
       this.setState({
         invalidDest : e.target.value.length == 0,
-        dest : e.target.value
+        destination : e.target.value
       });
     },
     onPhoneChange : function(e) {
@@ -84,7 +84,7 @@
       switch (e.keyCode) {
         case 13: // ENTER
           e.preventDefault();
-          if (this.state.src.length && this.state.dest.length) {
+          if (this.state.source.length && this.state.destination.length) {
             this.onSave();
           }
         break;
@@ -133,28 +133,28 @@
             ref={function(el) {
               // autofocus does not work after saving a new item...
               // not sure why
-              if (el && !me.state.src.length && !me.state.dest.length
+              if (el && !me.state.source.length && !me.state.destination.length
                 && !me.state.phone.length)
               {
                 el.focus();
               }
             }}
             onKeyDown={this.onKeyDown}
-            required={!!this.props.entry.id || this.state.dest.length}
+            required={!!this.props.entry.id || this.state.destination.length}
             onChange={this.onSrcChange}
-            value={this.state.src} /></td>
+            value={this.state.source} /></td>
           <td><input type="text"
-            required={!!this.props.entry.id || this.state.src.length}
+            required={!!this.props.entry.id || this.state.source.length}
             onChange={this.onDestChange}
             onKeyDown={this.onKeyDown}
-            value={this.state.dest} /></td>
+            value={this.state.destination} /></td>
           <td><input type="text"
             onChange={this.onPhoneChange}
             onKeyDown={this.onKeyDown}
             value={this.state.phone} /></td>
           <td>
             <div className="smallToolbar">
-              <button disabled={!(this.state.src.length && this.state.dest.length)}
+              <button disabled={!(this.state.source.length && this.state.destination.length)}
                 onClick={this.onSave}>Save</button>
               {this.props.entry.id
                 ? (
@@ -189,8 +189,8 @@
                   editOrCreateRow
                   :
                   <tr onClick={this.onActivate} data-id={entryId} key={entryId}>
-                    <td>{entry.src}</td>
-                    <td>{entry.dest}</td>
+                    <td>{entry.source}</td>
+                    <td>{entry.destination}</td>
                     <td>{entry.phone}</td>
                     <td>{entry.attempt_success} / {entry.attempt_failure}</td>
                   </tr>

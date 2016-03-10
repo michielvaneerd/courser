@@ -7,8 +7,8 @@
 
   var emptyEntry = {
     id: 0,
-    src: "",
-    dest: "",
+    source: "",
+    destination: "",
     phone: "",
     attempt_success: 0,
     attempt_failure: 0
@@ -37,13 +37,13 @@
     onSrcChange: function (e) {
       this.setState({
         invalidSrc: e.target.value.length == 0,
-        src: e.target.value
+        source: e.target.value
       });
     },
     onDestChange: function (e) {
       this.setState({
         invalidDest: e.target.value.length == 0,
-        dest: e.target.value
+        destination: e.target.value
       });
     },
     onPhoneChange: function (e) {
@@ -87,7 +87,7 @@
         case 13:
           // ENTER
           e.preventDefault();
-          if (this.state.src.length && this.state.dest.length) {
+          if (this.state.source.length && this.state.destination.length) {
             this.onSave();
           }
           break;
@@ -143,23 +143,23 @@
             ref: function (el) {
               // autofocus does not work after saving a new item...
               // not sure why
-              if (el && !me.state.src.length && !me.state.dest.length && !me.state.phone.length) {
+              if (el && !me.state.source.length && !me.state.destination.length && !me.state.phone.length) {
                 el.focus();
               }
             },
             onKeyDown: this.onKeyDown,
-            required: !!this.props.entry.id || this.state.dest.length,
+            required: !!this.props.entry.id || this.state.destination.length,
             onChange: this.onSrcChange,
-            value: this.state.src })
+            value: this.state.source })
         ),
         React.createElement(
           "td",
           null,
           React.createElement("input", { type: "text",
-            required: !!this.props.entry.id || this.state.src.length,
+            required: !!this.props.entry.id || this.state.source.length,
             onChange: this.onDestChange,
             onKeyDown: this.onKeyDown,
-            value: this.state.dest })
+            value: this.state.destination })
         ),
         React.createElement(
           "td",
@@ -177,7 +177,7 @@
             { className: "smallToolbar" },
             React.createElement(
               "button",
-              { disabled: !(this.state.src.length && this.state.dest.length),
+              { disabled: !(this.state.source.length && this.state.destination.length),
                 onClick: this.onSave },
               "Save"
             ),
@@ -258,12 +258,12 @@
                 React.createElement(
                   "td",
                   null,
-                  entry.src
+                  entry.source
                 ),
                 React.createElement(
                   "td",
                   null,
-                  entry.dest
+                  entry.destination
                 ),
                 React.createElement(
                   "td",

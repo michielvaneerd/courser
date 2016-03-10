@@ -62,15 +62,15 @@
     getSuccess : function(entry) {
       var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
       switch (this.props.doCourseTestType) {
-        case "SRC_DEST_CHOOSE":
-          return entry.dest == doCourseEntry.dest;
+        case "SOURCE_DESTINATION_CHOOSE":
+          return entry.destination == doCourseEntry.destination;
         break;
-        case "DEST_SRC_CHOOSE":
-          return entry.src == doCourseEntry.src;
-        case "SRC_DEST_WRITE":
-          return this.state.answer == doCourseEntry.dest;
-        case "DEST_SRC_WRITE":
-          return this.state.answer == doCourseEntry.src;
+        case "DESTINATION_SOURCE_CHOOSE":
+          return entry.source == doCourseEntry.source;
+        case "SOURCE_DESTINATION_WRITE":
+          return this.state.answer == doCourseEntry.destination;
+        case "DESTINATION_SOURCE_WRITE":
+          return this.state.answer == doCourseEntry.source;
         break;
       }
       return null;
@@ -127,114 +127,96 @@
         forceBackToMainScreen : this.props.forceBackToMainScreen
       });
     },
+    showWrite : function() {
+      var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
+      var key = this.props.doCourseTestType == "SOURCE_DESTINATION_CHOOSE"
+        ? "source" : "destination";
+      var otherKey = key == "source" ? "destination" : "source";
+      var cName = "";
+      if (this.props.doCourseSuccess === true) {
+        cName = "success";
+      } else if (this.props.doCourseSuccess === false) {
+        cName = "wrong";
+      }
+      return (
+        <div>
+          <div className="doCourseSource">
+            <div>{this.props.course[key + "_title"]}</div>
+            {doCourseEntry[key]}
+          </div>
+          <div className="doCourseInput">
+            <input className={cName} placeholder={this.props.course[key + "_title"]}
+              autoFocus={true} type="text"
+              ref={function(el) {
+                if (el) {
+                  el.focus();
+                }
+              }}
+              onChange={this.onChange} value={this.state.answer} />
+          </div>
+          <div>
+            <button disabled={this.state.answer.length == 0} onClick={this.onSave}>Save</button>
+          </div>
+        </div>
+      );
+    },
+    showOptions : function() {
+      var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
+      var key = this.props.doCourseTestType == "SOURCE_DESTINATION_CHOOSE"
+        ? "source" : "destination";
+      var otherKey = key == "source" ? "destination" : "source";
+      return (
+        <div>
+          <div className="doCourseSource">
+            <div>{this.props.course[key + "_title"]}</div>
+            {doCourseEntry[key]}
+          </div>
+          <div className="doCourseOptions">
+          {this.props.doCourseAnswerEntryIds.map(function(entryId) {
+            var cName = "";
+            if (this.props.answerEntryId) {
+              if (this.props.answerEntryId == entryId) {
+                cName = this.props.doCourseSuccess ? "success" : "wrong";
+              }
+            }
+            return (
+              <button className={cName}
+                key={entryId} data-id={entryId}
+                onClick={this.answerClick}>{this.props.entries[entryId][otherKey]}</button>
+            );
+          }, this)}
+          </div>
+        </div>
+      );
+    },
     render : function() {
       if (this.props.doCourseEntryId) {
         var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
         var editArea = null;
         switch (this.props.doCourseTestType) {
-          case "SRC_DEST_CHOOSE":
-            editArea = (
-              <div>
-                <div>SRC: {doCourseEntry.src}</div>
-                <div>
-                {this.props.doCourseAnswerEntryIds.map(function(entryId) {
-                  var cName = "";
-                  if (this.props.answerEntryId) {
-                    if (this.props.answerEntryId == entryId) {
-                      cName = this.props.doCourseSuccess ? "success" : "wrong";
-                    }
-                  }
-                  return (
-                    <button className={cName}
-                      key={entryId} data-id={entryId}
-                      onClick={this.answerClick}>{this.props.entries[entryId].dest}</button>
-                  );
-                }, this)}
-                </div>
-                <button disabled={this.props.doCourseSuccess === null}
-                  onClick={this.dispatchNewItem}>Next</button>
-              </div>
-            );
+          case "SOURCE_DESTINATION_CHOOSE":
+          case "DESTINATION_SOURCE_CHOOSE":
+            editArea = this.showOptions();
           break;
-          case "DEST_SRC_CHOOSE":
-            editArea = (
-              <div>
-                <div>DEST: {doCourseEntry.dest}</div>
-                <div>
-                {this.props.doCourseAnswerEntryIds.map(function(entryId) {
-                  var cName = "";
-                  if (this.props.answerEntryId) {
-                    if (this.props.answerEntryId == entryId) {
-                      cName = this.props.doCourseSuccess ? "success" : "wrong";
-                    }
-                  }
-                  return (
-                    <button className={cName}
-                      key={entryId} data-id={entryId}
-                      onClick={this.answerClick}>{this.props.entries[entryId].src}</button>
-                  );
-                }, this)}
-                </div>
-                <button disabled={this.props.doCourseSuccess === null}
-                  onClick={this.dispatchNewItem}>Next</button>
-              </div>
-            );
-          break;
-          case "SRC_DEST_WRITE":
-            var cName = "";
-            if (this.props.doCourseSuccess === true) {
-              cName = "success";
-            } else if (this.props.doCourseSuccess === false) {
-              cName = "wrong";
-            }
-            editArea = (
-              <div>
-                <div>SRC: {doCourseEntry.src}</div>
-                <input className={cName} placeholder="dest" autoFocus={true} type="text"
-                  ref={function(el) {
-                    if (el) {
-                      el.focus();
-                    }
-                  }}
-                  onChange={this.onChange} value={this.state.answer} />
-                <button disabled={this.state.answer.length == 0} onClick={this.onSave}>Save</button>
-                <button disabled={this.props.doCourseSuccess === null}
-                  onClick={this.dispatchNewItem}>Next</button>
-              </div>
-            );
-          break;
-          case "DEST_SRC_WRITE":
-            var cName = "";
-            if (this.props.doCourseSuccess === true) {
-              cName = "success";
-            } else if (this.props.doCourseSuccess === false) {
-              cName = "wrong";
-            }
-            editArea = (
-              <div>
-                <div>DEST: {doCourseEntry.dest}</div>
-                <input className={cName} placeholder="dest" autoFocus={true} type="text"
-                  ref={function(el) {
-                    if (el) {
-                      el.focus();
-                    }
-                  }}
-                  onChange={this.onChange} value={this.state.answer} />
-                <button disabled={this.state.answer.length == 0} onClick={this.onSave}>Save</button>
-                <button disabled={this.props.doCourseSuccess === null}
-                  onClick={this.dispatchNewItem}>Next</button>
-              </div>
-            );
+          case "SOURCE_DESTINATION_WRITE":
+          case "DESTINATION_SOURCE_WRITE":
+            editArea = this.showWrite();
           break;
         }
         return (
           <div>
-            <div>{this.props.course.title}</div>
+            <div className="toolbar topToolbar">
+              <button onClick={this.onBack}>Back</button>
+              <button
+                disabled={(this.props.course.count_attempt_success == 0 && this.props.course.count_attempt_failure == 0)}
+                onClick={this.onReset}>Reset</button>
+            </div>
+            <h2>Test of {this.props.course.title}</h2>
             {editArea}
-            <button onClick={this.onBack}>Back</button>
-            <button
-              disabled={(this.props.course.count_attempt_success == 0 && this.props.course.count_attempt_failure == 0)}
-              onClick={this.onReset}>Reset</button>
+            <div className="toolbar bottomToolbar">
+              <button disabled={this.props.doCourseSuccess === null}
+                onClick={this.dispatchNewItem}>Next</button>
+            </div>
           </div>
         );
       } else {

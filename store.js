@@ -3,18 +3,18 @@
   // Constants - maybe separate file...
   win.Constants = {
     testTypes : [
-      "SRC_DEST_CHOOSE",
-      "DEST_SRC_CHOOSE",
-      "SRC_DEST_WRITE",
-      "DEST_SRC_WRITE"
+      "SOURCE_DESTINATION_CHOOSE",
+      "DESTINATION_SOURCE_CHOOSE",
+      "SOURCE_DESTINATION_WRITE",
+      "DESTINATION_SOURCE_WRITE"
     ]
   };
   
   win.Language = {
-    "SRC_DEST_CHOOSE" : "Show %source% item, select one of 4 possible %destination% items",
-    "DEST_SRC_CHOOSE" : "Show %destination% item, select one of 4 possible %source% items",
-    "SRC_DEST_WRITE" : "Show %source% item, enter %destination%",
-    "DEST_SRC_WRITE" : "Show %destination% item, enter %source%"
+    "SOURCE_DESTINATION_CHOOSE" : "Show %source% item, select one of 4 possible %destination% items",
+    "DESTINATION_SOURCE_CHOOSE" : "Show %destination% item, select one of 4 possible %source% items",
+    "SOURCE_DESTINATION_WRITE" : "Show %source% item, enter %destination%",
+    "DESTINATION_SOURCE_WRITE" : "Show %destination% item, enter %source%"
   };
 
 	var defaultState = {

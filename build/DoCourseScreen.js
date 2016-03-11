@@ -64,7 +64,6 @@
       switch (this.props.doCourseTestType) {
         case "SOURCE_DESTINATION_CHOOSE":
           return entry.destination == doCourseEntry.destination;
-          break;
         case "DESTINATION_SOURCE_CHOOSE":
           return entry.source == doCourseEntry.source;
         case "SOURCE_DESTINATION_WRITE":
@@ -124,9 +123,21 @@
         forceBackToMainScreen: this.props.forceBackToMainScreen
       });
     },
+    onWriteKeyDown: function (e) {
+      switch (e.keyCode) {
+        case 13:
+          // ENTER
+          e.preventDefault();
+          if (this.state.answer.length) {
+            this.onSave();
+          }
+          break;
+      }
+    },
     showWrite: function () {
+      var me = this;
       var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
-      var key = this.props.doCourseTestType == "SOURCE_DESTINATION_CHOOSE" ? "source" : "destination";
+      var key = this.props.doCourseTestType == "SOURCE_DESTINATION_WRITE" ? "source" : "destination";
       var otherKey = key == "source" ? "destination" : "source";
       var cName = "";
       if (this.props.doCourseSuccess === true) {
@@ -154,10 +165,12 @@
         React.createElement(
           "div",
           { className: "doCourseInput" },
-          React.createElement("input", { className: cName, placeholder: this.props.course[key + "_title"],
-            autoFocus: true, type: "text",
+          React.createElement("input", { className: cName,
+            placeholder: this.props.course[otherKey + "_title"],
+            type: "text",
+            onKeyDown: this.onWriteKeyDown,
             ref: function (el) {
-              if (el) {
+              if (el && me.props.doCourseSuccess === null) {
                 el.focus();
               }
             },
@@ -174,6 +187,11 @@
           React.createElement(
             "button",
             { disabled: this.props.doCourseSuccess === null,
+              ref: function (el) {
+                if (el && me.props.doCourseSuccess !== null) {
+                  el.focus();
+                }
+              },
               onClick: this.dispatchNewItem },
             "Next"
           )
@@ -181,6 +199,7 @@
       );
     },
     showOptions: function () {
+      var me = this;
       var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
       var key = this.props.doCourseTestType == "SOURCE_DESTINATION_CHOOSE" ? "source" : "destination";
       var otherKey = key == "source" ? "destination" : "source";
@@ -204,7 +223,7 @@
         React.createElement(
           "div",
           { className: "doCourseOptions" },
-          this.props.doCourseAnswerEntryIds.map(function (entryId) {
+          this.props.doCourseAnswerEntryIds.map(function (entryId, index) {
             var cName = "";
             if (this.props.answerEntryId) {
               if (this.props.answerEntryId == entryId) {
@@ -214,6 +233,11 @@
             return React.createElement(
               "button",
               { className: cName,
+                ref: function (el) {
+                  if (el && index == 0 && me.props.doCourseSuccess === null) {
+                    el.focus();
+                  }
+                },
                 key: entryId, "data-id": entryId,
                 onClick: this.answerClick },
               this.props.entries[entryId][otherKey]
@@ -225,7 +249,13 @@
           { className: "toolbar bottomToolbar" },
           React.createElement(
             "button",
-            { disabled: this.props.doCourseSuccess === null,
+            {
+              ref: function (el) {
+                if (el && me.props.doCourseSuccess !== null) {
+                  el.focus();
+                }
+              },
+              disabled: this.props.doCourseSuccess === null,
               onClick: this.dispatchNewItem },
             "Next"
           )

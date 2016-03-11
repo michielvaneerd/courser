@@ -64,7 +64,6 @@
       switch (this.props.doCourseTestType) {
         case "SOURCE_DESTINATION_CHOOSE":
           return entry.destination == doCourseEntry.destination;
-        break;
         case "DESTINATION_SOURCE_CHOOSE":
           return entry.source == doCourseEntry.source;
         case "SOURCE_DESTINATION_WRITE":
@@ -127,9 +126,20 @@
         forceBackToMainScreen : this.props.forceBackToMainScreen
       });
     },
+    onWriteKeyDown : function(e) {
+      switch (e.keyCode) {
+        case 13: // ENTER
+          e.preventDefault();
+          if (this.state.answer.length) {
+            this.onSave();
+          }
+        break;
+      }
+    },
     showWrite : function() {
+      var me = this;
       var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
-      var key = this.props.doCourseTestType == "SOURCE_DESTINATION_CHOOSE"
+      var key = this.props.doCourseTestType == "SOURCE_DESTINATION_WRITE"
         ? "source" : "destination";
       var otherKey = key == "source" ? "destination" : "source";
       var cName = "";
@@ -145,10 +155,12 @@
             <div className="doCourseQuestionEntry">{doCourseEntry[key]}</div>
           </div>
           <div className="doCourseInput">
-            <input className={cName} placeholder={this.props.course[key + "_title"]}
-              autoFocus={true} type="text"
+            <input className={cName}
+              placeholder={this.props.course[otherKey + "_title"]}
+              type="text"
+              onKeyDown={this.onWriteKeyDown}
               ref={function(el) {
-                if (el) {
+                if (el && me.props.doCourseSuccess === null) {
                   el.focus();
                 }
               }}
@@ -157,12 +169,18 @@
           <div className="toolbar bottomToolbar">
             <button disabled={this.state.answer.length == 0} onClick={this.onSave}>Save</button>
             <button disabled={this.props.doCourseSuccess === null}
+              ref={function(el) {
+                if (el && me.props.doCourseSuccess !== null) {
+                  el.focus();
+                }
+              }}
               onClick={this.dispatchNewItem}>Next</button>
           </div>
         </div>
       );
     },
     showOptions : function() {
+      var me = this;
       var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
       var key = this.props.doCourseTestType == "SOURCE_DESTINATION_CHOOSE"
         ? "source" : "destination";
@@ -174,7 +192,7 @@
             <div className="doCourseQuestionEntry">{doCourseEntry[key]}</div>
           </div>
           <div className="doCourseOptions">
-          {this.props.doCourseAnswerEntryIds.map(function(entryId) {
+          {this.props.doCourseAnswerEntryIds.map(function(entryId, index) {
             var cName = "";
             if (this.props.answerEntryId) {
               if (this.props.answerEntryId == entryId) {
@@ -183,13 +201,24 @@
             }
             return (
               <button className={cName}
+                ref={function(el) {
+                  if (el && index == 0 && me.props.doCourseSuccess === null) {
+                    el.focus();
+                  }
+                }}
                 key={entryId} data-id={entryId}
                 onClick={this.answerClick}>{this.props.entries[entryId][otherKey]}</button>
             );
           }, this)}
           </div>
           <div className="toolbar bottomToolbar">
-            <button disabled={this.props.doCourseSuccess === null}
+            <button
+              ref={function(el) {
+                if (el && me.props.doCourseSuccess !== null) {
+                  el.focus();
+                }
+              }}
+              disabled={this.props.doCourseSuccess === null}
               onClick={this.dispatchNewItem}>Next</button>
           </div>
         </div>

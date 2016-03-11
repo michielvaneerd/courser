@@ -30,8 +30,6 @@ input:required:invalid, input:focus:invalid {
   border-color:red;
 }
 
-
-
 .formRow {
   margin:0 0 1rem 0;
 }
@@ -54,6 +52,10 @@ input:required:invalid, input:focus:invalid {
 
 .toolbar, .smallToolbar {
   overflow:hidden;
+}
+
+button, input {
+  margin:2px;
 }
 
 .toolbar button, .smallToolbar button {
@@ -125,4 +127,8 @@ input.success, .doCourseOptions button.success {
 input.wrong, .doCourseOptions button.wrong {
   background-color:red;
   color:white;
+}
+
+input:focus, button:focus {
+  outline:2px solid black;
 }

@@ -123,4 +123,13 @@
   }).catch(function (error) {
     alert(error);
   });
+
+  // Start service worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js', {
+      scope: '.'
+    }).then(function (registration) {
+      console.log('The service worker has been registered ', registration);
+    });
+  }
 })(window);

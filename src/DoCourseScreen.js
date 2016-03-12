@@ -158,6 +158,7 @@
             <input className={cName}
               placeholder={this.props.course[otherKey + "_title"]}
               type="text"
+              readOnly={me.props.doCourseSuccess !== null}
               onKeyDown={this.onWriteKeyDown}
               ref={function(el) {
                 if (el && me.props.doCourseSuccess === null) {
@@ -188,10 +189,11 @@
       return (
         <div>
           <div className="doCourseQuestion">
-            <div className="doCourseQuestionTitle">{this.props.course[key + "_title"]}</div>
-            <div className="doCourseQuestionEntry">{doCourseEntry[key]}</div>
+            <span className="doCourseQuestionTitleSource">{this.props.course[key + "_title"]}:</span>
+            <span className="doCourseQuestionEntry">{doCourseEntry[key]}</span>
           </div>
           <div className="doCourseOptions">
+          <div className="doCourseQuestionTitle">{this.props.course[otherKey + "_title"]}?</div>
           {this.props.doCourseAnswerEntryIds.map(function(entryId, index) {
             var cName = "";
             if (this.props.answerEntryId) {
@@ -206,6 +208,7 @@
                     el.focus();
                   }
                 }}
+                disabled={this.props.doCourseSuccess !== null}
                 key={entryId} data-id={entryId}
                 onClick={this.answerClick}>{this.props.entries[entryId][otherKey]}</button>
             );
@@ -246,7 +249,6 @@
                 disabled={(this.props.course.count_attempt_success == 0 && this.props.course.count_attempt_failure == 0)}
                 onClick={this.onReset}>Reset</button>
             </div>
-            <h2>Test of {this.props.course.title}</h2>
             {editArea}
           </div>
         );

@@ -168,6 +168,7 @@
           React.createElement("input", { className: cName,
             placeholder: this.props.course[otherKey + "_title"],
             type: "text",
+            readOnly: me.props.doCourseSuccess !== null,
             onKeyDown: this.onWriteKeyDown,
             ref: function (el) {
               if (el && me.props.doCourseSuccess === null) {
@@ -210,12 +211,13 @@
           "div",
           { className: "doCourseQuestion" },
           React.createElement(
-            "div",
-            { className: "doCourseQuestionTitle" },
-            this.props.course[key + "_title"]
+            "span",
+            { className: "doCourseQuestionTitleSource" },
+            this.props.course[key + "_title"],
+            ":"
           ),
           React.createElement(
-            "div",
+            "span",
             { className: "doCourseQuestionEntry" },
             doCourseEntry[key]
           )
@@ -223,6 +225,12 @@
         React.createElement(
           "div",
           { className: "doCourseOptions" },
+          React.createElement(
+            "div",
+            { className: "doCourseQuestionTitle" },
+            this.props.course[otherKey + "_title"],
+            "?"
+          ),
           this.props.doCourseAnswerEntryIds.map(function (entryId, index) {
             var cName = "";
             if (this.props.answerEntryId) {
@@ -238,6 +246,7 @@
                     el.focus();
                   }
                 },
+                disabled: this.props.doCourseSuccess !== null,
                 key: entryId, "data-id": entryId,
                 onClick: this.answerClick },
               this.props.entries[entryId][otherKey]
@@ -294,12 +303,6 @@
                 onClick: this.onReset },
               "Reset"
             )
-          ),
-          React.createElement(
-            "h2",
-            null,
-            "Test of ",
-            this.props.course.title
           ),
           editArea
         );

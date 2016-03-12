@@ -4,25 +4,38 @@
 
 #inProgress {
   position:fixed;
+  top:1rem;
   padding:1rem;
   margin:1rem auto;
   background-color:yellow;
   color:black;
+  opacity:0.2;
+  transition:opacity .6s;
 }
 
-#errorDialog {
+#inProgress.visibleSpinner {
+  opacity:1;
+}
+
+
+#dialog {
   position:fixed;
   padding:1rem;
   margin:1rem auto;
+}
+
+.dialog_success {
+  background-color:green;
+  color:white;
+}
+
+.dialog_error {
   background-color:red;
   color:white;
 }
 
-#successDialog {
-  position:fixed;
-  padding:1rem;
-  margin:1rem auto;
-  background-color:green;
+.dialog_warning {
+  background-color:orange;
   color:white;
 }
 
@@ -85,13 +98,11 @@ button, input {
 }
 
 .doCourseQuestionTitle {
-  display:block;
   margin-bottom:.4rem;
   font-weight:bold;
 }
 
 .doCourseQuestionEntry {
-  display:block;
   margin-bottom:.4rem;
   font-weight:bold;
 }

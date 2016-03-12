@@ -1,4 +1,14 @@
 (function(win) {
+  
+  function countDownForInRequestSpinner() {
+    var t = setTimeout(function() {
+      clearTimeout(t);
+      var el = document.getElementById("inProgress");
+      if (el) {
+        el.className = "visibleSpinner";
+      }
+    }, 300);
+  }
 
   var App = React.createClass({
     propTypes : {
@@ -27,22 +37,32 @@
         type : "SELECT_COURSES"
       });
     },
+    onClearType : function(type) {
+      this.props.store.dispatch({
+        type : type
+      });
+    },
+    onClearError : function() {
+      this.onClearType("ERROR");
+    },
+    onClearSuccess : function() {
+      this.onClearType("SUCCESS");
+    },
+    onClearWarning : function() {
+      this.onClearType("WARNING");
+    },
     render : function() {
       var screen = null;
       var course = this.state.courseId
         ? this.state.courses[this.state.courseId] : {};
       var entry = this.state.entryId
         ? this.state.entries[this.state.entryId] : {};
-      var progressSpinner = this.state.inRequest
-        ? <div id="inProgress">Busy!</div> : "";
-      var errorDialog = this.state.error
-        ? <ErrorDialog
-            error={this.state.error}
-            store={this.props.store} /> : "";
-      var successDialog = this.state.success
-        ? <SuccessDialog
-            success={this.state.success}
-            store={this.props.store} /> : "";
+      var progressSpinner = "";
+      if (this.state.inRequest) {
+        progressSpinner = <div id="inProgress">Busy!</div>
+        countDownForInRequestSpinner();
+      }
+        
       switch (this.state.screen) {
         case "ENTRIES_SCREEN":
           screen = <EntriesScreen
@@ -85,8 +105,15 @@
         <div>
           {screen}
           {progressSpinner}
-          {errorDialog}
-          {successDialog}
+          {this.state.error
+            ? <Dialog onClear={this.onClearError} type="error" message={this.state.error} />
+            : null}
+          {this.state.warning
+            ? <Dialog onClear={this.onClearWarning} type="warning" message={this.state.warning} />
+            : null}
+          {this.state.success
+            ? <Dialog onClear={this.onClearSuccess} type="success" message={this.state.success} />
+            : null}
         </div>
       );
     }

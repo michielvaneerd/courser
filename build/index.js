@@ -1,5 +1,15 @@
 (function (win) {
 
+  function countDownForInRequestSpinner() {
+    var t = setTimeout(function () {
+      clearTimeout(t);
+      var el = document.getElementById("inProgress");
+      if (el) {
+        el.className = "visibleSpinner";
+      }
+    }, 300);
+  }
+
   var App = React.createClass({
     displayName: "App",
 
@@ -29,21 +39,34 @@
         type: "SELECT_COURSES"
       });
     },
+    onClearType: function (type) {
+      this.props.store.dispatch({
+        type: type
+      });
+    },
+    onClearError: function () {
+      this.onClearType("ERROR");
+    },
+    onClearSuccess: function () {
+      this.onClearType("SUCCESS");
+    },
+    onClearWarning: function () {
+      this.onClearType("WARNING");
+    },
     render: function () {
       var screen = null;
       var course = this.state.courseId ? this.state.courses[this.state.courseId] : {};
       var entry = this.state.entryId ? this.state.entries[this.state.entryId] : {};
-      var progressSpinner = this.state.inRequest ? React.createElement(
-        "div",
-        { id: "inProgress" },
-        "Busy!"
-      ) : "";
-      var errorDialog = this.state.error ? React.createElement(ErrorDialog, {
-        error: this.state.error,
-        store: this.props.store }) : "";
-      var successDialog = this.state.success ? React.createElement(SuccessDialog, {
-        success: this.state.success,
-        store: this.props.store }) : "";
+      var progressSpinner = "";
+      if (this.state.inRequest) {
+        progressSpinner = React.createElement(
+          "div",
+          { id: "inProgress" },
+          "Busy!"
+        );
+        countDownForInRequestSpinner();
+      }
+
       switch (this.state.screen) {
         case "ENTRIES_SCREEN":
           screen = React.createElement(EntriesScreen, {
@@ -87,8 +110,9 @@
         null,
         screen,
         progressSpinner,
-        errorDialog,
-        successDialog
+        this.state.error ? React.createElement(Dialog, { onClear: this.onClearError, type: "error", message: this.state.error }) : null,
+        this.state.warning ? React.createElement(Dialog, { onClear: this.onClearWarning, type: "warning", message: this.state.warning }) : null,
+        this.state.success ? React.createElement(Dialog, { onClear: this.onClearSuccess, type: "success", message: this.state.success }) : null
       );
     }
   });

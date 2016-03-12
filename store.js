@@ -47,6 +47,7 @@
     }
     
     if (state.inRequest) {
+      state.warning = "In request...";
 	    return state;
 	  }
 	  
@@ -55,12 +56,17 @@
     if (action.type != "ERROR") {
       state.error = false;
     }
+    if (action.type != "WARNING") {
+      state.warning = false;
+    }
+    
+    if (action.type != "SUCCESS") {
+      state.success = false;
+    }
     
     if (action.type != "ERROR" && action.type != "SUCCESS") {
       state.forceBackToMainScreen = action.forceBackToMainScreen;
     }
-    
-    state.success = false;
 	  
 	  state.inRequest = true;
 	  var suppressInRequest = false;
@@ -128,6 +134,7 @@
       case "SAVE_COURSE":
         state.courseId = action.value.id;
         state.courses[state.courseId] = action.value;
+        state.success = "OK";
         break;
       case "SELECT_ENTRY":
         state.entryId = action.value;
@@ -174,14 +181,17 @@
       	break;
       case "REQUEST_DELETE_COURSE":
         suppressInRequest = true;
-        storage.deleteCourse(state.courseId).then(function() {
-          state.inRequest = false;
-          me.dispatch({
-            type : "DELETE_COURSE"
+        // Simulate long during action:
+        setTimeout(function() {
+          storage.deleteCourse(state.courseId).then(function() {
+            state.inRequest = false;
+            me.dispatch({
+              type : "DELETE_COURSE"
+            });
+          }).catch(function(error) {
+            errorHandler(error, state);
           });
-        }).catch(function(error) {
-          errorHandler(error, state);
-        });
+        }, 1000);
         break;
       case "DELETE_COURSE":
       	delete state.courses[state.courseId];
@@ -239,14 +249,23 @@
         state.doCourseTestType = action.testType;
         break;
       case "REQUEST_SAVE_ANSWER":
-        var doCourseEntry = Object.assign({}, state.entries[state.doCourseEntryId]);
+        // var doCourseEntry = Object.assign({}, state.entries[state.doCourseEntryId]);
+        // Optimistically save of answer: first set local,
+        // save to storage. Will mostly be okay,
+        // but if it isn't, revert what you did here in the error handler
+        // below. TODO.
+        var doCourseEntry = state.entries[state.doCourseEntryId];
         if (action.doCourseSuccess) {
           doCourseEntry.attempt_success += 1;
+          state.courses[state.courseId].count_attempt_success += 1;
         } else {
           doCourseEntry.attempt_failure += 1;
+          state.courses[state.courseId].count_attempt_failure += 1;
         }
         suppressInRequest = true;
         state.answer = action.answer;
+        state.answerEntryId = action.answerEntryId;
+        state.doCourseSuccess = action.doCourseSuccess;
         storage.saveEntry(doCourseEntry).then(function(entry) {
           state.inRequest = false;
           me.dispatch({
@@ -258,25 +277,18 @@
             forceBackToMainScreen : action.forceBackToMainScreen
           });
         }).catch(function(error) {
+          // TODO: revert what you did above.
           errorHandler(error, state);
         });
-        break;
-      case "SAVE_ANSWER":
-        if (action.doCourseSuccess) {
-          state.courses[state.courseId].count_attempt_success += 1;
-        } else {
-          state.courses[state.courseId].count_attempt_failure += 1;
-        }
-        state.answerEntryId = action.answerEntryId;
-        state.entries[state.doCourseEntryId] = action.doCourseEntry;
-        state.doCourseSuccess = action.doCourseSuccess;
-        state.answer = action.answer
         break;
       case "ERROR":
         state.error = action.value;
         break;
       case "SUCCESS":
         state.success = action.value;
+        break;
+      case "WARNING":
+        state.warning = action.value;
         break;
     }
     

@@ -10,7 +10,9 @@
     getInitialState: function () {
       return Object.assign({
         source_title: "Source",
-        destination_title: "Destination"
+        destination_title: "Destination",
+        test_ok_success_count: 1,
+        title: ""
       }, invalidity, this.props.course);
     },
     componentWillReceiveProps: function (nextProps) {
@@ -134,11 +136,13 @@
           "div",
           { className: "formRow" },
           win.Constants.testTypes.map(function (testType) {
-            var text = win.Language[testType].replace("%source%", this.props.course.source_title || this.state.source_title).replace("%destination%", this.props.course.destination_title || this.state.destination_title);
+            var text = win.Language[testType].replace("%source%", this.state.source_title).replace("%destination%", this.state.destination_title);
             return React.createElement(
               "div",
               { className: "formInputLabelPair", key: testType },
-              React.createElement("input", { checked: this.state[testType], onChange: this.onTestTypeChange, "data-id": testType, type: "checkbox", id: testType }),
+              React.createElement("input", { checked: typeof this.state[testType] === "undefined" ? false : this.state[testType],
+                onChange: this.onTestTypeChange,
+                "data-id": testType, type: "checkbox", id: testType }),
               React.createElement(
                 "label",
                 { htmlFor: testType },

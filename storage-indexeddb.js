@@ -2,7 +2,7 @@
 
   var db = null;
 
-  win.StorageDB = {
+  win.Storage = {
   
     ready : function() {
       return new Promise(function(resolve, reject) {

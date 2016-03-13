@@ -1,6 +1,16 @@
-h1, h2, h3, p, ul, li, ol {
+html, body, h1, h2, h3, p, ul, li, ol {
   margin:0;
   padding:0;
+}
+
+html, body {
+  height:100%;
+}
+
+#app {
+  position:relative;
+  max-width:600px;
+  background-color:white;
 }
 
 .active {

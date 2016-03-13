@@ -126,8 +126,9 @@
     },
     render : function() {
       var me = this;
+      var propsEntry = this.props.entry || {};
       var editOrCreateRow =
-        <tr key={this.props.entry.id || 0}>
+        <tr key={propsEntry.id || 0}>
           <td><input type="text"
             autoFocus={true}
             ref={function(el) {
@@ -140,11 +141,11 @@
               }
             }}
             onKeyDown={this.onKeyDown}
-            required={!!this.props.entry.id || this.state.destination.length}
+            required={!!propsEntry.id || this.state.destination.length}
             onChange={this.onSrcChange}
             value={this.state.source} /></td>
           <td><input type="text"
-            required={!!this.props.entry.id || this.state.source.length}
+            required={!!propsEntry.id || this.state.source.length}
             onChange={this.onDestChange}
             onKeyDown={this.onKeyDown}
             value={this.state.destination} /></td>
@@ -156,7 +157,7 @@
             <div className="smallToolbar">
               <button disabled={!(this.state.source.length && this.state.destination.length)}
                 onClick={this.onSave}>Save</button>
-              {this.props.entry.id
+              {propsEntry.id
                 ? (
                     <span>
                       <button className="deleteButton" onClick={this.onDelete}>Delete</button>
@@ -184,7 +185,7 @@
             <tbody>
               {Object.keys(this.props.entries).map(function(entryId) {
                 var entry = this.props.entries[entryId];
-                var row = this.props.entry.id == entryId
+                var row = propsEntry.id == entryId
                   ?
                   editOrCreateRow
                   :
@@ -196,7 +197,7 @@
                   </tr>
                 return row;
               }, this)}
-              {this.props.entry.id
+              {propsEntry.id
                 ? <tr><td></td><td></td><td></td><td></td></tr>
                 : editOrCreateRow}
             </tbody>

@@ -132,9 +132,10 @@
     },
     render: function () {
       var me = this;
+      var propsEntry = this.props.entry || {};
       var editOrCreateRow = React.createElement(
         "tr",
-        { key: this.props.entry.id || 0 },
+        { key: propsEntry.id || 0 },
         React.createElement(
           "td",
           null,
@@ -148,7 +149,7 @@
               }
             },
             onKeyDown: this.onKeyDown,
-            required: !!this.props.entry.id || this.state.destination.length,
+            required: !!propsEntry.id || this.state.destination.length,
             onChange: this.onSrcChange,
             value: this.state.source })
         ),
@@ -156,7 +157,7 @@
           "td",
           null,
           React.createElement("input", { type: "text",
-            required: !!this.props.entry.id || this.state.source.length,
+            required: !!propsEntry.id || this.state.source.length,
             onChange: this.onDestChange,
             onKeyDown: this.onKeyDown,
             value: this.state.destination })
@@ -181,7 +182,7 @@
                 onClick: this.onSave },
               "Save"
             ),
-            this.props.entry.id ? React.createElement(
+            propsEntry.id ? React.createElement(
               "span",
               null,
               React.createElement(
@@ -252,7 +253,7 @@
             null,
             Object.keys(this.props.entries).map(function (entryId) {
               var entry = this.props.entries[entryId];
-              var row = this.props.entry.id == entryId ? editOrCreateRow : React.createElement(
+              var row = propsEntry.id == entryId ? editOrCreateRow : React.createElement(
                 "tr",
                 { onClick: this.onActivate, "data-id": entryId, key: entryId },
                 React.createElement(
@@ -280,7 +281,7 @@
               );
               return row;
             }, this),
-            this.props.entry.id ? React.createElement(
+            propsEntry.id ? React.createElement(
               "tr",
               null,
               React.createElement("td", null),

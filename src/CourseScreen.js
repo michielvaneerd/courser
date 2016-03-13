@@ -8,7 +8,9 @@
     getInitialState : function() {
       return Object.assign({
         source_title : "Source",
-        destination_title : "Destination"
+        destination_title : "Destination",
+        test_ok_success_count : 1,
+        title : ""
       }, invalidity, this.props.course);
     },
     componentWillReceiveProps : function(nextProps) {
@@ -94,11 +96,13 @@
           <div className="formRow">
             {win.Constants.testTypes.map(function(testType) {
               var text = win.Language[testType]
-                .replace("%source%", this.props.course.source_title || this.state.source_title)
-                .replace("%destination%", this.props.course.destination_title || this.state.destination_title)
+                .replace("%source%", this.state.source_title)
+                .replace("%destination%", this.state.destination_title)
               return (
                 <div className="formInputLabelPair" key={testType}>
-                  <input checked={this.state[testType]} onChange={this.onTestTypeChange} data-id={testType} type="checkbox" id={testType} />
+                  <input checked={typeof this.state[testType] === "undefined" ? false : this.state[testType]}
+                    onChange={this.onTestTypeChange}
+                    data-id={testType} type="checkbox" id={testType} />
                   <label htmlFor={testType}>{text}</label>
                 </div>
               );

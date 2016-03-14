@@ -75,7 +75,7 @@
           { className: "toolbar topToolbar" },
           React.createElement(
             "button",
-            { onClick: this.props.onMain },
+            { className: "linkButton", onClick: this.props.onMain },
             "Back"
           )
         ),

@@ -55,9 +55,9 @@
                   "td",
                   null,
                   React.createElement(
-                    "a",
-                    { onClick: this.onCourseClick, "data-id": courseId,
-                      href: "#" },
+                    "button",
+                    { className: "linkButton", onClick: this.onCourseClick,
+                      "data-id": courseId },
                     React.createElement(
                       "strong",
                       null,
@@ -69,8 +69,8 @@
                   "td",
                   null,
                   React.createElement(
-                    "a",
-                    { href: "#", "data-id": courseId,
+                    "button",
+                    { className: "linkButton", "data-id": courseId,
                       onClick: this.onEntriesClick },
                     course.count,
                     " entries"
@@ -80,8 +80,8 @@
                   "td",
                   null,
                   course.count > 4 ? React.createElement(
-                    "a",
-                    { href: "#", "data-id": courseId,
+                    "button",
+                    { className: "linkButton", "data-id": courseId,
                       onClick: this.onDoClick },
                     course.count_attempt_success,
                     " done"

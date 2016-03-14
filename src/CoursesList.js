@@ -40,17 +40,17 @@
                 return (
                   <tr key={course.id}>
                     <td>
-                      <a onClick={this.onCourseClick} data-id={courseId}
-                        href="#"><strong>{course.title}</strong></a>
+                      <button className="linkButton" onClick={this.onCourseClick}
+                      data-id={courseId}><strong>{course.title}</strong></button>
                     </td>
                     <td>
-                      <a href="#" data-id={courseId}
-                        onClick={this.onEntriesClick}>{course.count} entries</a>
+                      <button className="linkButton" data-id={courseId}
+                        onClick={this.onEntriesClick}>{course.count} entries</button>
                     </td>
                     <td>
                       {course.count > 4
-                        ? <a href="#" data-id={courseId}
-                            onClick={this.onDoClick}>{course.count_attempt_success} done</a>
+                        ? <button className="linkButton" data-id={courseId}
+                            onClick={this.onDoClick}>{course.count_attempt_success} done</button>
                         : ""}
                     </td>
                   </tr>

@@ -35,7 +35,6 @@
       var courses = this.storage.courses;
       Object.keys(courses).forEach(function(courseId) {
         var course = courses[courseId];
-        console.log(course);
         var courseEntries = this.storage.entries[courseId];
         course.count = Object.keys(courseEntries).length;
         course.count_attempt_success = 0;

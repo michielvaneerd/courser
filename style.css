@@ -1,21 +1,81 @@
-html, body, h1, h2, h3, p, ul, li, ol {
+html, body, h1, h2, h3, p, ul, li, ol, form, button, input, textarea, table, tr, td, th {
   margin:0;
   padding:0;
 }
 
-html, body {
-  height:100%;
+html {
+  font-family:Roboto, Helvetica;
+}
+
+button, input {
+  margin:2px;
+  border:1px solid black;
+  padding:2px;
 }
 
 #app {
   position:relative;
-  max-width:600px;
+  max-width:800px;
   background-color:white;
 }
 
-.active {
-	font-weight:bold;
+input:required:invalid, input:focus:invalid {
+  border-color:red;
 }
+
+input:focus, button:focus {
+  outline:2px solid black;
+}
+
+input.success, .doCourseOptions button.success {
+  background-color:green;
+  color:white;
+}
+
+input.wrong, .doCourseOptions button.wrong {
+  background-color:red;
+  color:white;
+}
+
+button.deleteButton {
+  color:red;
+}
+
+button.linkButton {
+  border-color:transparent;
+  text-decoration:underline;
+  background-color:transparent;
+  color:blue;
+}
+
+.toolbar, .smallToolbar {
+  overflow:hidden;
+}
+
+.toolbar button, .smallToolbar button {
+  display:block;
+  float:left;
+}
+
+.smallToolbar button {
+  margin-right:.2rem;
+}
+
+h1, h2, h3, .formRow, .topToolbar, table {
+  margin:0 0 1rem 0;
+}
+
+h2 {
+  font-size:100%;
+}
+
+table {
+  
+}
+
+
+
+
 
 #inProgress {
   position:fixed;
@@ -54,13 +114,9 @@ html, body {
   color:white;
 }
 
-input:required:invalid, input:focus:invalid {
-  border-color:red;
-}
 
-.formRow {
-  margin:0 0 1rem 0;
-}
+
+
 
 .formLabelInputPair label {
   display:block;
@@ -78,35 +134,17 @@ input:required:invalid, input:focus:invalid {
   
 }
 
-.toolbar, .smallToolbar {
-  overflow:hidden;
-}
 
-button, input {
-  margin:2px;
-}
-
-.toolbar button, .smallToolbar button {
-  display:block;
-  float:left;
-  margin-right:1rem;
-}
-
-.smallToolbar button {
-  margin-right:.2rem;
-}
 
 .bottomToolbar {
   
 }
 
 .topToolbar {
-  
+ 
 }
 
-.deleteButton {
-  color:red;
-}
+
 
 .doCourseQuestion {
 
@@ -145,16 +183,5 @@ button, input {
   background-color:#e0e0e0;
 }
 
-input.success, .doCourseOptions button.success {
-  background-color:green;
-  color:white;
-}
 
-input.wrong, .doCourseOptions button.wrong {
-  background-color:red;
-  color:white;
-}
 
-input:focus, button:focus {
-  outline:2px solid black;
-}

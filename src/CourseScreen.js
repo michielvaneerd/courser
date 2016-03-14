@@ -65,7 +65,7 @@
       return (
         <div>
           <div className="toolbar topToolbar">
-            <button onClick={this.props.onMain}>Back</button>
+            <button className="linkButton" onClick={this.props.onMain}>Back</button>
           </div>
           <h2>{this.props.course.id
             ? ("Edit " + this.props.course.title) : "Create course"}</h2>

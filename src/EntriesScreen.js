@@ -170,7 +170,7 @@
       return (
         <div>
           <div className="toolbar topToolbar">
-            <button onClick={this.props.onMain}>Back</button>
+            <button onClick={this.onBack}>Back</button>
           </div>
           <h2>Entries of {this.props.course.title}</h2>
           <table>

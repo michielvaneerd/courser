@@ -31,61 +31,61 @@
         forceBackToMainScreen: true
       });
     },
+    onShuffleClick: function (e) {
+      e.preventDefault();
+      this.props.store.dispatch({
+        type: "REQUEST_DO_SHUFFLE",
+        value: e.currentTarget.dataset.id,
+        forceBackToMainScreen: true
+      });
+    },
     render: function () {
+      /*
+      <td>
+                      <button className="linkButton" data-id={courseId}
+                        onClick={this.onEntriesClick}>{course.count} entries</button>
+                    </td>
+                    <td>
+                      {course.count > 4
+                        ? <button className="linkButton" data-id={courseId}
+                            onClick={this.onDoClick}>{course.count_attempt_success} done</button>
+                        : ""}
+                    </td>
+                    <td>
+                      {course.count > 0
+                        ? <button className="linkButton" data-id={courseId}
+                            onClick={this.onShuffleClick}>Shuffle</button>
+                        : ""}
+                    </td>
+      */
       return React.createElement(
         "div",
         null,
         React.createElement(
-          "h2",
-          null,
-          "Courses"
+          "div",
+          { id: "navbar" },
+          React.createElement(
+            "h2",
+            null,
+            "Courses"
+          )
         ),
         React.createElement(
-          "table",
-          null,
+          "div",
+          { id: "main" },
           React.createElement(
-            "tbody",
-            null,
+            "ul",
+            { className: "listView" },
             Object.keys(this.props.courses).map(function (courseId) {
               var course = this.props.courses[courseId];
               return React.createElement(
-                "tr",
+                "li",
                 { key: course.id },
                 React.createElement(
-                  "td",
-                  null,
-                  React.createElement(
-                    "button",
-                    { className: "linkButton", onClick: this.onCourseClick,
-                      "data-id": courseId },
-                    React.createElement(
-                      "strong",
-                      null,
-                      course.title
-                    )
-                  )
-                ),
-                React.createElement(
-                  "td",
-                  null,
-                  React.createElement(
-                    "button",
-                    { className: "linkButton", "data-id": courseId,
-                      onClick: this.onEntriesClick },
-                    course.count,
-                    " entries"
-                  )
-                ),
-                React.createElement(
-                  "td",
-                  null,
-                  course.count > 4 ? React.createElement(
-                    "button",
-                    { className: "linkButton", "data-id": courseId,
-                      onClick: this.onDoClick },
-                    course.count_attempt_success,
-                    " done"
-                  ) : ""
+                  "a",
+                  { href: "#", className: "linkButton", onClick: this.onCourseClick,
+                    "data-id": courseId },
+                  course.title
                 )
               );
             }, this)
@@ -93,11 +93,11 @@
         ),
         React.createElement(
           "div",
-          { className: "bottomToolbar" },
+          { id: "bottombar" },
           React.createElement(
             "button",
-            { onClick: this.onCreateCourse },
-            "Create course"
+            { className: "floatingButton", onClick: this.onCreateCourse },
+            "+"
           )
         )
       );

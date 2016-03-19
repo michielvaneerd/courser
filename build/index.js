@@ -99,6 +99,15 @@
             implicitCourseId: this.state.implicitCourseId,
             course: course });
           break;
+        case "SHUFFLE_SCREEN":
+          screen = React.createElement(ShuffleScreen, {
+            forceBackToMainScreen: this.state.forceBackToMainScreen,
+            store: this.props.store,
+            course: course,
+            entry: entry,
+            onMain: this.onMain,
+            entries: this.state.entries });
+          break;
         default:
           screen = React.createElement(CoursesList, {
             store: this.props.store,

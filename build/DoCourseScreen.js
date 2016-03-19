@@ -50,14 +50,14 @@
       }, entry);
     },
     getInitialState: function () {
-      return { answer: "" };
+      return { answer: "", showMore: false };
     },
     componentDidMount: function () {
       // Force a rerender with first set of random item + possible answers.
       this.dispatchNewItem();
     },
     componentWillReceiveProps: function (nextProps) {
-      this.setState({ answer: nextProps.answer || "" });
+      this.setState({ answer: nextProps.answer || "", showMore: false });
     },
     getSuccess: function (entry) {
       var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
@@ -255,7 +255,7 @@
         ),
         React.createElement(
           "div",
-          { className: "toolbar bottomToolbar" },
+          { id: "bottombar" },
           React.createElement(
             "button",
             {
@@ -271,7 +271,17 @@
         )
       );
     },
+    onMore: function () {
+      this.setState({
+        showMore: !this.state.showMore
+      });
+    },
     render: function () {
+      /*
+      <button
+                disabled={(this.props.course.count_attempt_success == 0 && this.props.course.count_attempt_failure == 0)}
+                onClick={this.onReset}>Reset</button>
+                */
       if (this.props.doCourseEntryId) {
         var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
         var editArea = null;
@@ -290,21 +300,37 @@
           null,
           React.createElement(
             "div",
-            { className: "toolbar topToolbar" },
+            { id: "navbar" },
             React.createElement(
-              "button",
-              { onClick: this.onBack },
-              "Back"
+              "a",
+              { href: "#", id: "backButton", onClick: this.onBack },
+              "<"
             ),
             React.createElement(
-              "button",
-              {
-                disabled: this.props.course.count_attempt_success == 0 && this.props.course.count_attempt_failure == 0,
-                onClick: this.onReset },
-              "Reset"
+              "h2",
+              null,
+              "Test"
+            ),
+            React.createElement(
+              "a",
+              { href: "#", id: "moreButton", onClick: this.onMore },
+              ":"
             )
           ),
-          editArea
+          editArea,
+          this.state.showMore ? React.createElement(
+            "ul",
+            { id: "popup" },
+            React.createElement(
+              "li",
+              null,
+              React.createElement(
+                "button",
+                { className: "deleteButton", onClick: this.onReset },
+                "Reset"
+              )
+            )
+          ) : ""
         );
       } else {
         return React.createElement(
@@ -314,13 +340,6 @@
             "div",
             null,
             "Course finished!"
-          ),
-          React.createElement(
-            "button",
-            {
-              disabled: this.props.course.count_attempt_success == 0 && this.props.course.count_attempt_failure == 0,
-              onClick: this.onReset },
-            "Reset"
           )
         );
       }

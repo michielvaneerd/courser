@@ -207,7 +207,7 @@
           { className: "toolbar topToolbar" },
           React.createElement(
             "button",
-            { onClick: this.props.onMain },
+            { onClick: this.onBack },
             "Back"
           )
         ),

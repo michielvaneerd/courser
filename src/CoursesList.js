@@ -29,21 +29,17 @@
         forceBackToMainScreen : true
       });
     },
+    onShuffleClick : function(e) {
+      e.preventDefault();
+      this.props.store.dispatch({
+        type : "REQUEST_DO_SHUFFLE",
+        value : e.currentTarget.dataset.id,
+        forceBackToMainScreen : true
+      });
+    },
     render : function() {
-      return (
-        <div>
-          <h2>Courses</h2>
-          <table>
-            <tbody>
-              {Object.keys(this.props.courses).map(function(courseId) {
-                var course = this.props.courses[courseId];
-                return (
-                  <tr key={course.id}>
-                    <td>
-                      <button className="linkButton" onClick={this.onCourseClick}
-                      data-id={courseId}><strong>{course.title}</strong></button>
-                    </td>
-                    <td>
+      /*
+      <td>
                       <button className="linkButton" data-id={courseId}
                         onClick={this.onEntriesClick}>{course.count} entries</button>
                     </td>
@@ -53,13 +49,33 @@
                             onClick={this.onDoClick}>{course.count_attempt_success} done</button>
                         : ""}
                     </td>
-                  </tr>
+                    <td>
+                      {course.count > 0
+                        ? <button className="linkButton" data-id={courseId}
+                            onClick={this.onShuffleClick}>Shuffle</button>
+                        : ""}
+                    </td>
+      */
+      return (
+        <div>
+          <div id="navbar">
+            <h2>Courses</h2>
+          </div>
+          <div id="main">
+            <ul className="listView">
+              {Object.keys(this.props.courses).map(function(courseId) {
+                var course = this.props.courses[courseId];
+                return (
+                  <li key={course.id}>
+                    <a href="#" className="linkButton" onClick={this.onCourseClick}
+                      data-id={courseId}>{course.title}</a>
+                  </li>
                 );
               }, this)}
-            </tbody>
-          </table>
-          <div className="bottomToolbar">
-            <button onClick={this.onCreateCourse}>Create course</button>
+            </ul>
+          </div>
+          <div id="bottombar">
+            <button className="floatingButton" onClick={this.onCreateCourse}>+</button>
           </div>
         </div>
       );

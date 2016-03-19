@@ -95,6 +95,15 @@
             implicitCourseId={this.state.implicitCourseId}
             course={course} />
           break;
+        case "SHUFFLE_SCREEN":
+          screen = <ShuffleScreen
+            forceBackToMainScreen={this.state.forceBackToMainScreen}
+            store={this.props.store}
+            course={course}
+            entry={entry}
+            onMain={this.onMain}
+            entries={this.state.entries} />
+          break;
         default:
           screen = <CoursesList
             store={this.props.store}

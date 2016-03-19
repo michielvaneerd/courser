@@ -1,187 +1,174 @@
-html, body, h1, h2, h3, p, ul, li, ol, form, button, input, textarea, table, tr, td, th {
-  margin:0;
+* {
   padding:0;
+  margin:0;
 }
 
-html {
-  font-family:Roboto, Helvetica;
-}
-
-button, input {
-  margin:2px;
-  border:1px solid black;
-  padding:2px;
+html, body {
+  height:100%;
 }
 
 #app {
   position:relative;
-  max-width:800px;
-  background-color:white;
 }
 
-input:required:invalid, input:focus:invalid {
-  border-color:red;
+#navbar {
+  background-color:brown;
+  color:white;
+  position:relative;
 }
 
-input:focus, button:focus {
-  outline:2px solid black;
+#navbar h2 {
+  margin-left:2rem;
+  font-size:120%;
+  padding:2rem 0;
 }
 
-input.success, .doCourseOptions button.success {
-  background-color:green;
+#navbar #backButton, #navbar #moreButton {
+  display:block;
+  font-size:120%;
+  position:absolute;
+  height:100%;
+  width:2rem;
+  padding:2rem 0;
+  text-align:center;
+  box-sizing:border-box;
+  text-decoration:none;
   color:white;
 }
 
-input.wrong, .doCourseOptions button.wrong {
-  background-color:red;
-  color:white;
+#navbar #moreButton {
+  right:0;
+  top:0;
 }
 
-button.deleteButton {
-  color:red;
+#navbar #backButton:active {
+  background-color:black;
 }
 
-button.linkButton {
-  border-color:transparent;
-  text-decoration:underline;
-  background-color:transparent;
-  color:blue;
+#bottombar {
+  position:fixed;
+  bottom:0;
+  padding:1rem;
+  overflow:hidden;
+  box-sizing:border-box;
+  width:100%;
 }
 
-.toolbar, .smallToolbar {
+#topbar {
+  padding:1rem;
+  width:100%;
+  box-sizing:border-box;
   overflow:hidden;
 }
 
-.toolbar button, .smallToolbar button {
+#topbar button {
   display:block;
   float:left;
+  margin-right:1rem;
 }
 
-.smallToolbar button {
-  margin-right:.2rem;
-}
-
-h1, h2, h3, .formRow, .topToolbar, table {
-  margin:0 0 1rem 0;
-}
-
-h2 {
-  font-size:100%;
-}
-
-table {
-  
-}
-
-
-
-
-
-#inProgress {
-  position:fixed;
-  top:1rem;
-  padding:1rem;
-  margin:1rem auto;
-  background-color:yellow;
-  color:black;
-  opacity:0.2;
-  transition:opacity .6s;
-}
-
-#inProgress.visibleSpinner {
-  opacity:1;
-}
-
-
-#dialog {
-  position:fixed;
-  padding:1rem;
-  margin:1rem auto;
-}
-
-.dialog_success {
-  background-color:green;
-  color:white;
-}
-
-.dialog_error {
-  background-color:red;
-  color:white;
-}
-
-.dialog_warning {
-  background-color:orange;
-  color:white;
-}
-
-
-
-
-
-.formLabelInputPair label {
+#bottombar button {
   display:block;
+  float:right;
 }
 
-.formLabelInputPair input {
+#main {
   
 }
 
-.formInputLabelPair label {
-  
+.listView {
+  list-style-type:none;
 }
 
-.formInputLabelPair input {
-  
+.listView li {
+  display:block;
+  border-bottom:1px solid #c0c0c0;
 }
 
-
-
-.bottomToolbar {
-  
+.listView a {
+  display:block;
+  padding:1rem 1rem;
 }
 
-.topToolbar {
- 
+.floatingButton {
+  border:none;
+  width:3rem;
+  height:3rem;
+  border-radius:1.5rem;
+  background-color:brown;
+  color:white;
+  box-shadow:1px 1px 20px black;
 }
 
-
-
-.doCourseQuestion {
-
-}
-
-.doCourseQuestionTitle {
-  margin-bottom:.4rem;
-  font-weight:bold;
-}
-
-.doCourseQuestionEntry {
-  margin-bottom:.4rem;
-  font-weight:bold;
-}
-
-.doCourseOptions, .doCourseInput {
-  position:relative;
-  width:200px;
-  overflow:hidden;
+.formRow {
+  padding:0 1rem;
   margin-bottom:1rem;
 }
 
-.doCourseOptions button {
-  position:relative;
-  display:table-cell;
-  float:left;
-  width:80px;
-  height:80px;
-  border:1px solid black;
-  margin:10px;
-  padding:0;
+.formLabelInputPair label, .formLabelInputPair input {
+  display:block;
+  width:100%;
   box-sizing:border-box;
-  vertical-align:middle;
-  text-align:center;
-  font-weight:bold;
-  background-color:#e0e0e0;
 }
 
+input, button {
+  padding:.6rem;
+}
 
+#popup {
+  position:fixed;
+  top:1rem;
+  right:2rem;
+  max-width:80%;
+  min-width:40%;
+  background-color:black;
+  color:white;
+}
+
+.fullwidthButton {
+  width:100%;
+}
+
+.doCourseQuestion {
+  padding:0 1rem;
+  margin-bottom:1rem;
+  margin-top:1rem;
+}
+
+.doCourseQuestionTitleSource {
+  
+}
+
+.doCourseQuestionEntry {
+  
+}
+
+.doCourseOptions {
+  padding:0 1rem;
+  margin-bottom:1rem;
+  position:relative;
+  overflow:hidden;
+}
+
+.doCourseOptions button {
+  display:block;
+  width:50%;
+  box-sizing:border-box;
+  float:left;
+  padding:2rem;
+}
+
+.doCourseOptions button.wrong {
+  background-color:red;
+  color:white;
+}
+
+.doCourseOptions button.success {
+  background-color:green;
+  color:white;
+}
+
+.doCourseQuestionTitle {
+  margin-bottom:1rem;
+}
 

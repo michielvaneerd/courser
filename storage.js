@@ -58,6 +58,7 @@
           ? Math.max.apply(null, Object.keys(this.storage.courses)) + 1 : 1;
         this.storage.entries[course.id] = {};
       }
+      course.count = course.count || 0;
       this.storage.courses[course.id] = course;
       saveStorage(this.storage);
       return Promise.resolve(course);

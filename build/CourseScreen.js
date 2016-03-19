@@ -1,7 +1,8 @@
 (function (win) {
 
   var invalidity = {
-    invalidTitle: false
+    invalidTitle: false,
+    showMore: false
   };
 
   win.CourseScreen = React.createClass({
@@ -61,106 +62,181 @@
         destination_title: e.target.value
       });
     },
+    onEntriesClick: function (e) {
+      e.preventDefault();
+      this.props.store.dispatch({
+        type: "REQUEST_SELECT_ENTRIES",
+        value: this.props.course.id,
+        forceBackToMainScreen: false
+      });
+    },
+    onDoClick: function (e) {
+      e.preventDefault();
+      this.props.store.dispatch({
+        type: "REQUEST_DO_COURSE",
+        value: this.props.course.id,
+        forceBackToMainScreen: false
+      });
+    },
+    onShuffleClick: function (e) {
+      e.preventDefault();
+      this.props.store.dispatch({
+        type: "REQUEST_DO_SHUFFLE",
+        value: this.props.course.id,
+        forceBackToMainScreen: false
+      });
+    },
+    onMore: function () {
+      this.setState({
+        showMore: !this.state.showMore
+      });
+    },
     render: function () {
-      var deleteButton = this.props.course.id ? React.createElement(
-        "button",
-        { className: "deleteButton", onClick: this.onDelete },
-        "Delete"
+      var topbar = this.props.course.id ? React.createElement(
+        "div",
+        { id: "topbar" },
+        React.createElement(
+          "button",
+          { className: "linkButton", "data-id": this.props.course.id,
+            onClick: this.onEntriesClick },
+          this.props.course.count,
+          " entries"
+        ),
+        React.createElement(
+          "button",
+          {
+            disabled: this.props.course.count <= 4,
+            className: "linkButton", "data-id": this.props.course.id,
+            onClick: this.onDoClick },
+          this.props.course.count_attempt_success,
+          " done"
+        ),
+        React.createElement(
+          "button",
+          {
+            disabled: this.props.course.count == 0,
+            className: "linkButton", "data-id": this.props.course.id,
+            onClick: this.onShuffleClick },
+          "Shuffle"
+        )
       ) : "";
       return React.createElement(
         "div",
         null,
         React.createElement(
           "div",
-          { className: "toolbar topToolbar" },
+          { id: "navbar" },
           React.createElement(
-            "button",
-            { className: "linkButton", onClick: this.props.onMain },
-            "Back"
+            "a",
+            { href: "#", id: "backButton", onClick: this.props.onMain },
+            "<"
+          ),
+          React.createElement(
+            "h2",
+            null,
+            this.props.course.id ? this.props.course.title : "Create course"
+          ),
+          this.props.course.id ? React.createElement(
+            "a",
+            { href: "#", id: "moreButton", onClick: this.onMore },
+            ":"
+          ) : ""
+        ),
+        topbar,
+        React.createElement(
+          "div",
+          { id: "main" },
+          React.createElement(
+            "div",
+            { className: "formRow formLabelInputPair" },
+            React.createElement(
+              "label",
+              { htmlFor: "courseTitleInput" },
+              "Title"
+            ),
+            React.createElement("input", { id: "courseTitleInput", placeholder: "Title", autoFocus: true, required: true,
+              type: "text", onChange: this.onTitleInputChange,
+              value: this.state.title })
+          ),
+          React.createElement(
+            "div",
+            { className: "formRow formLabelInputPair" },
+            React.createElement(
+              "label",
+              { htmlFor: "courseSourceTitleInput" },
+              "Source title"
+            ),
+            React.createElement("input", { id: "courseSourceTitleInput", placeholder: "Source title", required: true,
+              type: "text", onChange: this.onSourceTitleInputChange,
+              value: this.state.source_title })
+          ),
+          React.createElement(
+            "div",
+            { className: "formRow formLabelInputPair" },
+            React.createElement(
+              "label",
+              { htmlFor: "courseDestinationTitleInput" },
+              "Destination title"
+            ),
+            React.createElement("input", { id: "courseDestinationTitleInput", placeholder: "Destination title", required: true,
+              type: "text", onChange: this.onDestinationTitleInputChange,
+              value: this.state.destination_title })
+          ),
+          React.createElement(
+            "div",
+            { className: "formRow formLabelInputPair" },
+            React.createElement(
+              "label",
+              { htmlFor: "courseTestOkSuccessCountInput" },
+              "Test success count"
+            ),
+            React.createElement("input", { id: "courseTestOkSuccessCountInput", type: "number",
+              value: this.state.test_ok_success_count,
+              onChange: this.onTestOkSuccessCountChange })
+          ),
+          React.createElement(
+            "div",
+            { className: "formRow" },
+            win.Constants.testTypes.map(function (testType) {
+              var text = win.Language[testType].replace("%source%", this.state.source_title).replace("%destination%", this.state.destination_title);
+              return React.createElement(
+                "div",
+                { className: "formInputLabelPair", key: testType },
+                React.createElement("input", { checked: typeof this.state[testType] === "undefined" ? false : this.state[testType],
+                  onChange: this.onTestTypeChange,
+                  "data-id": testType, type: "checkbox", id: testType }),
+                React.createElement(
+                  "label",
+                  { htmlFor: testType },
+                  text
+                )
+              );
+            }, this)
+          ),
+          React.createElement(
+            "div",
+            { className: "formRow" },
+            React.createElement(
+              "button",
+              { className: "fullwidthButton", disabled: !!!this.state.title,
+                onClick: this.onSave },
+              "Save"
+            )
           )
         ),
-        React.createElement(
-          "h2",
-          null,
-          this.props.course.id ? "Edit " + this.props.course.title : "Create course"
-        ),
-        React.createElement(
-          "div",
-          { className: "formRow formLabelInputPair" },
+        this.state.showMore ? React.createElement(
+          "ul",
+          { id: "popup" },
           React.createElement(
-            "label",
-            { htmlFor: "courseTitleInput" },
-            "Title"
-          ),
-          React.createElement("input", { id: "courseTitleInput", placeholder: "Title", autoFocus: true, required: true,
-            type: "text", onChange: this.onTitleInputChange,
-            value: this.state.title })
-        ),
-        React.createElement(
-          "div",
-          { className: "formRow formLabelInputPair" },
-          React.createElement(
-            "label",
-            { htmlFor: "courseSourceTitleInput" },
-            "Source title"
-          ),
-          React.createElement("input", { id: "courseSourceTitleInput", placeholder: "Source title", required: true,
-            type: "text", onChange: this.onSourceTitleInputChange,
-            value: this.state.source_title })
-        ),
-        React.createElement(
-          "div",
-          { className: "formRow formLabelInputPair" },
-          React.createElement(
-            "label",
-            { htmlFor: "courseDestinationTitleInput" },
-            "Destination title"
-          ),
-          React.createElement("input", { id: "courseDestinationTitleInput", placeholder: "Destination title", required: true,
-            type: "text", onChange: this.onDestinationTitleInputChange,
-            value: this.state.destination_title })
-        ),
-        React.createElement(
-          "div",
-          { className: "formRow formLabelInputPair" },
-          React.createElement(
-            "label",
-            { htmlFor: "courseTestOkSuccessCountInput" },
-            "Test success count"
-          ),
-          React.createElement("input", { id: "courseTestOkSuccessCountInput", type: "number",
-            value: this.state.test_ok_success_count,
-            onChange: this.onTestOkSuccessCountChange })
-        ),
-        React.createElement(
-          "div",
-          { className: "formRow" },
-          win.Constants.testTypes.map(function (testType) {
-            var text = win.Language[testType].replace("%source%", this.state.source_title).replace("%destination%", this.state.destination_title);
-            return React.createElement(
-              "div",
-              { className: "formInputLabelPair", key: testType },
-              React.createElement("input", { checked: typeof this.state[testType] === "undefined" ? false : this.state[testType],
-                onChange: this.onTestTypeChange,
-                "data-id": testType, type: "checkbox", id: testType }),
-              React.createElement(
-                "label",
-                { htmlFor: testType },
-                text
-              )
-            );
-          }, this)
-        ),
-        React.createElement(
-          "div",
-          { className: "toolbar bottomToolbar" },
-          React.createElement(
-            "button",
-            { disabled: !!!this.state.title, onClick: this.onSave },
-            "Save"
-          ),
-          deleteButton
-        )
+            "li",
+            null,
+            React.createElement(
+              "button",
+              { className: "deleteButton", onClick: this.onDelete },
+              "Delete"
+            )
+          )
+        ) : ""
       );
     }
   });

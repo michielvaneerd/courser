@@ -50,14 +50,14 @@
       }, entry);
     },
     getInitialState : function() {
-      return {answer : ""};
+      return {answer : "", showMore : false};
     },
     componentDidMount : function() {
       // Force a rerender with first set of random item + possible answers.
       this.dispatchNewItem();
     },
     componentWillReceiveProps : function(nextProps) {
-      this.setState({answer : nextProps.answer || ""});
+      this.setState({answer : nextProps.answer || "", showMore : false});
     },
     getSuccess : function(entry) {
       var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
@@ -193,28 +193,28 @@
             <span className="doCourseQuestionEntry">{doCourseEntry[key]}</span>
           </div>
           <div className="doCourseOptions">
-          <div className="doCourseQuestionTitle">{this.props.course[otherKey + "_title"]}?</div>
-          {this.props.doCourseAnswerEntryIds.map(function(entryId, index) {
-            var cName = "";
-            if (this.props.answerEntryId) {
-              if (this.props.answerEntryId == entryId) {
-                cName = this.props.doCourseSuccess ? "success" : "wrong";
+            <div className="doCourseQuestionTitle">{this.props.course[otherKey + "_title"]}?</div>
+            {this.props.doCourseAnswerEntryIds.map(function(entryId, index) {
+              var cName = "";
+              if (this.props.answerEntryId) {
+                if (this.props.answerEntryId == entryId) {
+                  cName = this.props.doCourseSuccess ? "success" : "wrong";
+                }
               }
-            }
-            return (
-              <button className={cName}
-                ref={function(el) {
-                  if (el && index == 0 && me.props.doCourseSuccess === null) {
-                    el.focus();
-                  }
-                }}
-                disabled={this.props.doCourseSuccess !== null}
-                key={entryId} data-id={entryId}
-                onClick={this.answerClick}>{this.props.entries[entryId][otherKey]}</button>
-            );
-          }, this)}
+              return (
+                <button className={cName}
+                  ref={function(el) {
+                    if (el && index == 0 && me.props.doCourseSuccess === null) {
+                      el.focus();
+                    }
+                  }}
+                  disabled={this.props.doCourseSuccess !== null}
+                  key={entryId} data-id={entryId}
+                  onClick={this.answerClick}>{this.props.entries[entryId][otherKey]}</button>
+              );
+            }, this)}
           </div>
-          <div className="toolbar bottomToolbar">
+          <div id="bottombar">
             <button
               ref={function(el) {
                 if (el && me.props.doCourseSuccess !== null) {
@@ -227,7 +227,17 @@
         </div>
       );
     },
+    onMore : function() {
+      this.setState({
+        showMore : !this.state.showMore
+      });
+    },
     render : function() {
+      /*
+      <button
+                disabled={(this.props.course.count_attempt_success == 0 && this.props.course.count_attempt_failure == 0)}
+                onClick={this.onReset}>Reset</button>
+                */
       if (this.props.doCourseEntryId) {
         var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
         var editArea = null;
@@ -243,22 +253,23 @@
         }
         return (
           <div>
-            <div className="toolbar topToolbar">
-              <button onClick={this.onBack}>Back</button>
-              <button
-                disabled={(this.props.course.count_attempt_success == 0 && this.props.course.count_attempt_failure == 0)}
-                onClick={this.onReset}>Reset</button>
+            <div id="navbar">
+              <a href="#" id="backButton" onClick={this.onBack}>&lt;</a>
+              <h2>Test</h2>
+              <a href="#" id="moreButton" onClick={this.onMore}>:</a>
             </div>
             {editArea}
+            {this.state.showMore ? (
+              <ul id="popup">
+                <li><button className="deleteButton" onClick={this.onReset}>Reset</button></li>
+              </ul>
+            ) : ""}
           </div>
         );
       } else {
         return (
           <div>
             <div>Course finished!</div>
-            <button
-              disabled={(this.props.course.count_attempt_success == 0 && this.props.course.count_attempt_failure == 0)}
-              onClick={this.onReset}>Reset</button>
           </div>
         );
       }

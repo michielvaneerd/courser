@@ -96,6 +96,25 @@
         state.entryId = 0;
       	state.screen = state.courseId ? "COURSE_SCREEN" : null;
         break;
+      case "REQUEST_DO_SHUFFLE":
+        suppressInRequest = true;
+        storage.getEntries(action.value).then(function(entries) {
+          state.inRequest = false;
+          state.courseId = action.value;
+          me.dispatch({
+            type : "DO_SHUFFLE",
+            value : entries,
+            forceBackToMainScreen : action.forceBackToMainScreen
+          });
+        }).catch(function(error) {
+          errorHandler(error, state);
+        });
+        break;
+      case "DO_SHUFFLE":
+        state.entryId = 0;
+        state.entries = action.value;
+        state.screen = "SHUFFLE_SCREEN";
+        break;
       case "REQUEST_SELECT_ENTRIES":
         suppressInRequest = true;
         storage.getEntries(action.value).then(function(entries) {
@@ -153,10 +172,8 @@
         });
         break;
       case "SAVE_ENTRY":
-        if (!(action.value.id in state.entries)) {
-          state.courses[state.courseId].count += 1;
-        }
         state.entries[action.value.id] = action.value;
+        state.courses[state.courseId].count = Object.keys(state.entries).length;
         state.entryId = 0;
         break;
       case "REQUEST_DELETE_ENTRY":

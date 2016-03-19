@@ -1,7 +1,8 @@
 (function(win) {
 
   var invalidity = {
-    invalidTitle : false
+    invalidTitle : false,
+    showMore : false
   };
 
   win.CourseScreen = React.createClass({
@@ -59,59 +60,112 @@
         destination_title : e.target.value
       });
     },
+    onEntriesClick : function(e) {
+      e.preventDefault();
+      this.props.store.dispatch({
+        type : "REQUEST_SELECT_ENTRIES",
+        value : this.props.course.id,
+        forceBackToMainScreen : false
+      });
+    },
+    onDoClick : function(e) {
+      e.preventDefault();
+      this.props.store.dispatch({
+        type : "REQUEST_DO_COURSE",
+        value : this.props.course.id,
+        forceBackToMainScreen : false
+      });
+    },
+    onShuffleClick : function(e) {
+      e.preventDefault();
+      this.props.store.dispatch({
+        type : "REQUEST_DO_SHUFFLE",
+        value : this.props.course.id,
+        forceBackToMainScreen : false
+      });
+    },
+    onMore : function() {
+      this.setState({
+        showMore : !this.state.showMore
+      });
+    },
     render : function() {
-      var deleteButton = this.props.course.id
-        ? <button className="deleteButton" onClick={this.onDelete}>Delete</button> : "";
+      var topbar = this.props.course.id
+        ? (
+            <div id="topbar">
+              <button className="linkButton" data-id={this.props.course.id}
+                onClick={this.onEntriesClick}>{this.props.course.count} entries</button>
+              <button
+                disabled={this.props.course.count <= 4}
+                className="linkButton" data-id={this.props.course.id}
+                onClick={this.onDoClick}>{this.props.course.count_attempt_success} done</button>
+              <button
+                disabled={this.props.course.count == 0}
+                className="linkButton" data-id={this.props.course.id}
+                onClick={this.onShuffleClick}>Shuffle</button>
+            </div>
+          ) : "";
       return (
         <div>
-          <div className="toolbar topToolbar">
-            <button className="linkButton" onClick={this.props.onMain}>Back</button>
+          <div id="navbar">
+            <a href="#" id="backButton" onClick={this.props.onMain}>&lt;</a>
+            <h2>{this.props.course.id
+              ? this.props.course.title : "Create course"}</h2>
+              {this.props.course.id
+                ? <a href="#" id="moreButton" onClick={this.onMore}>:</a> : ""}
           </div>
-          <h2>{this.props.course.id
-            ? ("Edit " + this.props.course.title) : "Create course"}</h2>
-          <div className="formRow formLabelInputPair">
-            <label htmlFor="courseTitleInput">Title</label>
-            <input id="courseTitleInput" placeholder="Title" autoFocus={true} required={true}
-              type="text" onChange={this.onTitleInputChange}
-              value={this.state.title} />
+          {topbar}
+          <div id="main">
+            <div className="formRow formLabelInputPair">
+              <label htmlFor="courseTitleInput">Title</label>
+              <input id="courseTitleInput" placeholder="Title" autoFocus={true} required={true}
+                type="text" onChange={this.onTitleInputChange}
+                value={this.state.title} />
+            </div>
+            <div className="formRow formLabelInputPair">
+              <label htmlFor="courseSourceTitleInput">Source title</label>
+              <input id="courseSourceTitleInput" placeholder="Source title" required={true}
+                type="text" onChange={this.onSourceTitleInputChange}
+                value={this.state.source_title} />
+            </div>
+            <div className="formRow formLabelInputPair">
+              <label htmlFor="courseDestinationTitleInput">Destination title</label>
+              <input id="courseDestinationTitleInput" placeholder="Destination title" required={true}
+                type="text" onChange={this.onDestinationTitleInputChange}
+                value={this.state.destination_title} />
+            </div>
+            <div className="formRow formLabelInputPair">
+              <label htmlFor="courseTestOkSuccessCountInput">Test success count</label>
+              <input id="courseTestOkSuccessCountInput" type="number"
+                value={this.state.test_ok_success_count}
+                onChange={this.onTestOkSuccessCountChange} />
+            </div>
+            <div className="formRow">
+              {win.Constants.testTypes.map(function(testType) {
+                var text = win.Language[testType]
+                  .replace("%source%", this.state.source_title)
+                  .replace("%destination%", this.state.destination_title)
+                return (
+                  <div className="formInputLabelPair" key={testType}>
+                    <input checked={typeof this.state[testType] === "undefined" ? false : this.state[testType]}
+                      onChange={this.onTestTypeChange}
+                      data-id={testType} type="checkbox" id={testType} />
+                    <label htmlFor={testType}>{text}</label>
+                  </div>
+                );
+              }, this)}
+            </div>
+            <div className="formRow">
+              <button className="fullwidthButton" disabled={!!!this.state.title}
+                onClick={this.onSave}>Save</button>
+            </div>
           </div>
-          <div className="formRow formLabelInputPair">
-            <label htmlFor="courseSourceTitleInput">Source title</label>
-            <input id="courseSourceTitleInput" placeholder="Source title" required={true}
-              type="text" onChange={this.onSourceTitleInputChange}
-              value={this.state.source_title} />
-          </div>
-          <div className="formRow formLabelInputPair">
-            <label htmlFor="courseDestinationTitleInput">Destination title</label>
-            <input id="courseDestinationTitleInput" placeholder="Destination title" required={true}
-              type="text" onChange={this.onDestinationTitleInputChange}
-              value={this.state.destination_title} />
-          </div>
-          <div className="formRow formLabelInputPair">
-            <label htmlFor="courseTestOkSuccessCountInput">Test success count</label>
-            <input id="courseTestOkSuccessCountInput" type="number"
-              value={this.state.test_ok_success_count}
-              onChange={this.onTestOkSuccessCountChange} />
-          </div>
-          <div className="formRow">
-            {win.Constants.testTypes.map(function(testType) {
-              var text = win.Language[testType]
-                .replace("%source%", this.state.source_title)
-                .replace("%destination%", this.state.destination_title)
-              return (
-                <div className="formInputLabelPair" key={testType}>
-                  <input checked={typeof this.state[testType] === "undefined" ? false : this.state[testType]}
-                    onChange={this.onTestTypeChange}
-                    data-id={testType} type="checkbox" id={testType} />
-                  <label htmlFor={testType}>{text}</label>
-                </div>
-              );
-            }, this)}
-          </div>
-          <div className="toolbar bottomToolbar">
-            <button disabled={!!!this.state.title} onClick={this.onSave}>Save</button>
-            {deleteButton}
-          </div>
+          {this.state.showMore
+            ? (
+              <ul id="popup">
+                <li><button className="deleteButton" onClick={this.onDelete}>Delete</button></li>
+              </ul>
+            ) : ""}
         </div>
       );
     }

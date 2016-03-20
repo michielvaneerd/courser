@@ -97,25 +97,25 @@
         { id: "topbar" },
         React.createElement(
           "button",
-          { className: "linkButton", "data-id": this.props.course.id,
+          { "data-id": this.props.course.id,
             onClick: this.onEntriesClick },
+          "Entries (",
           this.props.course.count,
-          " entries"
+          ")"
         ),
         React.createElement(
           "button",
           {
             disabled: this.props.course.count <= 4,
-            className: "linkButton", "data-id": this.props.course.id,
+            "data-id": this.props.course.id,
             onClick: this.onDoClick },
-          this.props.course.count_attempt_success,
-          " done"
+          "Test"
         ),
         React.createElement(
           "button",
           {
             disabled: this.props.course.count == 0,
-            className: "linkButton", "data-id": this.props.course.id,
+            "data-id": this.props.course.id,
             onClick: this.onShuffleClick },
           "Shuffle"
         )
@@ -164,7 +164,7 @@
             React.createElement(
               "label",
               { htmlFor: "courseSourceTitleInput" },
-              "Source title"
+              "Source"
             ),
             React.createElement("input", { id: "courseSourceTitleInput", placeholder: "Source title", required: true,
               type: "text", onChange: this.onSourceTitleInputChange,
@@ -176,7 +176,7 @@
             React.createElement(
               "label",
               { htmlFor: "courseDestinationTitleInput" },
-              "Destination title"
+              "Destination"
             ),
             React.createElement("input", { id: "courseDestinationTitleInput", placeholder: "Destination title", required: true,
               type: "text", onChange: this.onDestinationTitleInputChange,

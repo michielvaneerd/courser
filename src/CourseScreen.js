@@ -93,15 +93,15 @@
       var topbar = this.props.course.id
         ? (
             <div id="topbar">
-              <button className="linkButton" data-id={this.props.course.id}
-                onClick={this.onEntriesClick}>{this.props.course.count} entries</button>
+              <button data-id={this.props.course.id}
+                onClick={this.onEntriesClick}>Entries ({this.props.course.count})</button>
               <button
                 disabled={this.props.course.count <= 4}
-                className="linkButton" data-id={this.props.course.id}
-                onClick={this.onDoClick}>{this.props.course.count_attempt_success} done</button>
+                data-id={this.props.course.id}
+                onClick={this.onDoClick}>Test</button>
               <button
                 disabled={this.props.course.count == 0}
-                className="linkButton" data-id={this.props.course.id}
+                data-id={this.props.course.id}
                 onClick={this.onShuffleClick}>Shuffle</button>
             </div>
           ) : "";
@@ -123,13 +123,13 @@
                 value={this.state.title} />
             </div>
             <div className="formRow formLabelInputPair">
-              <label htmlFor="courseSourceTitleInput">Source title</label>
+              <label htmlFor="courseSourceTitleInput">Source</label>
               <input id="courseSourceTitleInput" placeholder="Source title" required={true}
                 type="text" onChange={this.onSourceTitleInputChange}
                 value={this.state.source_title} />
             </div>
             <div className="formRow formLabelInputPair">
-              <label htmlFor="courseDestinationTitleInput">Destination title</label>
+              <label htmlFor="courseDestinationTitleInput">Destination</label>
               <input id="courseDestinationTitleInput" placeholder="Destination title" required={true}
                 type="text" onChange={this.onDestinationTitleInputChange}
                 value={this.state.destination_title} />

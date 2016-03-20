@@ -11,10 +11,10 @@
   };
   
   win.Language = {
-    "SOURCE_DESTINATION_CHOOSE" : "Show %source% item, select one of 4 possible %destination% items",
-    "DESTINATION_SOURCE_CHOOSE" : "Show %destination% item, select one of 4 possible %source% items",
-    "SOURCE_DESTINATION_WRITE" : "Show %source% item, enter %destination%",
-    "DESTINATION_SOURCE_WRITE" : "Show %destination% item, enter %source%"
+    "SOURCE_DESTINATION_CHOOSE" : "Show %source%, select %destination%",
+    "DESTINATION_SOURCE_CHOOSE" : "Show %destination%, select %source%",
+    "SOURCE_DESTINATION_WRITE" : "Show %source%, type %destination%",
+    "DESTINATION_SOURCE_WRITE" : "Show %destination%, type %source%"
   };
 
 	var defaultState = {

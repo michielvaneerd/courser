@@ -151,8 +151,8 @@
       return (
         <div>
           <div className="doCourseQuestion">
-            <div className="doCourseQuestionTitle">{this.props.course[key + "_title"]}</div>
-            <div className="doCourseQuestionEntry">{doCourseEntry[key]}</div>
+            <span className="doCourseQuestionTitleSource">{this.props.course[key + "_title"]}</span>
+            <span className="doCourseQuestionEntry">{doCourseEntry[key]}</span>
           </div>
           <div className="doCourseInput">
             <input className={cName}
@@ -167,8 +167,7 @@
               }}
               onChange={this.onChange} value={this.state.answer} />
           </div>
-          <div className="toolbar bottomToolbar">
-            <button disabled={this.state.answer.length == 0} onClick={this.onSave}>Save</button>
+          <div id="bottombar">
             <button disabled={this.props.doCourseSuccess === null}
               ref={function(el) {
                 if (el && me.props.doCourseSuccess !== null) {
@@ -176,6 +175,7 @@
                 }
               }}
               onClick={this.dispatchNewItem}>Next</button>
+            <button disabled={this.state.answer.length == 0 || this.props.doCourseSuccess !== null} onClick={this.onSave}>Save</button>
           </div>
         </div>
       );
@@ -233,14 +233,9 @@
       });
     },
     render : function() {
-      /*
-      <button
-                disabled={(this.props.course.count_attempt_success == 0 && this.props.course.count_attempt_failure == 0)}
-                onClick={this.onReset}>Reset</button>
-                */
+      var editArea = null;
       if (this.props.doCourseEntryId) {
         var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
-        var editArea = null;
         switch (this.props.doCourseTestType) {
           case "SOURCE_DESTINATION_CHOOSE":
           case "DESTINATION_SOURCE_CHOOSE":
@@ -251,28 +246,35 @@
             editArea = this.showWrite();
           break;
         }
-        return (
-          <div>
-            <div id="navbar">
-              <a href="#" id="backButton" onClick={this.onBack}>&lt;</a>
-              <h2>Test</h2>
-              <a href="#" id="moreButton" onClick={this.onMore}>:</a>
-            </div>
-            {editArea}
-            {this.state.showMore ? (
-              <ul id="popup">
-                <li><button className="deleteButton" onClick={this.onReset}>Reset</button></li>
-              </ul>
-            ) : ""}
-          </div>
-        );
       } else {
-        return (
+        editArea = (
           <div>
-            <div>Course finished!</div>
+            <div className="formRow">
+              <p><strong>Course finished!</strong></p>
+              <p>Good answers: {this.props.course.count_attempt_success}</p>
+              <p>Wrong answers: {this.props.course.count_attempt_failure}</p>
+            </div>
+            <div className="formRow">
+              <p><button className="deleteButton" onClick={this.onReset}>Reset</button></p>
+            </div>
           </div>
         );
       }
+      return (
+        <div>
+          <div id="navbar">
+            <a href="#" id="backButton" onClick={this.onBack}>&lt;</a>
+            <h2>Test</h2>
+            <a href="#" id="moreButton" onClick={this.onMore}>:</a>
+          </div>
+          {editArea}
+          {this.state.showMore ? (
+            <ul id="popup">
+              <li><button className="deleteButton" onClick={this.onReset}>Reset</button></li>
+            </ul>
+          ) : ""}
+        </div>
+      );
     }
   });
 

@@ -152,12 +152,12 @@
           "div",
           { className: "doCourseQuestion" },
           React.createElement(
-            "div",
-            { className: "doCourseQuestionTitle" },
+            "span",
+            { className: "doCourseQuestionTitleSource" },
             this.props.course[key + "_title"]
           ),
           React.createElement(
-            "div",
+            "span",
             { className: "doCourseQuestionEntry" },
             doCourseEntry[key]
           )
@@ -179,12 +179,7 @@
         ),
         React.createElement(
           "div",
-          { className: "toolbar bottomToolbar" },
-          React.createElement(
-            "button",
-            { disabled: this.state.answer.length == 0, onClick: this.onSave },
-            "Save"
-          ),
+          { id: "bottombar" },
           React.createElement(
             "button",
             { disabled: this.props.doCourseSuccess === null,
@@ -195,6 +190,11 @@
               },
               onClick: this.dispatchNewItem },
             "Next"
+          ),
+          React.createElement(
+            "button",
+            { disabled: this.state.answer.length == 0 || this.props.doCourseSuccess !== null, onClick: this.onSave },
+            "Save"
           )
         )
       );
@@ -277,14 +277,9 @@
       });
     },
     render: function () {
-      /*
-      <button
-                disabled={(this.props.course.count_attempt_success == 0 && this.props.course.count_attempt_failure == 0)}
-                onClick={this.onReset}>Reset</button>
-                */
+      var editArea = null;
       if (this.props.doCourseEntryId) {
         var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
-        var editArea = null;
         switch (this.props.doCourseTestType) {
           case "SOURCE_DESTINATION_CHOOSE":
           case "DESTINATION_SOURCE_CHOOSE":
@@ -295,34 +290,40 @@
             editArea = this.showWrite();
             break;
         }
-        return React.createElement(
+      } else {
+        editArea = React.createElement(
           "div",
           null,
           React.createElement(
             "div",
-            { id: "navbar" },
+            { className: "formRow" },
             React.createElement(
-              "a",
-              { href: "#", id: "backButton", onClick: this.onBack },
-              "<"
-            ),
-            React.createElement(
-              "h2",
+              "p",
               null,
-              "Test"
+              React.createElement(
+                "strong",
+                null,
+                "Course finished!"
+              )
             ),
             React.createElement(
-              "a",
-              { href: "#", id: "moreButton", onClick: this.onMore },
-              ":"
+              "p",
+              null,
+              "Good answers: ",
+              this.props.course.count_attempt_success
+            ),
+            React.createElement(
+              "p",
+              null,
+              "Wrong answers: ",
+              this.props.course.count_attempt_failure
             )
           ),
-          editArea,
-          this.state.showMore ? React.createElement(
-            "ul",
-            { id: "popup" },
+          React.createElement(
+            "div",
+            { className: "formRow" },
             React.createElement(
-              "li",
+              "p",
               null,
               React.createElement(
                 "button",
@@ -330,19 +331,46 @@
                 "Reset"
               )
             )
-          ) : ""
-        );
-      } else {
-        return React.createElement(
-          "div",
-          null,
-          React.createElement(
-            "div",
-            null,
-            "Course finished!"
           )
         );
       }
+      return React.createElement(
+        "div",
+        null,
+        React.createElement(
+          "div",
+          { id: "navbar" },
+          React.createElement(
+            "a",
+            { href: "#", id: "backButton", onClick: this.onBack },
+            "<"
+          ),
+          React.createElement(
+            "h2",
+            null,
+            "Test"
+          ),
+          React.createElement(
+            "a",
+            { href: "#", id: "moreButton", onClick: this.onMore },
+            ":"
+          )
+        ),
+        editArea,
+        this.state.showMore ? React.createElement(
+          "ul",
+          { id: "popup" },
+          React.createElement(
+            "li",
+            null,
+            React.createElement(
+              "button",
+              { className: "deleteButton", onClick: this.onReset },
+              "Reset"
+            )
+          )
+        ) : ""
+      );
     }
   });
 })(window);

@@ -12,7 +12,8 @@
       return {
         selectedId: 0,
         mode: "SOURCE_DESTINATION",
-        ids: shuffle(Object.keys(this.props.entries))
+        ids: shuffle(Object.keys(this.props.entries)),
+        showMore: false
       };
     },
     onBack: function () {
@@ -59,38 +60,46 @@
         });
       }
     },
+    onMore: function () {
+      this.setState({
+        showMore: !this.state.showMore
+      });
+    },
     render: function () {
       return React.createElement(
         "div",
         null,
         React.createElement(
           "div",
-          { className: "toolbar topToolbar" },
+          { id: "navbar" },
           React.createElement(
-            "button",
-            { onClick: this.onBack },
-            "Back"
+            "a",
+            { href: "#", id: "backButton", onClick: this.onBack },
+            "<"
           ),
+          React.createElement(
+            "h2",
+            null,
+            "Shuffle"
+          ),
+          React.createElement(
+            "a",
+            { href: "#", id: "moreButton", onClick: this.onMore },
+            ":"
+          )
+        ),
+        React.createElement(
+          "div",
+          { id: "topbar" },
           React.createElement(
             "button",
             { onClick: this.onShuffle },
             "Shuffle"
-          ),
-          React.createElement("input", { name: "mode", type: "radio", checked: this.state.mode == "SOURCE_DESTINATION",
-            onChange: this.onModeChangeSD }),
-          React.createElement("input", { name: "mode", type: "radio", checked: this.state.mode == "DESTINATION_SOURCE",
-            onChange: this.onModeChangeDS }),
-          React.createElement("input", { name: "mode", type: "radio", checked: this.state.mode == "ALL",
-            onChange: this.onModeChangeAll })
-        ),
-        React.createElement(
-          "h2",
-          null,
-          "Hussle"
+          )
         ),
         React.createElement(
           "ul",
-          null,
+          { className: "listView" },
           this.state.ids.map(function (id) {
             var styleSource = {
               visibility: this.state.mode == "ALL" || this.state.mode == "SOURCE_DESTINATION" || id == this.state.selectedId ? "visible" : "hidden"
@@ -105,23 +114,72 @@
               "li",
               { onClick: this.onItemClick, "data-id": id, key: id },
               React.createElement(
-                "div",
-                { style: styleSource },
-                this.props.entries[id].source
-              ),
-              React.createElement(
-                "div",
-                { style: styleDestination },
-                this.props.entries[id].destination
-              ),
-              React.createElement(
-                "div",
-                { style: style },
-                this.props.entries[id].phone
+                "a",
+                null,
+                React.createElement(
+                  "div",
+                  { style: styleSource },
+                  this.props.entries[id].source
+                ),
+                React.createElement(
+                  "div",
+                  { style: styleDestination },
+                  this.props.entries[id].destination
+                ),
+                React.createElement(
+                  "div",
+                  { style: style },
+                  this.props.entries[id].phone
+                )
               )
             );
           }, this)
-        )
+        ),
+        this.state.showMore ? React.createElement(
+          "ul",
+          { id: "popup" },
+          React.createElement(
+            "li",
+            null,
+            React.createElement("input", { name: "mode", type: "radio",
+              checked: this.state.mode == "SOURCE_DESTINATION",
+              id: "modeSD",
+              onChange: this.onModeChangeSD }),
+            React.createElement(
+              "label",
+              { htmlFor: "modeSD" },
+              "Show ",
+              this.props.course.source_title
+            )
+          ),
+          React.createElement(
+            "li",
+            null,
+            React.createElement("input", { name: "mode", type: "radio",
+              id: "modeDS",
+              checked: this.state.mode == "DESTINATION_SOURCE",
+              onChange: this.onModeChangeDS }),
+            React.createElement(
+              "label",
+              { htmlFor: "modeDS" },
+              "Show ",
+              this.props.course.destination_title
+            )
+          ),
+          React.createElement(
+            "li",
+            null,
+            React.createElement("input", { name: "mode", type: "radio",
+              id: "modeALL",
+              checked: this.state.mode == "ALL",
+              onChange: this.onModeChangeAll }),
+            React.createElement(
+              "label",
+              { htmlFor: "modeALL" },
+              "Show all"
+            )
+          )
+        ) : ""
       );
     }
   });

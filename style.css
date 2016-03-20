@@ -55,10 +55,11 @@ html, body {
 }
 
 #topbar {
-  padding:1rem;
+  padding:1rem 1rem 0 1rem;
   width:100%;
   box-sizing:border-box;
   overflow:hidden;
+  margin-bottom: 1rem;
 }
 
 #topbar button {
@@ -70,6 +71,7 @@ html, body {
 #bottombar button {
   display:block;
   float:right;
+  margin-left: 1rem;
 }
 
 #main {
@@ -103,6 +105,7 @@ html, body {
 .formRow {
   padding:0 1rem;
   margin-bottom:1rem;
+  margin-top: 1rem;
 }
 
 .formLabelInputPair label, .formLabelInputPair input {
@@ -121,8 +124,14 @@ input, button {
   right:2rem;
   max-width:80%;
   min-width:40%;
-  background-color:black;
+  background-color:gray;
   color:white;
+  list-style-type:none;
+}
+
+#popup button {
+  box-sizing:border-box;
+  width:100%;
 }
 
 .fullwidthButton {
@@ -136,18 +145,24 @@ input, button {
 }
 
 .doCourseQuestionTitleSource {
-  
+  margin-right:1rem;
 }
 
 .doCourseQuestionEntry {
-  
+  font-size:140%;
 }
 
-.doCourseOptions {
+.doCourseOptions, .doCourseInput {
   padding:0 1rem;
   margin-bottom:1rem;
   position:relative;
   overflow:hidden;
+}
+
+.doCourseInput input {
+  display:block;
+  box-sizing:border-box;
+  width:100%;
 }
 
 .doCourseOptions button {
@@ -156,14 +171,15 @@ input, button {
   box-sizing:border-box;
   float:left;
   padding:2rem;
+  font-size:140%;
 }
 
-.doCourseOptions button.wrong {
+.doCourseOptions button.wrong, .doCourseInput input.wrong {
   background-color:red;
   color:white;
 }
 
-.doCourseOptions button.success {
+.doCourseOptions button.success, .doCourseInput input.success {
   background-color:green;
   color:white;
 }

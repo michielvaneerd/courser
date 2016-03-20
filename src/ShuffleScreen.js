@@ -10,7 +10,8 @@
       return {
         selectedId : 0,
         mode : "SOURCE_DESTINATION",
-        ids : shuffle(Object.keys(this.props.entries))
+        ids : shuffle(Object.keys(this.props.entries)),
+        showMore : false
       };
     },
     onBack : function() {
@@ -58,21 +59,24 @@
         });
       }
     },
+    onMore : function() {
+      this.setState({
+        showMore : !this.state.showMore
+      });
+    },
     render : function() {
       return (
         <div>
-          <div className="toolbar topToolbar">
-            <button onClick={this.onBack}>Back</button>
-            <button onClick={this.onShuffle}>Shuffle</button>
-            <input name="mode" type="radio" checked={this.state.mode == "SOURCE_DESTINATION"}
-              onChange={this.onModeChangeSD} />
-            <input name="mode" type="radio" checked={this.state.mode == "DESTINATION_SOURCE"}
-              onChange={this.onModeChangeDS} />
-            <input name="mode" type="radio" checked={this.state.mode == "ALL"}
-              onChange={this.onModeChangeAll} />
+          <div id="navbar">
+            <a href="#" id="backButton" onClick={this.onBack}>&lt;</a>
+            <h2>Shuffle</h2>
+            <a href="#" id="moreButton" onClick={this.onMore}>:</a>
           </div>
-          <h2>Hussle</h2>
-          <ul>
+          <div id="topbar">
+            <button onClick={this.onShuffle}>Shuffle</button>
+          </div>
+          
+          <ul className="listView">
           {this.state.ids.map(function(id) {
             var styleSource = {
               visibility : (this.state.mode == "ALL" || this.state.mode == "SOURCE_DESTINATION" || id == this.state.selectedId)
@@ -87,14 +91,40 @@
                 ? "visible" : "hidden"
             };
             return (
-              <li onClick={this.onItemClick} data-id={id} key={id}>
+              <li onClick={this.onItemClick} data-id={id} key={id}><a>
                 <div style={styleSource}>{this.props.entries[id].source}</div>
                 <div style={styleDestination}>{this.props.entries[id].destination}</div>
-                <div style={style}>{this.props.entries[id].phone}</div>
+                <div style={style}>{this.props.entries[id].phone}</div></a>
               </li>
             );
           }, this)}
           </ul>
+          {this.state.showMore
+            ? (
+              <ul id="popup">
+                <li>
+                  <input name="mode" type="radio"
+                    checked={this.state.mode == "SOURCE_DESTINATION"}
+                    id="modeSD"
+                    onChange={this.onModeChangeSD} />
+                  <label htmlFor="modeSD">Show {this.props.course.source_title}</label>
+                </li>
+                <li>
+                  <input name="mode" type="radio"
+                    id="modeDS"
+                    checked={this.state.mode == "DESTINATION_SOURCE"}
+                    onChange={this.onModeChangeDS} />
+                  <label htmlFor="modeDS">Show {this.props.course.destination_title}</label>
+                </li>
+                <li>
+                  <input name="mode" type="radio"
+                    id="modeALL"
+                    checked={this.state.mode == "ALL"}
+                    onChange={this.onModeChangeAll} />
+                  <label htmlFor="modeALL">Show all</label>
+                </li>
+              </ul>
+            ) : ""}
         </div>
       );
     }

@@ -127,8 +127,8 @@
           "div",
           { id: "navbar" },
           React.createElement(
-            "a",
-            { href: "#", id: "backButton", onClick: this.props.onMain },
+            "button",
+            { id: "backButton", onClick: this.props.onMain },
             "<"
           ),
           React.createElement(
@@ -137,8 +137,8 @@
             this.props.course.id ? this.props.course.title : "Create course"
           ),
           this.props.course.id ? React.createElement(
-            "a",
-            { href: "#", id: "moreButton", onClick: this.onMore },
+            "button",
+            { id: "moreButton", onClick: this.onMore },
             ":"
           ) : ""
         ),

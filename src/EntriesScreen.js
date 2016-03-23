@@ -2,7 +2,8 @@
 
   var invalidity = {
     invalidSrc : false,
-    invalidDest : false
+    invalidDest : false,
+    showCreate : false
   };
 
   var emptyEntry = {
@@ -16,7 +17,7 @@
 
   win.EntriesScreen = React.createClass({
     getInitialState : function() {
-      return Object.assign({}, emptyEntry, this.props.entry);
+      return Object.assign({}, emptyEntry, invalidity, this.props.entry);
     },
     componentWillReceiveProps : function(nextProps) {
       this.setState(Object.assign({}, invalidity, emptyEntry, nextProps.entry));
@@ -90,7 +91,7 @@
         break;
         case 27: // ESC
           e.preventDefault();
-          if (this.state.id) {
+          if (this.state.id || this.state.showCreate) {
             this.onCancel();
           } else {
             this.onBack();
@@ -124,84 +125,94 @@
         break;
       }
     },
+    onCreateEntry : function() {
+      this.setState({
+        showCreate : true
+      });
+    },
     render : function() {
       var me = this;
       var propsEntry = this.props.entry || {};
-      var editOrCreateRow =
-        <tr key={propsEntry.id || 0}>
-          <td><input type="text"
-            autoFocus={true}
-            ref={function(el) {
-              // autofocus does not work after saving a new item...
-              // not sure why
-              if (el && !me.state.source.length && !me.state.destination.length
-                && !me.state.phone.length)
-              {
-                el.focus();
-              }
-            }}
-            onKeyDown={this.onKeyDown}
-            required={!!propsEntry.id || this.state.destination.length}
-            onChange={this.onSrcChange}
-            value={this.state.source} /></td>
-          <td><input type="text"
-            required={!!propsEntry.id || this.state.source.length}
-            onChange={this.onDestChange}
-            onKeyDown={this.onKeyDown}
-            value={this.state.destination} /></td>
-          <td><input type="text"
-            onChange={this.onPhoneChange}
-            onKeyDown={this.onKeyDown}
-            value={this.state.phone} /></td>
-          <td>
-            <div className="smallToolbar">
-              <button disabled={!(this.state.source.length && this.state.destination.length)}
+      var editOrCreateRow = propsEntry.id || this.state.showCreate
+        ? (
+        <li key={propsEntry.id || 0}>
+          <div className="formLabelInputPair">
+            <input type="text"
+              autoFocus={true}
+              ref={function(el) {
+                // autofocus does not work after saving a new item...
+                // not sure why
+                if (el && !me.state.source.length && !me.state.destination.length
+                  && !me.state.phone.length)
+                {
+                  el.focus();
+                }
+              }}
+              onKeyDown={this.onKeyDown}
+              placeholder={this.props.course.source_title}
+              required={!!propsEntry.id || this.state.destination.length}
+              onChange={this.onSrcChange}
+              value={this.state.source} />
+          </div>
+          <div className="formLabelInputPair">
+            <input type="text"
+              placeholder={this.props.course.destination_title}
+              required={!!propsEntry.id || this.state.source.length}
+              onChange={this.onDestChange}
+              onKeyDown={this.onKeyDown}
+              value={this.state.destination} />
+          </div>
+          <div className="formLabelInputPair">
+            <input type="text"
+              placeholder="Phonetic"
+              onChange={this.onPhoneChange}
+              onKeyDown={this.onKeyDown}
+              value={this.state.phone} />
+          </div>
+          <div>
+              <button
+                className="w1-3"
+                disabled={!(this.state.source.length && this.state.destination.length)}
                 onClick={this.onSave}>Save</button>
+              <button className="w1-3" onClick={this.onCancel}>Cancel</button>
               {propsEntry.id
                 ? (
                     <span>
-                      <button className="deleteButton" onClick={this.onDelete}>Delete</button>
-                      <button onClick={this.onCancel}>Cancel</button>
+                      <button className="w1-3 deleteButton" onClick={this.onDelete}>Delete</button>
                     </span>
                   ) : null}
             </div>
-          </td>
-        </tr>
+        </li>
+        ) : "";
       return (
         <div>
-          <div className="toolbar topToolbar">
-            <button onClick={this.onBack}>Back</button>
+          <div id="navbar">
+            <button id="backButton" onClick={this.onBack}>&lt;</button>
+            <h2>Entries</h2>
+            {!this.state.showCreate && !propsEntry.id
+            ? (<button id="createButton" onClick={this.onCreateEntry}>+</button>)
+            : ""}
           </div>
-          <h2>Entries of {this.props.course.title}</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>{this.props.course.source_title}</th>
-                <th>{this.props.course.destination_title}</th>
-                <th>Pronunciation</th>
-                <th>Test result</th>
-              </tr>
-            </thead>
-            <tbody>
+          <div id="main">
+            <ul className="listView entriesList">
               {Object.keys(this.props.entries).map(function(entryId) {
                 var entry = this.props.entries[entryId];
                 var row = propsEntry.id == entryId
                   ?
                   editOrCreateRow
                   :
-                  <tr onClick={this.onActivate} data-id={entryId} key={entryId}>
-                    <td>{entry.source}</td>
-                    <td>{entry.destination}</td>
-                    <td>{entry.phone}</td>
-                    <td>{entry.attempt_success} / {entry.attempt_failure}</td>
-                  </tr>
+                  <li onClick={this.onActivate} data-id={entryId} key={entryId}>
+                    <a>
+                    <div>{entry.source}</div>
+                    <div>{entry.destination}</div>
+                    <div>{entry.phone}</div>
+                    </a>
+                  </li>
                 return row;
               }, this)}
-              {propsEntry.id
-                ? <tr><td></td><td></td><td></td><td></td></tr>
-                : editOrCreateRow}
-            </tbody>
-          </table>
+              {this.state.showCreate ? editOrCreateRow : ""}
+            </ul>
+          </div>
         </div>
       );
     }

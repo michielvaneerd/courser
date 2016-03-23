@@ -73,8 +73,8 @@
           "div",
           { id: "navbar" },
           React.createElement(
-            "a",
-            { href: "#", id: "backButton", onClick: this.onBack },
+            "button",
+            { id: "backButton", onClick: this.onBack },
             "<"
           ),
           React.createElement(
@@ -83,8 +83,8 @@
             "Shuffle"
           ),
           React.createElement(
-            "a",
-            { href: "#", id: "moreButton", onClick: this.onMore },
+            "button",
+            { id: "moreButton", onClick: this.onMore },
             ":"
           )
         ),
@@ -141,42 +141,54 @@
           React.createElement(
             "li",
             null,
-            React.createElement("input", { name: "mode", type: "radio",
-              checked: this.state.mode == "SOURCE_DESTINATION",
-              id: "modeSD",
-              onChange: this.onModeChangeSD }),
             React.createElement(
               "label",
               { htmlFor: "modeSD" },
-              "Show ",
-              this.props.course.source_title
+              React.createElement("input", { name: "mode", type: "radio",
+                checked: this.state.mode == "SOURCE_DESTINATION",
+                id: "modeSD",
+                onChange: this.onModeChangeSD }),
+              React.createElement(
+                "span",
+                null,
+                "Show ",
+                this.props.course.source_title
+              )
             )
           ),
           React.createElement(
             "li",
             null,
-            React.createElement("input", { name: "mode", type: "radio",
-              id: "modeDS",
-              checked: this.state.mode == "DESTINATION_SOURCE",
-              onChange: this.onModeChangeDS }),
             React.createElement(
               "label",
               { htmlFor: "modeDS" },
-              "Show ",
-              this.props.course.destination_title
+              React.createElement("input", { name: "mode", type: "radio",
+                id: "modeDS",
+                checked: this.state.mode == "DESTINATION_SOURCE",
+                onChange: this.onModeChangeDS }),
+              React.createElement(
+                "span",
+                null,
+                "Show ",
+                this.props.course.destination_title
+              )
             )
           ),
           React.createElement(
             "li",
             null,
-            React.createElement("input", { name: "mode", type: "radio",
-              id: "modeALL",
-              checked: this.state.mode == "ALL",
-              onChange: this.onModeChangeAll }),
             React.createElement(
               "label",
               { htmlFor: "modeALL" },
-              "Show all"
+              React.createElement("input", { name: "mode", type: "radio",
+                id: "modeALL",
+                checked: this.state.mode == "ALL",
+                onChange: this.onModeChangeAll }),
+              React.createElement(
+                "span",
+                null,
+                "Show all"
+              )
             )
           )
         ) : ""

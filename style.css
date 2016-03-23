@@ -9,36 +9,48 @@ html, body {
 
 #app {
   position:relative;
+  max-width:600px;
+  min-height:100%;
+  margin:0 auto;
 }
 
 #navbar {
   background-color:brown;
   color:white;
   position:relative;
+  height:4rem;
 }
 
 #navbar h2 {
   margin-left:2rem;
   font-size:120%;
-  padding:2rem 0;
+  line-height:4rem;
 }
 
-#navbar #backButton, #navbar #moreButton {
+#navbar #backButton, #navbar #moreButton, #navbar #createButton {
   display:block;
   font-size:120%;
   position:absolute;
   height:100%;
   width:2rem;
-  padding:2rem 0;
   text-align:center;
   box-sizing:border-box;
   text-decoration:none;
   color:white;
 }
 
-#navbar #moreButton {
+
+
+#navbar #moreButton, #navbar #createButton {
   right:0;
   top:0;
+}
+
+#navbar button {
+  line-height:inherit;
+  color:black;
+  background-color:transparent;
+  border:none;
 }
 
 #navbar #backButton:active {
@@ -46,12 +58,12 @@ html, body {
 }
 
 #bottombar {
-  position:fixed;
+  position:absolute;
   bottom:0;
   padding:1rem;
   overflow:hidden;
   box-sizing:border-box;
-  width:100%;
+  right:0;
 }
 
 #topbar {
@@ -119,7 +131,7 @@ input, button {
 }
 
 #popup {
-  position:fixed;
+  position:absolute;
   top:1rem;
   right:2rem;
   max-width:80%;
@@ -129,9 +141,28 @@ input, button {
   list-style-type:none;
 }
 
+#popup li {
+  overflow:hidden;
+}
+
 #popup button {
   box-sizing:border-box;
   width:100%;
+}
+
+#popup li label {
+  padding:.6rem;
+  display:block;
+  line-height:1rem;
+  height:1rem;
+}
+
+#popup li input {
+  display:block;
+  float:left;
+  line-height:1rem;
+  height:1rem;
+  margin-right:.4rem;
 }
 
 .fullwidthButton {
@@ -188,3 +219,15 @@ input, button {
   margin-bottom:1rem;
 }
 
+.w1-3 {
+  box-sizing:border-box;
+  width:calc(100% / 3);
+}
+
+.deleteButton {
+  color:red;
+}
+
+.entriesList li {
+  
+}

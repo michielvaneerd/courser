@@ -341,8 +341,8 @@
           "div",
           { id: "navbar" },
           React.createElement(
-            "a",
-            { href: "#", id: "backButton", onClick: this.onBack },
+            "button",
+            { id: "backButton", onClick: this.onBack },
             "<"
           ),
           React.createElement(
@@ -351,8 +351,8 @@
             "Test"
           ),
           React.createElement(
-            "a",
-            { href: "#", id: "moreButton", onClick: this.onMore },
+            "button",
+            { id: "moreButton", onClick: this.onMore },
             ":"
           )
         ),

@@ -108,11 +108,11 @@
       return (
         <div>
           <div id="navbar">
-            <a href="#" id="backButton" onClick={this.props.onMain}>&lt;</a>
+            <button id="backButton" onClick={this.props.onMain}>&lt;</button>
             <h2>{this.props.course.id
               ? this.props.course.title : "Create course"}</h2>
               {this.props.course.id
-                ? <a href="#" id="moreButton" onClick={this.onMore}>:</a> : ""}
+                ? <button id="moreButton" onClick={this.onMore}>:</button> : ""}
           </div>
           {topbar}
           <div id="main">

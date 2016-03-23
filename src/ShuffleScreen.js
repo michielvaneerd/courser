@@ -68,9 +68,9 @@
       return (
         <div>
           <div id="navbar">
-            <a href="#" id="backButton" onClick={this.onBack}>&lt;</a>
+            <button id="backButton" onClick={this.onBack}>&lt;</button>
             <h2>Shuffle</h2>
-            <a href="#" id="moreButton" onClick={this.onMore}>:</a>
+            <button id="moreButton" onClick={this.onMore}>:</button>
           </div>
           <div id="topbar">
             <button onClick={this.onShuffle}>Shuffle</button>
@@ -103,25 +103,25 @@
             ? (
               <ul id="popup">
                 <li>
-                  <input name="mode" type="radio"
+                  <label htmlFor="modeSD"><input name="mode" type="radio"
                     checked={this.state.mode == "SOURCE_DESTINATION"}
                     id="modeSD"
                     onChange={this.onModeChangeSD} />
-                  <label htmlFor="modeSD">Show {this.props.course.source_title}</label>
+                  <span>Show {this.props.course.source_title}</span></label>
                 </li>
                 <li>
-                  <input name="mode" type="radio"
+                  <label htmlFor="modeDS"><input name="mode" type="radio"
                     id="modeDS"
                     checked={this.state.mode == "DESTINATION_SOURCE"}
                     onChange={this.onModeChangeDS} />
-                  <label htmlFor="modeDS">Show {this.props.course.destination_title}</label>
+                  <span>Show {this.props.course.destination_title}</span></label>
                 </li>
                 <li>
-                  <input name="mode" type="radio"
+                  <label htmlFor="modeALL"><input name="mode" type="radio"
                     id="modeALL"
                     checked={this.state.mode == "ALL"}
                     onChange={this.onModeChangeAll} />
-                  <label htmlFor="modeALL">Show all</label>
+                  <span>Show all</span></label>
                 </li>
               </ul>
             ) : ""}

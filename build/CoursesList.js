@@ -68,6 +68,11 @@
             "h2",
             null,
             "Courses"
+          ),
+          React.createElement(
+            "button",
+            { id: "createButton", onClick: this.onCreateCourse },
+            "+"
           )
         ),
         React.createElement(
@@ -89,15 +94,6 @@
                 )
               );
             }, this)
-          )
-        ),
-        React.createElement(
-          "div",
-          { id: "bottombar" },
-          React.createElement(
-            "button",
-            { className: "floatingButton", onClick: this.onCreateCourse },
-            "+"
           )
         )
       );

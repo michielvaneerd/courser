@@ -2,7 +2,8 @@
 
   var invalidity = {
     invalidSrc: false,
-    invalidDest: false
+    invalidDest: false,
+    showCreate: false
   };
 
   var emptyEntry = {
@@ -18,7 +19,7 @@
     displayName: "EntriesScreen",
 
     getInitialState: function () {
-      return Object.assign({}, emptyEntry, this.props.entry);
+      return Object.assign({}, emptyEntry, invalidity, this.props.entry);
     },
     componentWillReceiveProps: function (nextProps) {
       this.setState(Object.assign({}, invalidity, emptyEntry, nextProps.entry));
@@ -94,7 +95,7 @@
         case 27:
           // ESC
           e.preventDefault();
-          if (this.state.id) {
+          if (this.state.id || this.state.showCreate) {
             this.onCancel();
           } else {
             this.onBack();
@@ -130,15 +131,20 @@
           break;
       }
     },
+    onCreateEntry: function () {
+      this.setState({
+        showCreate: true
+      });
+    },
     render: function () {
       var me = this;
       var propsEntry = this.props.entry || {};
-      var editOrCreateRow = React.createElement(
-        "tr",
+      var editOrCreateRow = propsEntry.id || this.state.showCreate ? React.createElement(
+        "li",
         { key: propsEntry.id || 0 },
         React.createElement(
-          "td",
-          null,
+          "div",
+          { className: "formLabelInputPair" },
           React.createElement("input", { type: "text",
             autoFocus: true,
             ref: function (el) {
@@ -149,146 +155,113 @@
               }
             },
             onKeyDown: this.onKeyDown,
+            placeholder: this.props.course.source_title,
             required: !!propsEntry.id || this.state.destination.length,
             onChange: this.onSrcChange,
             value: this.state.source })
         ),
         React.createElement(
-          "td",
-          null,
+          "div",
+          { className: "formLabelInputPair" },
           React.createElement("input", { type: "text",
+            placeholder: this.props.course.destination_title,
             required: !!propsEntry.id || this.state.source.length,
             onChange: this.onDestChange,
             onKeyDown: this.onKeyDown,
             value: this.state.destination })
         ),
         React.createElement(
-          "td",
-          null,
+          "div",
+          { className: "formLabelInputPair" },
           React.createElement("input", { type: "text",
+            placeholder: "Phonetic",
             onChange: this.onPhoneChange,
             onKeyDown: this.onKeyDown,
             value: this.state.phone })
         ),
         React.createElement(
-          "td",
+          "div",
           null,
           React.createElement(
-            "div",
-            { className: "smallToolbar" },
+            "button",
+            {
+              className: "w1-3",
+              disabled: !(this.state.source.length && this.state.destination.length),
+              onClick: this.onSave },
+            "Save"
+          ),
+          React.createElement(
+            "button",
+            { className: "w1-3", onClick: this.onCancel },
+            "Cancel"
+          ),
+          propsEntry.id ? React.createElement(
+            "span",
+            null,
             React.createElement(
               "button",
-              { disabled: !(this.state.source.length && this.state.destination.length),
-                onClick: this.onSave },
-              "Save"
-            ),
-            propsEntry.id ? React.createElement(
-              "span",
-              null,
-              React.createElement(
-                "button",
-                { className: "deleteButton", onClick: this.onDelete },
-                "Delete"
-              ),
-              React.createElement(
-                "button",
-                { onClick: this.onCancel },
-                "Cancel"
-              )
-            ) : null
-          )
+              { className: "w1-3 deleteButton", onClick: this.onDelete },
+              "Delete"
+            )
+          ) : null
         )
-      );
+      ) : "";
       return React.createElement(
         "div",
         null,
         React.createElement(
           "div",
-          { className: "toolbar topToolbar" },
+          { id: "navbar" },
           React.createElement(
             "button",
-            { onClick: this.onBack },
-            "Back"
-          )
-        ),
-        React.createElement(
-          "h2",
-          null,
-          "Entries of ",
-          this.props.course.title
-        ),
-        React.createElement(
-          "table",
-          null,
-          React.createElement(
-            "thead",
-            null,
-            React.createElement(
-              "tr",
-              null,
-              React.createElement(
-                "th",
-                null,
-                this.props.course.source_title
-              ),
-              React.createElement(
-                "th",
-                null,
-                this.props.course.destination_title
-              ),
-              React.createElement(
-                "th",
-                null,
-                "Pronunciation"
-              ),
-              React.createElement(
-                "th",
-                null,
-                "Test result"
-              )
-            )
+            { id: "backButton", onClick: this.onBack },
+            "<"
           ),
           React.createElement(
-            "tbody",
+            "h2",
             null,
+            "Entries"
+          ),
+          !this.state.showCreate && !propsEntry.id ? React.createElement(
+            "button",
+            { id: "createButton", onClick: this.onCreateEntry },
+            "+"
+          ) : ""
+        ),
+        React.createElement(
+          "div",
+          { id: "main" },
+          React.createElement(
+            "ul",
+            { className: "listView entriesList" },
             Object.keys(this.props.entries).map(function (entryId) {
               var entry = this.props.entries[entryId];
               var row = propsEntry.id == entryId ? editOrCreateRow : React.createElement(
-                "tr",
+                "li",
                 { onClick: this.onActivate, "data-id": entryId, key: entryId },
                 React.createElement(
-                  "td",
+                  "a",
                   null,
-                  entry.source
-                ),
-                React.createElement(
-                  "td",
-                  null,
-                  entry.destination
-                ),
-                React.createElement(
-                  "td",
-                  null,
-                  entry.phone
-                ),
-                React.createElement(
-                  "td",
-                  null,
-                  entry.attempt_success,
-                  " / ",
-                  entry.attempt_failure
+                  React.createElement(
+                    "div",
+                    null,
+                    entry.source
+                  ),
+                  React.createElement(
+                    "div",
+                    null,
+                    entry.destination
+                  ),
+                  React.createElement(
+                    "div",
+                    null,
+                    entry.phone
+                  )
                 )
               );
               return row;
             }, this),
-            propsEntry.id ? React.createElement(
-              "tr",
-              null,
-              React.createElement("td", null),
-              React.createElement("td", null),
-              React.createElement("td", null),
-              React.createElement("td", null)
-            ) : editOrCreateRow
+            this.state.showCreate ? editOrCreateRow : ""
           )
         )
       );

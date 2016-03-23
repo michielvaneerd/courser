@@ -263,9 +263,9 @@
       return (
         <div>
           <div id="navbar">
-            <a href="#" id="backButton" onClick={this.onBack}>&lt;</a>
+            <button id="backButton" onClick={this.onBack}>&lt;</button>
             <h2>Test</h2>
-            <a href="#" id="moreButton" onClick={this.onMore}>:</a>
+            <button id="moreButton" onClick={this.onMore}>:</button>
           </div>
           {editArea}
           {this.state.showMore ? (

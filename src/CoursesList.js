@@ -60,6 +60,7 @@
         <div>
           <div id="navbar">
             <h2>Courses</h2>
+            <button id="createButton" onClick={this.onCreateCourse}>+</button>
           </div>
           <div id="main">
             <ul className="listView">
@@ -73,9 +74,6 @@
                 );
               }, this)}
             </ul>
-          </div>
-          <div id="bottombar">
-            <button className="floatingButton" onClick={this.onCreateCourse}>+</button>
           </div>
         </div>
       );

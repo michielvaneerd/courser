@@ -126,9 +126,7 @@
       }
     },
     onCreateEntry : function() {
-      this.setState({
-        showCreate : true
-      });
+     this.setState(Object.assign({}, emptyEntry, invalidity, {showCreate : true}));
     },
     render : function() {
       var me = this;
@@ -175,7 +173,7 @@
                 disabled={!(this.state.source.length && this.state.destination.length)}
                 onClick={this.onSave}>Save</button>
               <button className="w1-3" onClick={this.onCancel}>Cancel</button>
-              {propsEntry.id
+              {this.state.id
                 ? (
                     <span>
                       <button className="w1-3 deleteButton" onClick={this.onDelete}>Delete</button>
@@ -189,15 +187,13 @@
           <div id="navbar">
             <button id="backButton" onClick={this.onBack}>&lt;</button>
             <h2>Entries</h2>
-            {!this.state.showCreate && !propsEntry.id
-            ? (<button id="createButton" onClick={this.onCreateEntry}>+</button>)
-            : ""}
+            <button id="createButton" onClick={this.onCreateEntry}>+</button>
           </div>
           <div id="main">
             <ul className="listView entriesList">
               {Object.keys(this.props.entries).map(function(entryId) {
                 var entry = this.props.entries[entryId];
-                var row = propsEntry.id == entryId
+                var row = this.state.id == entryId
                   ?
                   editOrCreateRow
                   :

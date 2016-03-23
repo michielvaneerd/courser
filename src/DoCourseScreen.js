@@ -267,12 +267,14 @@
             <h2>Test</h2>
             <button id="moreButton" onClick={this.onMore}>:</button>
           </div>
+          <div id="main">
           {editArea}
           {this.state.showMore ? (
             <ul id="popup">
               <li><button className="deleteButton" onClick={this.onReset}>Reset</button></li>
             </ul>
           ) : ""}
+          </div>
         </div>
       );
     }

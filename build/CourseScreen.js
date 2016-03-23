@@ -142,10 +142,10 @@
             ":"
           ) : ""
         ),
-        topbar,
         React.createElement(
           "div",
           { id: "main" },
+          topbar,
           React.createElement(
             "div",
             { className: "formRow formLabelInputPair" },

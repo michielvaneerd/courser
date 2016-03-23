@@ -3,22 +3,31 @@
   margin:0;
 }
 
-html, body {
+html {
   height:100%;
+}
+
+body {
+  height:calc(100% - 4rem);
 }
 
 #app {
   position:relative;
   max-width:600px;
-  min-height:100%;
   margin:0 auto;
+  min-height:100%;
 }
 
 #navbar {
   background-color:brown;
   color:white;
-  position:relative;
+  position:fixed;
   height:4rem;
+  width:100%;
+  top:0;
+  z-index:1;
+  left:0;
+  box-shadow: 2px 2px 10px black;
 }
 
 #navbar h2 {
@@ -58,7 +67,7 @@ html, body {
 }
 
 #bottombar {
-  position:absolute;
+  position:fixed;
   bottom:0;
   padding:1rem;
   overflow:hidden;
@@ -72,6 +81,7 @@ html, body {
   box-sizing:border-box;
   overflow:hidden;
   margin-bottom: 1rem;
+  margin-top:4rem;
 }
 
 #topbar button {
@@ -87,7 +97,8 @@ html, body {
 }
 
 #main {
-  
+  position:relative;
+  margin-top:4rem;
 }
 
 .listView {
@@ -131,7 +142,7 @@ input, button {
 }
 
 #popup {
-  position:absolute;
+  position:fixed;
   top:1rem;
   right:2rem;
   max-width:80%;
@@ -139,6 +150,7 @@ input, button {
   background-color:gray;
   color:white;
   list-style-type:none;
+  z-index:2;
 }
 
 #popup li {
@@ -170,7 +182,7 @@ input, button {
 }
 
 .doCourseQuestion {
-  padding:0 1rem;
+  padding:1rem 1rem 0 1rem;
   margin-bottom:1rem;
   margin-top:1rem;
 }

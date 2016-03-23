@@ -114,8 +114,8 @@
               {this.props.course.id
                 ? <button id="moreButton" onClick={this.onMore}>:</button> : ""}
           </div>
-          {topbar}
           <div id="main">
+            {topbar}
             <div className="formRow formLabelInputPair">
               <label htmlFor="courseTitleInput">Title</label>
               <input id="courseTitleInput" placeholder="Title" autoFocus={true} required={true}

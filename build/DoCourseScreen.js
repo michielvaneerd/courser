@@ -356,20 +356,24 @@
             ":"
           )
         ),
-        editArea,
-        this.state.showMore ? React.createElement(
-          "ul",
-          { id: "popup" },
-          React.createElement(
-            "li",
-            null,
+        React.createElement(
+          "div",
+          { id: "main" },
+          editArea,
+          this.state.showMore ? React.createElement(
+            "ul",
+            { id: "popup" },
             React.createElement(
-              "button",
-              { className: "deleteButton", onClick: this.onReset },
-              "Reset"
+              "li",
+              null,
+              React.createElement(
+                "button",
+                { className: "deleteButton", onClick: this.onReset },
+                "Reset"
+              )
             )
-          )
-        ) : ""
+          ) : ""
+        )
       );
     }
   });

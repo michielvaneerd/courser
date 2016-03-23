@@ -132,9 +132,7 @@
       }
     },
     onCreateEntry: function () {
-      this.setState({
-        showCreate: true
-      });
+      this.setState(Object.assign({}, emptyEntry, invalidity, { showCreate: true }));
     },
     render: function () {
       var me = this;
@@ -195,7 +193,7 @@
             { className: "w1-3", onClick: this.onCancel },
             "Cancel"
           ),
-          propsEntry.id ? React.createElement(
+          this.state.id ? React.createElement(
             "span",
             null,
             React.createElement(
@@ -222,11 +220,11 @@
             null,
             "Entries"
           ),
-          !this.state.showCreate && !propsEntry.id ? React.createElement(
+          React.createElement(
             "button",
             { id: "createButton", onClick: this.onCreateEntry },
             "+"
-          ) : ""
+          )
         ),
         React.createElement(
           "div",
@@ -236,7 +234,7 @@
             { className: "listView entriesList" },
             Object.keys(this.props.entries).map(function (entryId) {
               var entry = this.props.entries[entryId];
-              var row = propsEntry.id == entryId ? editOrCreateRow : React.createElement(
+              var row = this.state.id == entryId ? editOrCreateRow : React.createElement(
                 "li",
                 { onClick: this.onActivate, "data-id": entryId, key: entryId },
                 React.createElement(

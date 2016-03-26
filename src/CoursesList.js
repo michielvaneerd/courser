@@ -38,29 +38,13 @@
       });
     },
     render : function() {
-      /*
-      <td>
-                      <button className="linkButton" data-id={courseId}
-                        onClick={this.onEntriesClick}>{course.count} entries</button>
-                    </td>
-                    <td>
-                      {course.count > 4
-                        ? <button className="linkButton" data-id={courseId}
-                            onClick={this.onDoClick}>{course.count_attempt_success} done</button>
-                        : ""}
-                    </td>
-                    <td>
-                      {course.count > 0
-                        ? <button className="linkButton" data-id={courseId}
-                            onClick={this.onShuffleClick}>Shuffle</button>
-                        : ""}
-                    </td>
-      */
       return (
         <div>
           <div id="navbar">
-            <h2>Courses</h2>
-            <button id="createButton" onClick={this.onCreateCourse}>+</button>
+            <div id="navbarTitle">Courses</div>
+            <div className="navbarButtonContainer" id="navbarRight">
+              <button onClick={this.onCreateCourse}>+</button>
+            </div>
           </div>
           <div id="main">
             <ul className="listView">

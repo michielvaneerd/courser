@@ -134,7 +134,7 @@
       var editOrCreateRow = propsEntry.id || this.state.showCreate
         ? (
         <li key={propsEntry.id || 0}>
-          <div className="formLabelInputPair">
+          <div className="row formLabelInputPair">
             <input type="text"
               autoFocus={true}
               ref={function(el) {
@@ -152,7 +152,7 @@
               onChange={this.onSrcChange}
               value={this.state.source} />
           </div>
-          <div className="formLabelInputPair">
+          <div className="row formLabelInputPair">
             <input type="text"
               placeholder={this.props.course.destination_title}
               required={!!propsEntry.id || this.state.source.length}
@@ -160,23 +160,22 @@
               onKeyDown={this.onKeyDown}
               value={this.state.destination} />
           </div>
-          <div className="formLabelInputPair">
+          <div className="row formLabelInputPair">
             <input type="text"
               placeholder="Phonetic"
               onChange={this.onPhoneChange}
               onKeyDown={this.onKeyDown}
               value={this.state.phone} />
           </div>
-          <div>
+          <div className="row buttonbar buttonbar-3">
               <button
-                className="w1-3"
                 disabled={!(this.state.source.length && this.state.destination.length)}
                 onClick={this.onSave}>Save</button>
-              <button className="w1-3" onClick={this.onCancel}>Cancel</button>
+              <button onClick={this.onCancel}>Cancel</button>
               {this.state.id
                 ? (
                     <span>
-                      <button className="w1-3 deleteButton" onClick={this.onDelete}>Delete</button>
+                      <button className="deleteButton" onClick={this.onDelete}>Delete</button>
                     </span>
                   ) : null}
             </div>
@@ -185,9 +184,13 @@
       return (
         <div>
           <div id="navbar">
-            <button id="backButton" onClick={this.onBack}>&lt;</button>
-            <h2>Entries</h2>
-            <button id="createButton" onClick={this.onCreateEntry}>+</button>
+            <div className="navbarButtonContainer" id="navbarLeft">
+              <button onClick={this.onBack}>&lt;</button>
+            </div>
+            <div id="navbarTitle">Entries</div>
+            <div className="navbarButtonContainer" id="navbarRight">
+              <button onClick={this.onCreateEntry}>+</button>
+            </div>
           </div>
           <div id="main">
             <ul className="listView entriesList">

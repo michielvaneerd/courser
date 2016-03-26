@@ -142,7 +142,7 @@
         { key: propsEntry.id || 0 },
         React.createElement(
           "div",
-          { className: "formLabelInputPair" },
+          { className: "row formLabelInputPair" },
           React.createElement("input", { type: "text",
             autoFocus: true,
             ref: function (el) {
@@ -160,7 +160,7 @@
         ),
         React.createElement(
           "div",
-          { className: "formLabelInputPair" },
+          { className: "row formLabelInputPair" },
           React.createElement("input", { type: "text",
             placeholder: this.props.course.destination_title,
             required: !!propsEntry.id || this.state.source.length,
@@ -170,7 +170,7 @@
         ),
         React.createElement(
           "div",
-          { className: "formLabelInputPair" },
+          { className: "row formLabelInputPair" },
           React.createElement("input", { type: "text",
             placeholder: "Phonetic",
             onChange: this.onPhoneChange,
@@ -179,18 +179,17 @@
         ),
         React.createElement(
           "div",
-          null,
+          { className: "row buttonbar buttonbar-3" },
           React.createElement(
             "button",
             {
-              className: "w1-3",
               disabled: !(this.state.source.length && this.state.destination.length),
               onClick: this.onSave },
             "Save"
           ),
           React.createElement(
             "button",
-            { className: "w1-3", onClick: this.onCancel },
+            { onClick: this.onCancel },
             "Cancel"
           ),
           this.state.id ? React.createElement(
@@ -198,7 +197,7 @@
             null,
             React.createElement(
               "button",
-              { className: "w1-3 deleteButton", onClick: this.onDelete },
+              { className: "deleteButton", onClick: this.onDelete },
               "Delete"
             )
           ) : null
@@ -211,19 +210,27 @@
           "div",
           { id: "navbar" },
           React.createElement(
-            "button",
-            { id: "backButton", onClick: this.onBack },
-            "<"
+            "div",
+            { className: "navbarButtonContainer", id: "navbarLeft" },
+            React.createElement(
+              "button",
+              { onClick: this.onBack },
+              "<"
+            )
           ),
           React.createElement(
-            "h2",
-            null,
+            "div",
+            { id: "navbarTitle" },
             "Entries"
           ),
           React.createElement(
-            "button",
-            { id: "createButton", onClick: this.onCreateEntry },
-            "+"
+            "div",
+            { className: "navbarButtonContainer", id: "navbarRight" },
+            React.createElement(
+              "button",
+              { onClick: this.onCreateEntry },
+              "+"
+            )
           )
         ),
         React.createElement(

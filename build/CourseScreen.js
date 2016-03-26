@@ -94,7 +94,7 @@
     render: function () {
       var topbar = this.props.course.id ? React.createElement(
         "div",
-        { id: "topbar" },
+        { className: "row buttonbar buttonbar-3" },
         React.createElement(
           "button",
           { "data-id": this.props.course.id,
@@ -127,19 +127,27 @@
           "div",
           { id: "navbar" },
           React.createElement(
-            "button",
-            { id: "backButton", onClick: this.props.onMain },
-            "<"
+            "div",
+            { className: "navbarButtonContainer", id: "navbarLeft" },
+            React.createElement(
+              "button",
+              { onClick: this.props.onMain },
+              "<"
+            )
           ),
           React.createElement(
-            "h2",
-            null,
+            "div",
+            { id: "navbarTitle" },
             this.props.course.id ? this.props.course.title : "Create course"
           ),
           this.props.course.id ? React.createElement(
-            "button",
-            { id: "moreButton", onClick: this.onMore },
-            ":"
+            "div",
+            { className: "navbarButtonContainer", id: "navbarRight" },
+            React.createElement(
+              "button",
+              { onClick: this.onMore },
+              ":"
+            )
           ) : ""
         ),
         React.createElement(
@@ -148,7 +156,7 @@
           topbar,
           React.createElement(
             "div",
-            { className: "formRow formLabelInputPair" },
+            { className: "row formLabelInputPair" },
             React.createElement(
               "label",
               { htmlFor: "courseTitleInput" },
@@ -160,7 +168,7 @@
           ),
           React.createElement(
             "div",
-            { className: "formRow formLabelInputPair" },
+            { className: "row formLabelInputPair" },
             React.createElement(
               "label",
               { htmlFor: "courseSourceTitleInput" },
@@ -172,7 +180,7 @@
           ),
           React.createElement(
             "div",
-            { className: "formRow formLabelInputPair" },
+            { className: "row formLabelInputPair" },
             React.createElement(
               "label",
               { htmlFor: "courseDestinationTitleInput" },
@@ -184,7 +192,7 @@
           ),
           React.createElement(
             "div",
-            { className: "formRow formLabelInputPair" },
+            { className: "row formLabelInputPair" },
             React.createElement(
               "label",
               { htmlFor: "courseTestOkSuccessCountInput" },
@@ -196,12 +204,12 @@
           ),
           React.createElement(
             "div",
-            { className: "formRow" },
+            { className: "row" },
             win.Constants.testTypes.map(function (testType) {
               var text = win.Language[testType].replace("%source%", this.state.source_title).replace("%destination%", this.state.destination_title);
               return React.createElement(
                 "div",
-                { className: "formInputLabelPair", key: testType },
+                { className: "rowinner", key: testType },
                 React.createElement("input", { checked: typeof this.state[testType] === "undefined" ? false : this.state[testType],
                   onChange: this.onTestTypeChange,
                   "data-id": testType, type: "checkbox", id: testType }),
@@ -215,7 +223,7 @@
           ),
           React.createElement(
             "div",
-            { className: "formRow" },
+            { className: "row" },
             React.createElement(
               "button",
               { className: "fullwidthButton", disabled: !!!this.state.title,

@@ -40,24 +40,6 @@
       });
     },
     render: function () {
-      /*
-      <td>
-                      <button className="linkButton" data-id={courseId}
-                        onClick={this.onEntriesClick}>{course.count} entries</button>
-                    </td>
-                    <td>
-                      {course.count > 4
-                        ? <button className="linkButton" data-id={courseId}
-                            onClick={this.onDoClick}>{course.count_attempt_success} done</button>
-                        : ""}
-                    </td>
-                    <td>
-                      {course.count > 0
-                        ? <button className="linkButton" data-id={courseId}
-                            onClick={this.onShuffleClick}>Shuffle</button>
-                        : ""}
-                    </td>
-      */
       return React.createElement(
         "div",
         null,
@@ -65,14 +47,18 @@
           "div",
           { id: "navbar" },
           React.createElement(
-            "h2",
-            null,
+            "div",
+            { id: "navbarTitle" },
             "Courses"
           ),
           React.createElement(
-            "button",
-            { id: "createButton", onClick: this.onCreateCourse },
-            "+"
+            "div",
+            { className: "navbarButtonContainer", id: "navbarRight" },
+            React.createElement(
+              "button",
+              { onClick: this.onCreateCourse },
+              "+"
+            )
           )
         ),
         React.createElement(

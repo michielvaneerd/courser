@@ -92,7 +92,7 @@
     render : function() {
       var topbar = this.props.course.id
         ? (
-            <div id="topbar">
+            <div className="row buttonbar buttonbar-3">
               <button data-id={this.props.course.id}
                 onClick={this.onEntriesClick}>Entries ({this.props.course.count})</button>
               <button
@@ -108,45 +108,51 @@
       return (
         <div>
           <div id="navbar">
-            <button id="backButton" onClick={this.props.onMain}>&lt;</button>
-            <h2>{this.props.course.id
-              ? this.props.course.title : "Create course"}</h2>
+            <div className="navbarButtonContainer" id="navbarLeft">
+              <button onClick={this.props.onMain}>&lt;</button>
+            </div>
+            <div id="navbarTitle">{this.props.course.id
+              ? this.props.course.title : "Create course"}</div>
               {this.props.course.id
-                ? <button id="moreButton" onClick={this.onMore}>:</button> : ""}
+                ?
+                (<div className="navbarButtonContainer" id="navbarRight">
+                <button onClick={this.onMore}>:</button>
+                </div>)
+                : ""}
           </div>
           <div id="main">
             {topbar}
-            <div className="formRow formLabelInputPair">
+            <div className="row formLabelInputPair">
               <label htmlFor="courseTitleInput">Title</label>
               <input id="courseTitleInput" placeholder="Title" autoFocus={true} required={true}
                 type="text" onChange={this.onTitleInputChange}
                 value={this.state.title} />
             </div>
-            <div className="formRow formLabelInputPair">
+            <div className="row formLabelInputPair">
               <label htmlFor="courseSourceTitleInput">Source</label>
               <input id="courseSourceTitleInput" placeholder="Source title" required={true}
                 type="text" onChange={this.onSourceTitleInputChange}
                 value={this.state.source_title} />
             </div>
-            <div className="formRow formLabelInputPair">
+            <div className="row formLabelInputPair">
               <label htmlFor="courseDestinationTitleInput">Destination</label>
               <input id="courseDestinationTitleInput" placeholder="Destination title" required={true}
                 type="text" onChange={this.onDestinationTitleInputChange}
                 value={this.state.destination_title} />
             </div>
-            <div className="formRow formLabelInputPair">
+            <div className="row formLabelInputPair">
               <label htmlFor="courseTestOkSuccessCountInput">Test success count</label>
               <input id="courseTestOkSuccessCountInput" type="number"
                 value={this.state.test_ok_success_count}
                 onChange={this.onTestOkSuccessCountChange} />
             </div>
-            <div className="formRow">
+            <div className="row">
               {win.Constants.testTypes.map(function(testType) {
                 var text = win.Language[testType]
                   .replace("%source%", this.state.source_title)
                   .replace("%destination%", this.state.destination_title)
                 return (
-                  <div className="formInputLabelPair" key={testType}>
+                  <div className="rowinner" key={testType}>
                     <input checked={typeof this.state[testType] === "undefined" ? false : this.state[testType]}
                       onChange={this.onTestTypeChange}
                       data-id={testType} type="checkbox" id={testType} />
@@ -155,7 +161,7 @@
                 );
               }, this)}
             </div>
-            <div className="formRow">
+            <div className="row">
               <button className="fullwidthButton" disabled={!!!this.state.title}
                 onClick={this.onSave}>Save</button>
             </div>

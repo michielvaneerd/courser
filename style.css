@@ -3,7 +3,7 @@
   margin:0;
 }
 
-html, body, #app, #app > div, #app > div > div {
+html, body, #app, #app > div, #screen {
   height:100%;
 }
 
@@ -86,13 +86,19 @@ ul.listView li a {
   line-height:20px;
 }
 
-.rowinner input[type='checkbox'] {
+.rowinner input[type='checkbox'], label input[type='radio'] {
   display:block;
   float:left;
 }
 
+
+
 .rowinner label {
   margin-left:28px;
+}
+
+label > span {
+  margin-left:14px;
 }
 
 label {
@@ -124,4 +130,72 @@ button {
 
 .deleteButton {
   color:red;
+}
+
+#popup {
+  position:absolute;
+  top:56px;
+  right:10px;
+  background-color:white;
+  list-style-type:none;
+  box-shadow:1px 1px 10px black;
+}
+
+ul#popup.listView li {
+  min-height:28px;
+}
+
+ul#popup.listView li a, ul#popup.listView li label {
+  padding:14px;
+  min-width:200px;
+}
+
+#bottombar {
+  position:absolute;
+  bottom:0;
+  width:100%;
+  box-sizing:border-box;
+}
+
+#answerOptionWrapper button {
+  width:50%;
+  min-height:100px;
+}
+
+input.success, button.success {
+  background-color:lime;
+  color:white;
+}
+
+input.wrong, button.wrong {
+  background-color:red;
+  color:white;
+}
+button.fullwidthButton {
+  width:100%;
+}
+.floatright button {
+  float:right;
+}
+#dialog {
+  position: absolute;
+  top: 66px;
+  background-color: white;
+  box-shadow: 0 0 10px black;
+  box-sizing: border-box;
+  width: 80%;
+  margin-left: 10%;
+  padding: 28px;
+  text-align: center;
+}
+.dialog_error {
+  color:red;
+}
+
+.dialog_warning {
+  color:orange;
+}
+
+.dialog_success {
+  color:green;
 }

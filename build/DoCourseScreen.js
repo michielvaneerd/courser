@@ -150,21 +150,26 @@
         null,
         React.createElement(
           "div",
-          { className: "doCourseQuestion" },
+          { className: "row" },
           React.createElement(
             "span",
             { className: "doCourseQuestionTitleSource" },
-            this.props.course[key + "_title"]
+            this.props.course[key + "_title"],
+            ":"
           ),
           React.createElement(
             "span",
-            { className: "doCourseQuestionEntry" },
-            doCourseEntry[key]
+            null,
+            React.createElement(
+              "strong",
+              null,
+              doCourseEntry[key]
+            )
           )
         ),
         React.createElement(
           "div",
-          { className: "doCourseInput" },
+          { className: "row" },
           React.createElement("input", { className: cName,
             placeholder: this.props.course[otherKey + "_title"],
             type: "text",
@@ -179,7 +184,16 @@
         ),
         React.createElement(
           "div",
-          { id: "bottombar" },
+          { className: "row" },
+          React.createElement(
+            "button",
+            { className: "fullwidthButton", disabled: this.state.answer.length == 0 || this.props.doCourseSuccess !== null, onClick: this.onSave },
+            "Save"
+          )
+        ),
+        React.createElement(
+          "div",
+          { id: "bottombar", className: "row floatright" },
           React.createElement(
             "button",
             { disabled: this.props.doCourseSuccess === null,
@@ -190,11 +204,6 @@
               },
               onClick: this.dispatchNewItem },
             "Next"
-          ),
-          React.createElement(
-            "button",
-            { disabled: this.state.answer.length == 0 || this.props.doCourseSuccess !== null, onClick: this.onSave },
-            "Save"
           )
         )
       );
@@ -209,7 +218,7 @@
         null,
         React.createElement(
           "div",
-          { className: "doCourseQuestion" },
+          { className: "row" },
           React.createElement(
             "span",
             { className: "doCourseQuestionTitleSource" },
@@ -218,19 +227,27 @@
           ),
           React.createElement(
             "span",
-            { className: "doCourseQuestionEntry" },
-            doCourseEntry[key]
+            null,
+            React.createElement(
+              "strong",
+              null,
+              doCourseEntry[key]
+            )
           )
         ),
         React.createElement(
           "div",
-          { className: "doCourseOptions" },
+          { className: "row" },
           React.createElement(
             "div",
             { className: "doCourseQuestionTitle" },
             this.props.course[otherKey + "_title"],
             "?"
-          ),
+          )
+        ),
+        React.createElement(
+          "div",
+          { className: "row", id: "answerOptionWrapper" },
           this.props.doCourseAnswerEntryIds.map(function (entryId, index) {
             var cName = "";
             if (this.props.answerEntryId) {
@@ -255,7 +272,7 @@
         ),
         React.createElement(
           "div",
-          { id: "bottombar" },
+          { id: "bottombar", className: "row floatright" },
           React.createElement(
             "button",
             {
@@ -336,24 +353,32 @@
       }
       return React.createElement(
         "div",
-        null,
+        { id: "screen" },
         React.createElement(
           "div",
           { id: "navbar" },
           React.createElement(
-            "button",
-            { id: "backButton", onClick: this.onBack },
-            "<"
+            "div",
+            { className: "navbarButtonContainer", id: "navbarLeft" },
+            React.createElement(
+              "button",
+              { onClick: this.onBack },
+              "<"
+            )
           ),
           React.createElement(
-            "h2",
-            null,
+            "div",
+            { id: "navbarTitle" },
             "Test"
           ),
           React.createElement(
-            "button",
-            { id: "moreButton", onClick: this.onMore },
-            ":"
+            "div",
+            { className: "navbarButtonContainer", id: "navbarRight" },
+            React.createElement(
+              "button",
+              { onClick: this.onMore },
+              ":"
+            )
           )
         ),
         React.createElement(
@@ -362,13 +387,13 @@
           editArea,
           this.state.showMore ? React.createElement(
             "ul",
-            { id: "popup" },
+            { id: "popup", className: "listView" },
             React.createElement(
               "li",
               null,
               React.createElement(
-                "button",
-                { className: "deleteButton", onClick: this.onReset },
+                "a",
+                { onClick: this.onReset },
                 "Reset"
               )
             )

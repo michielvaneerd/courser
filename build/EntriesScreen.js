@@ -205,7 +205,7 @@
       ) : "";
       return React.createElement(
         "div",
-        null,
+        { id: "screen" },
         React.createElement(
           "div",
           { id: "navbar" },
@@ -266,7 +266,15 @@
               );
               return row;
             }, this),
-            this.state.showCreate ? editOrCreateRow : ""
+            this.state.showCreate ? editOrCreateRow : React.createElement(
+              "li",
+              null,
+              React.createElement(
+                "a",
+                { href: "#", onClick: this.onCreateEntry },
+                "+"
+              )
+            )
           )
         )
       );

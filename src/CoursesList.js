@@ -39,7 +39,7 @@
     },
     render : function() {
       return (
-        <div>
+        <div id="screen">
           <div id="navbar">
             <div id="navbarTitle">Courses</div>
             <div className="navbarButtonContainer" id="navbarRight">

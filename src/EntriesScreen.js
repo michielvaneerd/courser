@@ -182,7 +182,7 @@
         </li>
         ) : "";
       return (
-        <div>
+        <div id="screen">
           <div id="navbar">
             <div className="navbarButtonContainer" id="navbarLeft">
               <button onClick={this.onBack}>&lt;</button>
@@ -209,7 +209,9 @@
                   </li>
                 return row;
               }, this)}
-              {this.state.showCreate ? editOrCreateRow : ""}
+              {this.state.showCreate
+              ? editOrCreateRow : <li><a href="#" onClick={this.onCreateEntry}>+</a></li>}
+              
             </ul>
           </div>
         </div>

@@ -42,7 +42,7 @@
     render: function () {
       return React.createElement(
         "div",
-        null,
+        { id: "screen" },
         React.createElement(
           "div",
           { id: "navbar" },

@@ -106,7 +106,7 @@
             </div>
           ) : "";
       return (
-        <div>
+        <div id="screen">
           <div id="navbar">
             <div className="navbarButtonContainer" id="navbarLeft">
               <button onClick={this.props.onMain}>&lt;</button>
@@ -168,8 +168,8 @@
           </div>
           {this.state.showMore
             ? (
-              <ul id="popup">
-                <li><button className="deleteButton" onClick={this.onDelete}>Delete</button></li>
+              <ul id="popup" className="listView">
+                <li><a onClick={this.onDelete}>Delete</a></li>
               </ul>
             ) : ""}
         </div>

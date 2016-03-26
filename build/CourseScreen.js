@@ -122,7 +122,7 @@
       ) : "";
       return React.createElement(
         "div",
-        null,
+        { id: "screen" },
         React.createElement(
           "div",
           { id: "navbar" },
@@ -234,13 +234,13 @@
         ),
         this.state.showMore ? React.createElement(
           "ul",
-          { id: "popup" },
+          { id: "popup", className: "listView" },
           React.createElement(
             "li",
             null,
             React.createElement(
-              "button",
-              { className: "deleteButton", onClick: this.onDelete },
+              "a",
+              { onClick: this.onDelete },
               "Delete"
             )
           )

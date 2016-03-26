@@ -150,11 +150,11 @@
       }
       return (
         <div>
-          <div className="doCourseQuestion">
-            <span className="doCourseQuestionTitleSource">{this.props.course[key + "_title"]}</span>
-            <span className="doCourseQuestionEntry">{doCourseEntry[key]}</span>
+          <div className="row">
+            <span className="doCourseQuestionTitleSource">{this.props.course[key + "_title"]}:</span>
+            <span><strong>{doCourseEntry[key]}</strong></span>
           </div>
-          <div className="doCourseInput">
+          <div className="row">
             <input className={cName}
               placeholder={this.props.course[otherKey + "_title"]}
               type="text"
@@ -167,7 +167,10 @@
               }}
               onChange={this.onChange} value={this.state.answer} />
           </div>
-          <div id="bottombar">
+          <div className="row">
+            <button className="fullwidthButton" disabled={this.state.answer.length == 0 || this.props.doCourseSuccess !== null} onClick={this.onSave}>Save</button>
+          </div>
+          <div id="bottombar" className="row floatright">
             <button disabled={this.props.doCourseSuccess === null}
               ref={function(el) {
                 if (el && me.props.doCourseSuccess !== null) {
@@ -175,7 +178,6 @@
                 }
               }}
               onClick={this.dispatchNewItem}>Next</button>
-            <button disabled={this.state.answer.length == 0 || this.props.doCourseSuccess !== null} onClick={this.onSave}>Save</button>
           </div>
         </div>
       );
@@ -188,12 +190,14 @@
       var otherKey = key == "source" ? "destination" : "source";
       return (
         <div>
-          <div className="doCourseQuestion">
+          <div className="row">
             <span className="doCourseQuestionTitleSource">{this.props.course[key + "_title"]}:</span>
-            <span className="doCourseQuestionEntry">{doCourseEntry[key]}</span>
+            <span><strong>{doCourseEntry[key]}</strong></span>
           </div>
-          <div className="doCourseOptions">
+          <div className="row">
             <div className="doCourseQuestionTitle">{this.props.course[otherKey + "_title"]}?</div>
+          </div>
+          <div className="row" id="answerOptionWrapper">
             {this.props.doCourseAnswerEntryIds.map(function(entryId, index) {
               var cName = "";
               if (this.props.answerEntryId) {
@@ -214,7 +218,7 @@
               );
             }, this)}
           </div>
-          <div id="bottombar">
+          <div id="bottombar" className="row floatright">
             <button
               ref={function(el) {
                 if (el && me.props.doCourseSuccess !== null) {
@@ -261,17 +265,21 @@
         );
       }
       return (
-        <div>
+        <div id="screen">
           <div id="navbar">
-            <button id="backButton" onClick={this.onBack}>&lt;</button>
-            <h2>Test</h2>
-            <button id="moreButton" onClick={this.onMore}>:</button>
+            <div className="navbarButtonContainer" id="navbarLeft">
+              <button onClick={this.onBack}>&lt;</button>
+            </div>
+            <div id="navbarTitle">Test</div>
+            <div className="navbarButtonContainer" id="navbarRight">
+              <button onClick={this.onMore}>:</button>
+            </div>
           </div>
           <div id="main">
           {editArea}
           {this.state.showMore ? (
-            <ul id="popup">
-              <li><button className="deleteButton" onClick={this.onReset}>Reset</button></li>
+            <ul id="popup" className="listView">
+              <li><a onClick={this.onReset}>Reset</a></li>
             </ul>
           ) : ""}
           </div>

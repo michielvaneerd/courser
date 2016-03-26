@@ -68,32 +68,40 @@
     render: function () {
       return React.createElement(
         "div",
-        null,
+        { id: "screen" },
         React.createElement(
           "div",
           { id: "navbar" },
           React.createElement(
-            "button",
-            { id: "backButton", onClick: this.onBack },
-            "<"
+            "div",
+            { className: "navbarButtonContainer", id: "navbarLeft" },
+            React.createElement(
+              "button",
+              { onClick: this.onBack },
+              "<"
+            )
           ),
           React.createElement(
-            "h2",
-            null,
+            "div",
+            { id: "navbarTitle" },
             "Shuffle"
           ),
           React.createElement(
-            "button",
-            { id: "moreButton", onClick: this.onMore },
-            ":"
+            "div",
+            { className: "navbarButtonContainer", id: "navbarRight" },
+            React.createElement(
+              "button",
+              { onClick: this.onMore },
+              ":"
+            )
           )
         ),
         React.createElement(
           "div",
-          { id: "topbar" },
+          { className: "row buttonbar" },
           React.createElement(
             "button",
-            { onClick: this.onShuffle },
+            { className: "fullwidthButton", onClick: this.onShuffle },
             "Shuffle"
           )
         ),
@@ -137,7 +145,7 @@
         ),
         this.state.showMore ? React.createElement(
           "ul",
-          { id: "popup" },
+          { id: "popup", className: "listView" },
           React.createElement(
             "li",
             null,

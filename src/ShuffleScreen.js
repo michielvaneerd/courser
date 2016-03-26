@@ -66,14 +66,18 @@
     },
     render : function() {
       return (
-        <div>
+        <div id="screen">
           <div id="navbar">
-            <button id="backButton" onClick={this.onBack}>&lt;</button>
-            <h2>Shuffle</h2>
-            <button id="moreButton" onClick={this.onMore}>:</button>
+            <div className="navbarButtonContainer" id="navbarLeft">
+              <button onClick={this.onBack}>&lt;</button>
+            </div>
+            <div id="navbarTitle">Shuffle</div>
+            <div className="navbarButtonContainer" id="navbarRight">
+              <button onClick={this.onMore}>:</button>
+            </div>
           </div>
-          <div id="topbar">
-            <button onClick={this.onShuffle}>Shuffle</button>
+          <div className="row buttonbar">
+            <button className="fullwidthButton" onClick={this.onShuffle}>Shuffle</button>
           </div>
           
           <ul className="listView">
@@ -101,7 +105,7 @@
           </ul>
           {this.state.showMore
             ? (
-              <ul id="popup">
+              <ul id="popup" className="listView">
                 <li>
                   <label htmlFor="modeSD"><input name="mode" type="radio"
                     checked={this.state.mode == "SOURCE_DESTINATION"}

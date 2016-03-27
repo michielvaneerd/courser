@@ -59,6 +59,11 @@ body {
   color:white;
 }
 
+.navbarButtonContainer button:active, .navbarButtonContainer button:focus {
+  background-color:blue;
+  font-weight:bold;
+}
+
 ul.listView {
   list-style-type:none;
 }

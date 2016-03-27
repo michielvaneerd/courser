@@ -23,6 +23,7 @@
         forceBackToMainScreen: true
       });
     },
+    onMore: function () {},
     onDoClick: function (e) {
       e.preventDefault();
       this.props.store.dispatch({
@@ -40,6 +41,11 @@
       });
     },
     render: function () {
+      /*
+      <div className="navbarButtonContainer" id="navbarRight">
+              <button onClick={this.onMore}>:</button>
+            </div>
+            */
       return React.createElement(
         "div",
         { id: "screen" },
@@ -50,15 +56,6 @@
             "div",
             { id: "navbarTitle" },
             "Courses"
-          ),
-          React.createElement(
-            "div",
-            { className: "navbarButtonContainer", id: "navbarRight" },
-            React.createElement(
-              "button",
-              { onClick: this.onCreateCourse },
-              "+"
-            )
           )
         ),
         React.createElement(

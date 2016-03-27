@@ -27,9 +27,11 @@
       });
     },
     componentDidMount: function () {
-      this.props.store.dispatch({
-        type: "SELECT_COURSES"
-      });
+      if (this.state.screen === null) {
+        this.props.store.dispatch({
+          type: "SELECT_COURSES"
+        });
+      }
     },
     getInitialState: function () {
       return this.props.store.getState();

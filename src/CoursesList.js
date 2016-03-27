@@ -21,6 +21,9 @@
         forceBackToMainScreen : true
       });
     },
+    onMore : function() {
+      
+    },
     onDoClick : function(e) {
       e.preventDefault();
       this.props.store.dispatch({
@@ -38,13 +41,16 @@
       });
     },
     render : function() {
+      /*
+      <div className="navbarButtonContainer" id="navbarRight">
+              <button onClick={this.onMore}>:</button>
+            </div>
+            */
       return (
         <div id="screen">
           <div id="navbar">
             <div id="navbarTitle">Courses</div>
-            <div className="navbarButtonContainer" id="navbarRight">
-              <button onClick={this.onCreateCourse}>+</button>
-            </div>
+            
           </div>
           <div id="main">
             <ul className="listView">

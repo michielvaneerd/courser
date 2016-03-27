@@ -32,6 +32,20 @@
     entriesOrder : "ID_ASC"
   };
   
+  var localStorageName = "courser_store";
+  
+  var getStateFromLocalStorage = function() {
+    var item = win.localStorage.getItem(localStorageName);
+    if (item) {
+      return JSON.parse(item);
+    }
+    return defaultState;
+  };
+  
+  var setStateToLocalStorage = function(state) {
+    win.localStorage.setItem(localStorageName, JSON.stringify(state));
+  };
+  
   var storage = null;
   
   var errorHandler = function(error, state) {
@@ -115,7 +129,7 @@
 	var appReducer = function(state, action) {
 
     if (typeof state === "undefined") {
-      return defaultState;
+      return getStateFromLocalStorage();
     }
     
     if (state.inRequest) {
@@ -395,7 +409,8 @@
     if (!suppressInRequest) {
       state.inRequest = false;
     }
-
+    
+    setStateToLocalStorage(state);
     return state;
 
   };

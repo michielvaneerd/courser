@@ -59,6 +59,7 @@
               }, this)}
             </ul>
           </div>
+          <button className="floatingButton" id="floatingBottomButton" onClick={this.onCreateCourse}>+</button>
         </div>
       );
     }

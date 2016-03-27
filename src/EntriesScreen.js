@@ -3,7 +3,8 @@
   var invalidity = {
     invalidSrc : false,
     invalidDest : false,
-    showCreate : false
+    showCreate : false,
+    showMore : false
   };
 
   var emptyEntry = {
@@ -80,6 +81,36 @@
         type : "SELECT_ENTRY",
         forceBackToMainScreen : this.props.forceBackToMainScreen
       });
+    },
+    onMore : function() {
+      this.setState({
+        showMore : !this.state.showMore
+      });
+    },
+    dispatchOrder : function(orderValue) {
+      this.props.store.dispatch({
+        type : "ENTRIES_ORDER",
+        value : orderValue,
+        forceBackToMainScreen : this.props.forceBackToMainScreen
+      });
+    },
+    onOrderChangeALPHABETIC_SOURCE_DESC : function() {
+      this.dispatchOrder("ALPHABETIC_SOURCE_DESC");
+    },
+    onOrderChangeALPHABETIC_SOURCE_ASC : function() {
+      this.dispatchOrder("ALPHABETIC_SOURCE_ASC");
+    },
+    onOrderChangeALPHABETIC_DESTINATION_DESC : function() {
+      this.dispatchOrder("ALPHABETIC_DESTINATION_DESC");
+    },
+    onOrderChangeALPHABETIC_DESTINATION_ASC : function() {
+      this.dispatchOrder("ALPHABETIC_DESTINATION_ASC");
+    },
+    onOrderChangeID_ASC : function() {
+      this.dispatchOrder("ID_ASC");
+    },
+    onOrderChangeID_DESC : function() {
+      this.dispatchOrder("ID_DESC");
     },
     onKeyDown : function(e) {
       switch (e.keyCode) {
@@ -189,12 +220,12 @@
             </div>
             <div id="navbarTitle">Entries</div>
             <div className="navbarButtonContainer" id="navbarRight">
-              <button onClick={this.onCreateEntry}>+</button>
+              <button onClick={this.onMore}>:</button>
             </div>
           </div>
           <div id="main">
             <ul className="listView entriesList">
-              {Object.keys(this.props.entries).map(function(entryId) {
+              {this.props.entryIds.map(function(entryId) {
                 var entry = this.props.entries[entryId];
                 var row = this.state.id == entryId
                   ?
@@ -204,16 +235,68 @@
                     <a>
                     <div>{entry.source}</div>
                     <div>{entry.destination}</div>
-                    <div>{entry.phone}</div>
+                      {entry.phone
+                        ? <div><em>{entry.phone}</em></div>
+                      : ""}
                     </a>
                   </li>
                 return row;
               }, this)}
               {this.state.showCreate
-              ? editOrCreateRow : <li><a href="#" onClick={this.onCreateEntry}>+</a></li>}
+              ? editOrCreateRow : ""}
               
             </ul>
           </div>
+          {!this.state.showCreate && !this.state.id
+            ? <button className="floatingButton" id="floatingBottomButton" onClick={this.onCreateEntry}>+</button>
+          : ""}
+          {this.state.showMore
+            ? (
+              <ul id="popup" className="listView">
+                <li>
+                  <label htmlFor="orderIdAsc"><input name="order" type="radio"
+                    checked={this.props.entriesOrder == "ID_ASC"}
+                    id="orderIdAsc"
+                    onChange={this.onOrderChangeID_ASC} />
+                  <span>Order from old to new</span></label>
+                </li>
+                <li>
+                  <label htmlFor="orderIdDesc"><input name="order" type="radio"
+                    checked={this.props.entriesOrder == "ID_DESC"}
+                    id="orderIdDesc"
+                    onChange={this.onOrderChangeID_DESC} />
+                  <span>Order from new to old</span></label>
+                </li>
+                <li>
+                  <label htmlFor="orderAlphabeticSourceAsc"><input name="order" type="radio"
+                    id="orderAlphabeticSourceAsc"
+                    checked={this.props.entriesOrder == "ALPHABETIC_SOURCE_ASC"}
+                    onChange={this.onOrderChangeALPHABETIC_SOURCE_ASC} />
+                  <span>Order {this.props.course.source_title} alphabetically up</span></label>
+                </li>
+                <li>
+                  <label htmlFor="orderAlphabeticSourceDesc"><input name="order" type="radio"
+                    id="orderAlphabeticSourceDesc"
+                    checked={this.props.entriesOrder == "ALPHABETIC_SOURCE_DESC"}
+                    onChange={this.onOrderChangeALPHABETIC_SOURCE_DESC} />
+                  <span>Order {this.props.course.source_title} alphabetically down</span></label>
+                </li>
+                <li>
+                  <label htmlFor="orderAlphabeticDestinationAsc"><input name="order" type="radio"
+                    id="orderAlphabeticDestinationAsc"
+                    checked={this.props.entriesOrder == "ALPHABETIC_DESTINATION_ASC"}
+                    onChange={this.onOrderChangeALPHABETIC_DESTINATION_ASC} />
+                  <span>Order {this.props.course.destination_title} alphabetically up</span></label>
+                </li>
+                <li>
+                  <label htmlFor="orderAlphabeticDestinationDesc"><input name="order" type="radio"
+                    id="orderAlphabeticDestinationDesc"
+                    checked={this.props.entriesOrder == "ALPHABETIC_DESTINATION_DESC"}
+                    onChange={this.onOrderChangeALPHABETIC_DESTINATION_DESC} />
+                  <span>Order {this.props.course.destination_title} alphabetically down</span></label>
+                </li>
+              </ul>
+            ) : ""}
         </div>
       );
     }

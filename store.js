@@ -27,7 +27,9 @@
     entryId : 0,
     screen : null,
     courses : {}, // courseId => course
-    entries : {} // entryId => entry (only for active course)
+    entries : {}, // entryId => entry (only for active course)
+    entryIds : [], // to make sortable possible
+    entriesOrder : "ID_ASC"
   };
   
   var storage = null;
@@ -38,6 +40,76 @@
       type : "ERROR",
       value : error.toString()
     });
+  };
+  
+  var sortEntries = function(entries, entriesOrder) {
+    switch (entriesOrder) {
+      case "ID_DESC":
+        return Object.keys(entries).sort(function(a, b) {
+          return b - a;
+        }).map(function(id) {
+          return parseInt(id);
+        });
+      break;
+      case "ALPHABETIC_SOURCE_ASC":
+        return Object.keys(entries).sort(function(a, b) {
+          if (entries[a].source > entries[b].source) {
+            return 1;
+          }
+          if (entries[a].source < entries[b].source) {
+            return -1;
+          }
+          return 0;
+        }).map(function(id) {
+          return parseInt(id);
+        });
+      break;
+      case "ALPHABETIC_SOURCE_DESC":
+        return Object.keys(entries).sort(function(a, b) {
+          if (entries[a].source < entries[b].source) {
+            return 1;
+          }
+          if (entries[a].source > entries[b].source) {
+            return -1;
+          }
+          return 0;
+        }).map(function(id) {
+          return parseInt(id);
+        });
+      break;
+      case "ALPHABETIC_DESTINATION_ASC":
+        return Object.keys(entries).sort(function(a, b) {
+          if (entries[a].destination > entries[b].destination) {
+            return 1;
+          }
+          if (entries[a].destination < entries[b].destination) {
+            return -1;
+          }
+          return 0;
+        }).map(function(id) {
+          return parseInt(id);
+        });
+      break;
+      case "ALPHABETIC_DESTINATION_DESC":
+        return Object.keys(entries).sort(function(a, b) {
+          if (entries[a].destination < entries[b].destination) {
+            return 1;
+          }
+          if (entries[a].destination > entries[b].destination) {
+            return -1;
+          }
+          return 0;
+        }).map(function(id) {
+          return parseInt(id);
+        });
+      break;
+      default:
+        return Object.keys(entries).sort().map(function(id) {
+          return parseInt(id);
+        });
+      break;
+    }
+    return entryIds;
   };
 
 	var appReducer = function(state, action) {
@@ -131,7 +203,9 @@
         break;
       case "SELECT_ENTRIES":
         state.entryId = 0;
+        // TODO: sort in storage, for now I do it here...
         state.entries = action.value;
+        state.entryIds = sortEntries(action.value, state.entriesOrder);
         state.screen = "ENTRIES_SCREEN";
         break;
       case "REQUEST_SAVE_COURSE":
@@ -174,10 +248,16 @@
       case "SAVE_ENTRY":
         state.entries[action.value.id] = action.value;
         state.courses[state.courseId].count = Object.keys(state.entries).length;
+        if (state.entryIds.indexOf(parseInt(action.value.id)) === -1) {
+          // TODO: sort as entriesOrder!
+          state.entryIds.push(parseInt(action.value.id));
+        }
         state.entryId = 0;
         break;
       case "REQUEST_DELETE_ENTRY":
         suppressInRequest = true;
+        delete state.entries[state.entryId];
+        state.entryIds.splice(state.entryIds.indexOf(parseInt(state.entryId)), 1);
         storage.deleteEntry(state.entryId, state.courseId).then(function() {
           state.inRequest = false;
           me.dispatch({
@@ -189,9 +269,12 @@
         });
         break;
       case "DELETE_ENTRY":
-        delete state.entries[state.entryId];
         state.courses[state.courseId].count -= 1;
         state.entryId = 0;
+        break;
+      case "ENTRIES_ORDER":
+        state.entriesOrder = action.value;
+        state.entryIds = sortEntries(state.entries, state.entriesOrder);
         break;
       case "SHOW_COURSE_SCREEN":
       	state.screen = "COURSE_SCREEN";

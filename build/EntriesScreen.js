@@ -3,7 +3,8 @@
   var invalidity = {
     invalidSrc: false,
     invalidDest: false,
-    showCreate: false
+    showCreate: false,
+    showMore: false
   };
 
   var emptyEntry = {
@@ -82,6 +83,36 @@
         type: "SELECT_ENTRY",
         forceBackToMainScreen: this.props.forceBackToMainScreen
       });
+    },
+    onMore: function () {
+      this.setState({
+        showMore: !this.state.showMore
+      });
+    },
+    dispatchOrder: function (orderValue) {
+      this.props.store.dispatch({
+        type: "ENTRIES_ORDER",
+        value: orderValue,
+        forceBackToMainScreen: this.props.forceBackToMainScreen
+      });
+    },
+    onOrderChangeALPHABETIC_SOURCE_DESC: function () {
+      this.dispatchOrder("ALPHABETIC_SOURCE_DESC");
+    },
+    onOrderChangeALPHABETIC_SOURCE_ASC: function () {
+      this.dispatchOrder("ALPHABETIC_SOURCE_ASC");
+    },
+    onOrderChangeALPHABETIC_DESTINATION_DESC: function () {
+      this.dispatchOrder("ALPHABETIC_DESTINATION_DESC");
+    },
+    onOrderChangeALPHABETIC_DESTINATION_ASC: function () {
+      this.dispatchOrder("ALPHABETIC_DESTINATION_ASC");
+    },
+    onOrderChangeID_ASC: function () {
+      this.dispatchOrder("ID_ASC");
+    },
+    onOrderChangeID_DESC: function () {
+      this.dispatchOrder("ID_DESC");
     },
     onKeyDown: function (e) {
       switch (e.keyCode) {
@@ -228,8 +259,8 @@
             { className: "navbarButtonContainer", id: "navbarRight" },
             React.createElement(
               "button",
-              { onClick: this.onCreateEntry },
-              "+"
+              { onClick: this.onMore },
+              ":"
             )
           )
         ),
@@ -239,7 +270,7 @@
           React.createElement(
             "ul",
             { className: "listView entriesList" },
-            Object.keys(this.props.entries).map(function (entryId) {
+            this.props.entryIds.map(function (entryId) {
               var entry = this.props.entries[entryId];
               var row = this.state.id == entryId ? editOrCreateRow : React.createElement(
                 "li",
@@ -257,26 +288,141 @@
                     null,
                     entry.destination
                   ),
-                  React.createElement(
+                  entry.phone ? React.createElement(
                     "div",
                     null,
-                    entry.phone
-                  )
+                    React.createElement(
+                      "em",
+                      null,
+                      entry.phone
+                    )
+                  ) : ""
                 )
               );
               return row;
             }, this),
-            this.state.showCreate ? editOrCreateRow : React.createElement(
-              "li",
-              null,
+            this.state.showCreate ? editOrCreateRow : ""
+          )
+        ),
+        !this.state.showCreate && !this.state.id ? React.createElement(
+          "button",
+          { className: "floatingButton", id: "floatingBottomButton", onClick: this.onCreateEntry },
+          "+"
+        ) : "",
+        this.state.showMore ? React.createElement(
+          "ul",
+          { id: "popup", className: "listView" },
+          React.createElement(
+            "li",
+            null,
+            React.createElement(
+              "label",
+              { htmlFor: "orderIdAsc" },
+              React.createElement("input", { name: "order", type: "radio",
+                checked: this.props.entriesOrder == "ID_ASC",
+                id: "orderIdAsc",
+                onChange: this.onOrderChangeID_ASC }),
               React.createElement(
-                "a",
-                { href: "#", onClick: this.onCreateEntry },
-                "+"
+                "span",
+                null,
+                "Order from old to new"
+              )
+            )
+          ),
+          React.createElement(
+            "li",
+            null,
+            React.createElement(
+              "label",
+              { htmlFor: "orderIdDesc" },
+              React.createElement("input", { name: "order", type: "radio",
+                checked: this.props.entriesOrder == "ID_DESC",
+                id: "orderIdDesc",
+                onChange: this.onOrderChangeID_DESC }),
+              React.createElement(
+                "span",
+                null,
+                "Order from new to old"
+              )
+            )
+          ),
+          React.createElement(
+            "li",
+            null,
+            React.createElement(
+              "label",
+              { htmlFor: "orderAlphabeticSourceAsc" },
+              React.createElement("input", { name: "order", type: "radio",
+                id: "orderAlphabeticSourceAsc",
+                checked: this.props.entriesOrder == "ALPHABETIC_SOURCE_ASC",
+                onChange: this.onOrderChangeALPHABETIC_SOURCE_ASC }),
+              React.createElement(
+                "span",
+                null,
+                "Order ",
+                this.props.course.source_title,
+                " alphabetically up"
+              )
+            )
+          ),
+          React.createElement(
+            "li",
+            null,
+            React.createElement(
+              "label",
+              { htmlFor: "orderAlphabeticSourceDesc" },
+              React.createElement("input", { name: "order", type: "radio",
+                id: "orderAlphabeticSourceDesc",
+                checked: this.props.entriesOrder == "ALPHABETIC_SOURCE_DESC",
+                onChange: this.onOrderChangeALPHABETIC_SOURCE_DESC }),
+              React.createElement(
+                "span",
+                null,
+                "Order ",
+                this.props.course.source_title,
+                " alphabetically down"
+              )
+            )
+          ),
+          React.createElement(
+            "li",
+            null,
+            React.createElement(
+              "label",
+              { htmlFor: "orderAlphabeticDestinationAsc" },
+              React.createElement("input", { name: "order", type: "radio",
+                id: "orderAlphabeticDestinationAsc",
+                checked: this.props.entriesOrder == "ALPHABETIC_DESTINATION_ASC",
+                onChange: this.onOrderChangeALPHABETIC_DESTINATION_ASC }),
+              React.createElement(
+                "span",
+                null,
+                "Order ",
+                this.props.course.destination_title,
+                " alphabetically up"
+              )
+            )
+          ),
+          React.createElement(
+            "li",
+            null,
+            React.createElement(
+              "label",
+              { htmlFor: "orderAlphabeticDestinationDesc" },
+              React.createElement("input", { name: "order", type: "radio",
+                id: "orderAlphabeticDestinationDesc",
+                checked: this.props.entriesOrder == "ALPHABETIC_DESTINATION_DESC",
+                onChange: this.onOrderChangeALPHABETIC_DESTINATION_DESC }),
+              React.createElement(
+                "span",
+                null,
+                "Order ",
+                this.props.course.destination_title,
+                " alphabetically down"
               )
             )
           )
-        )
+        ) : ""
       );
     }
   });

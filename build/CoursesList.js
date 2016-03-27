@@ -81,6 +81,11 @@
               );
             }, this)
           )
+        ),
+        React.createElement(
+          "button",
+          { className: "floatingButton", id: "floatingBottomButton", onClick: this.onCreateCourse },
+          "+"
         )
       );
     }

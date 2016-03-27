@@ -71,6 +71,8 @@
             course={course}
             entry={entry}
             onMain={this.onMain}
+            entryIds={this.state.entryIds}
+            entriesOrder={this.state.entriesOrder}
             entries={this.state.entries} />
           break;
         case "COURSE_SCREEN":

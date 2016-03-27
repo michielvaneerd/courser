@@ -16,7 +16,6 @@ body {
 
 #navbar {
   height:56px;
-  /* rgb(255,64,129); */
   background-color:rgb(63,81,181);
   overflow:hidden;
   box-shadow:0 0 10px black;
@@ -198,4 +197,21 @@ button.fullwidthButton {
 
 .dialog_success {
   color:green;
+}
+
+.floatingButton {
+  width:56px;
+  height:56px;
+  border-radius:28px;
+  background-color:rgb(255,64,129);
+  color:white;
+  box-shadow:0 0 4px black;
+  position:absolute;
+  border:none;
+  font-size:140%;
+}
+
+#floatingBottomButton {
+  right:14px;
+  bottom:14px;
 }

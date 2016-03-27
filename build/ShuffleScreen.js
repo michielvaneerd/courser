@@ -137,7 +137,11 @@
                 React.createElement(
                   "div",
                   { style: style },
-                  this.props.entries[id].phone
+                  React.createElement(
+                    "em",
+                    null,
+                    this.props.entries[id].phone
+                  )
                 )
               )
             );

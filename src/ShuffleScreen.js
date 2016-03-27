@@ -98,7 +98,7 @@
               <li onClick={this.onItemClick} data-id={id} key={id}><a>
                 <div style={styleSource}>{this.props.entries[id].source}</div>
                 <div style={styleDestination}>{this.props.entries[id].destination}</div>
-                <div style={style}>{this.props.entries[id].phone}</div></a>
+                <div style={style}><em>{this.props.entries[id].phone}</em></div></a>
               </li>
             );
           }, this)}

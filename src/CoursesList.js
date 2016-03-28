@@ -40,6 +40,16 @@
         forceBackToMainScreen : true
       });
     },
+    onDropboxConnect : function() {
+      this.props.store.dispatch({
+        type : "DROPBOX_CONNECT"
+      });
+    },
+    onDropboxDisconnect : function() {
+      this.props.store.dispatch({
+        type : "DROPBOX_DISCONNECT"
+      });
+    },
     render : function() {
       /*
       <div className="navbarButtonContainer" id="navbarRight">
@@ -50,7 +60,11 @@
         <div id="screen">
           <div id="navbar">
             <div id="navbarTitle">Courses</div>
-            
+            <div className="navbarButtonContainer" id="navbarRight">
+            {this.props.dropboxAccount
+              ? <button onClick={this.onDropboxDisconnect}>{this.props.dropboxAccount.name.display_name}</button>
+              : <button onClick={this.onDropboxConnect}>Dropbox</button>}
+            </div>
           </div>
           <div id="main">
             <ul className="listView">

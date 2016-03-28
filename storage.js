@@ -19,9 +19,14 @@
 
   win.Storage = {
     
+    getStorage : getStorage,
+    saveStorage : saveStorage,
+    
     storage : null,
     
     ready : function() {
+      // TODO: hier dropbox check doen en als je deze hebt,
+      // dan deze gebruiken!
       var me = this;
       return new Promise(function(resolve, reject) {
         setTimeout(function() {

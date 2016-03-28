@@ -47,6 +47,7 @@
   };
   
   var storage = null;
+  var dropbox = null;
   
   var errorHandler = function(error, state) {
     state.inRequest = false;
@@ -395,6 +396,38 @@
           errorHandler(error, state);
         });
         break;
+      case "DROPBOX_CONNECT":
+        dropbox.authorize();
+        break;
+      case "DROPBOX_DISCONNECT":
+        //win.localStorage.removeItem("access_token");
+        //state.dropboxAccount = null;
+        dropbox.upload("/courser.json", JSON.stringify(storage.getStorage()))
+            .then(function(response) {
+          console.log(response);
+        });
+        break;
+      case "REQUEST_DROPBOX_ACCOUNT":
+        suppressInRequest = true;
+        dropbox.getCurrentAccount().then(function(response) {
+          state.dropboxAccount = response;
+          // TODO: create one if not exists...
+          return dropbox.download("/courser.json");
+        }).then(function(response) {
+          state.inRequest = false;
+          me.dispatch({
+            type : "DROPBOX_READY",
+            value : JSON.parse(decodeURIComponent(response))
+          });
+        }).catch(function(error) {
+          state.inRequest = false;
+          errorHandler(error, state);
+        });
+        break;
+      case "DROPBOX_READY":
+        storage.saveStorage(action.value);
+        console.log(action.value);
+        break;
       case "ERROR":
         state.error = action.value;
         break;
@@ -415,8 +448,9 @@
 
   };
 
-  win.initStore = function(readyStorage) {
+  win.initStore = function(readyStorage, DP) {
     storage = readyStorage;
+    dropbox = DP;
     win.Store = VerySimpleRedux.createStore(appReducer);
   };
 

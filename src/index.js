@@ -25,6 +25,14 @@
       });
     },
     componentDidMount : function() {
+      DP.emitter.on("accesstoken", function(type, e) {
+        window.localStorage.setItem("access_token", e.access_token);
+      });
+      if (DP.accessToken) {
+       this.props.store.dispatch({
+         type : "REQUEST_DROPBOX_ACCOUNT"
+       });
+      }
       if (this.state.screen === null) {
         this.props.store.dispatch({
           type : "SELECT_COURSES"
@@ -110,6 +118,7 @@
           break;
         default:
           screen = <CoursesList
+            dropboxAccount={this.state.dropboxAccount}
             store={this.props.store}
             courses={this.state.courses} />
           break;
@@ -132,11 +141,26 @@
     }
   });
   
+  var DP = new Dropbox("r0rft8iznsi5atw",
+    window.localStorage.getItem("access_token"));
+  DP.emitter.on("accesstoken", function(type, e) {
+    window.localStorage.setItem("access_token", e.access_token);
+  });
+  var authResult = DP.handleAuthorizationRedirect();
+  if (authResult === false) {
+    console.log("Kan nu iets doen, want geen redirect!");
+    console.log(DP.accessToken);
+  } else if (authResult !== true) {
+    alert(authResult);
+  }
+  
+  
   win.Storage.ready().then(function() {
-    win.initStore(win.Storage);
+    win.initStore(win.Storage, DP);
     ReactDOM.render(<App store={win.Store} />, win.document.getElementById("app"));
   }).catch(function(error) {
     alert(error);
+   console.error(error);
   });
   
   // Start service worker

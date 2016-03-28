@@ -40,6 +40,16 @@
         forceBackToMainScreen: true
       });
     },
+    onDropboxConnect: function () {
+      this.props.store.dispatch({
+        type: "DROPBOX_CONNECT"
+      });
+    },
+    onDropboxDisconnect: function () {
+      this.props.store.dispatch({
+        type: "DROPBOX_DISCONNECT"
+      });
+    },
     render: function () {
       /*
       <div className="navbarButtonContainer" id="navbarRight">
@@ -56,6 +66,19 @@
             "div",
             { id: "navbarTitle" },
             "Courses"
+          ),
+          React.createElement(
+            "div",
+            { className: "navbarButtonContainer", id: "navbarRight" },
+            this.props.dropboxAccount ? React.createElement(
+              "button",
+              { onClick: this.onDropboxDisconnect },
+              this.props.dropboxAccount.name.display_name
+            ) : React.createElement(
+              "button",
+              { onClick: this.onDropboxConnect },
+              "Dropbox"
+            )
           )
         ),
         React.createElement(

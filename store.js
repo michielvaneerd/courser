@@ -415,19 +415,15 @@
           return dropbox.download("/courser.json");
         }).then(function(response) {
           state.inRequest = false;
+          storage.storage = JSON.parse(decodeURIComponent(response));
+          storage.saveStorage(storage.storage);
           me.dispatch({
-            type : "DROPBOX_READY",
-            value : JSON.parse(decodeURIComponent(response))
+            type : "SELECT_COURSES"
           });
         }).catch(function(error) {
           state.inRequest = false;
           errorHandler(error, state);
         });
-        break;
-      case "DROPBOX_READY":
-        storage.saveStorage(action.value);
-        storage.storage = action.value;
-        console.log(action.value);
         break;
       case "ERROR":
         state.error = action.value;

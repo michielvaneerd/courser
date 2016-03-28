@@ -426,6 +426,7 @@
         break;
       case "DROPBOX_READY":
         storage.saveStorage(action.value);
+        storage.storage = action.value;
         console.log(action.value);
         break;
       case "ERROR":

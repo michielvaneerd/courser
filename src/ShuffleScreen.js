@@ -76,33 +76,35 @@
               <button onClick={this.onMore}>:</button>
             </div>
           </div>
-          <div className="row buttonbar">
-            <button className="fullwidthButton" onClick={this.onShuffle}>Shuffle</button>
-          </div>
+          <div id="main">
+            <div className="row buttonbar">
+              <button className="fullwidthButton" onClick={this.onShuffle}>Shuffle</button>
+            </div>
           
-          <ul className="listView">
-          {this.state.ids.map(function(id) {
-            var styleSource = {
-              visibility : (this.state.mode == "ALL" || this.state.mode == "SOURCE_DESTINATION" || id == this.state.selectedId)
-                ? "visible" : "hidden"
-            };
-            var styleDestination = {
-              visibility : (this.state.mode == "ALL" || this.state.mode == "DESTINATION_SOURCE" || id == this.state.selectedId)
-                ? "visible" : "hidden"
-            };
-            var style = {
-              visibility : (this.state.mode == "ALL" || id == this.state.selectedId)
-                ? "visible" : "hidden"
-            };
-            return (
-              <li onClick={this.onItemClick} data-id={id} key={id}><a>
-                <div style={styleSource}>{this.props.entries[id].source}</div>
-                <div style={styleDestination}>{this.props.entries[id].destination}</div>
-                <div style={style}><em>{this.props.entries[id].phone}</em></div></a>
-              </li>
-            );
-          }, this)}
-          </ul>
+            <ul className="listView">
+            {this.state.ids.map(function(id) {
+              var styleSource = {
+                visibility : (this.state.mode == "ALL" || this.state.mode == "SOURCE_DESTINATION" || id == this.state.selectedId)
+                  ? "visible" : "hidden"
+              };
+              var styleDestination = {
+                visibility : (this.state.mode == "ALL" || this.state.mode == "DESTINATION_SOURCE" || id == this.state.selectedId)
+                  ? "visible" : "hidden"
+              };
+              var style = {
+                visibility : (this.state.mode == "ALL" || id == this.state.selectedId)
+                  ? "visible" : "hidden"
+              };
+              return (
+                <li onClick={this.onItemClick} data-id={id} key={id}><a>
+                  <div style={styleSource}>{this.props.entries[id].source}</div>
+                  <div style={styleDestination}>{this.props.entries[id].destination}</div>
+                  <div style={style}><em>{this.props.entries[id].phone}</em></div></a>
+                </li>
+              );
+            }, this)}
+            </ul>
+          </div>
           {this.state.showMore
             ? (
               <ul id="popup" className="listView">

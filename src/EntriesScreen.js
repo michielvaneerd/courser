@@ -1,5 +1,7 @@
 (function(win) {
 
+  var scrollTop = 0;
+
   var invalidity = {
     invalidSrc : false,
     invalidDest : false,
@@ -18,10 +20,16 @@
 
   win.EntriesScreen = React.createClass({
     getInitialState : function() {
+      scrollTop = 0;
       return Object.assign({}, emptyEntry, invalidity, this.props.entry);
     },
     componentWillReceiveProps : function(nextProps) {
       this.setState(Object.assign({}, invalidity, emptyEntry, nextProps.entry));
+      if (scrollTop) {
+        setTimeout(function() {
+          win.document.getElementById("main").scrollTop = scrollTop;
+        }, 300);
+      }
     },
     onSave : function() {
       var entry = Object.assign({}, this.state);
@@ -52,6 +60,7 @@
       });
     },
     selectEntry : function(id) {
+      scrollTop = win.document.getElementById("main").scrollTop;
       this.props.store.dispatch({
         type : "SELECT_ENTRY",
         value : id,
@@ -88,6 +97,7 @@
       });
     },
     dispatchOrder : function(orderValue) {
+      scrollTop = 0;
       this.props.store.dispatch({
         type : "ENTRIES_ORDER",
         value : orderValue,
@@ -157,14 +167,15 @@
       }
     },
     onCreateEntry : function() {
-     this.setState(Object.assign({}, emptyEntry, invalidity, {showCreate : true}));
+      scrollTop = win.document.getElementById("main").scrollTop;
+      this.setState(Object.assign({}, emptyEntry, invalidity, {showCreate : true}));
     },
     render : function() {
       var me = this;
       var propsEntry = this.props.entry || {};
       var editOrCreateRow = propsEntry.id || this.state.showCreate
         ? (
-        <li key={propsEntry.id || 0}>
+        <li id="activeEditListItem" key={propsEntry.id || 0}>
           <div className="row formLabelInputPair">
             <input type="text"
               autoFocus={true}
@@ -212,6 +223,10 @@
             </div>
         </li>
         ) : "";
+      var listClass = "listView entriesList";
+      if (propsEntry.id || this.state.showCreate) {
+        listClass += " editMode";
+      }
       return (
         <div id="screen">
           <div id="navbar">
@@ -224,7 +239,7 @@
             </div>
           </div>
           <div id="main">
-            <ul className="listView entriesList">
+            <ul className={listClass}>
               {this.props.entryIds.map(function(entryId) {
                 var entry = this.props.entries[entryId];
                 var row = this.state.id == entryId

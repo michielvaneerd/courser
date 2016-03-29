@@ -1,5 +1,7 @@
 (function (win) {
 
+  var scrollTop = 0;
+
   var invalidity = {
     invalidSrc: false,
     invalidDest: false,
@@ -20,10 +22,16 @@
     displayName: "EntriesScreen",
 
     getInitialState: function () {
+      scrollTop = 0;
       return Object.assign({}, emptyEntry, invalidity, this.props.entry);
     },
     componentWillReceiveProps: function (nextProps) {
       this.setState(Object.assign({}, invalidity, emptyEntry, nextProps.entry));
+      if (scrollTop) {
+        setTimeout(function () {
+          win.document.getElementById("main").scrollTop = scrollTop;
+        }, 300);
+      }
     },
     onSave: function () {
       var entry = Object.assign({}, this.state);
@@ -54,6 +62,7 @@
       });
     },
     selectEntry: function (id) {
+      scrollTop = win.document.getElementById("main").scrollTop;
       this.props.store.dispatch({
         type: "SELECT_ENTRY",
         value: id,
@@ -90,6 +99,7 @@
       });
     },
     dispatchOrder: function (orderValue) {
+      scrollTop = 0;
       this.props.store.dispatch({
         type: "ENTRIES_ORDER",
         value: orderValue,
@@ -163,6 +173,7 @@
       }
     },
     onCreateEntry: function () {
+      scrollTop = win.document.getElementById("main").scrollTop;
       this.setState(Object.assign({}, emptyEntry, invalidity, { showCreate: true }));
     },
     render: function () {
@@ -170,7 +181,7 @@
       var propsEntry = this.props.entry || {};
       var editOrCreateRow = propsEntry.id || this.state.showCreate ? React.createElement(
         "li",
-        { key: propsEntry.id || 0 },
+        { id: "activeEditListItem", key: propsEntry.id || 0 },
         React.createElement(
           "div",
           { className: "row formLabelInputPair" },
@@ -234,6 +245,10 @@
           ) : null
         )
       ) : "";
+      var listClass = "listView entriesList";
+      if (propsEntry.id || this.state.showCreate) {
+        listClass += " editMode";
+      }
       return React.createElement(
         "div",
         { id: "screen" },
@@ -269,7 +284,7 @@
           { id: "main" },
           React.createElement(
             "ul",
-            { className: "listView entriesList" },
+            { className: listClass },
             this.props.entryIds.map(function (entryId) {
               var entry = this.props.entries[entryId];
               var row = this.state.id == entryId ? editOrCreateRow : React.createElement(

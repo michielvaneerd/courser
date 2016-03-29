@@ -98,54 +98,58 @@
         ),
         React.createElement(
           "div",
-          { className: "row buttonbar" },
+          { id: "main" },
           React.createElement(
-            "button",
-            { className: "fullwidthButton", onClick: this.onShuffle },
-            "Shuffle"
-          )
-        ),
-        React.createElement(
-          "ul",
-          { className: "listView" },
-          this.state.ids.map(function (id) {
-            var styleSource = {
-              visibility: this.state.mode == "ALL" || this.state.mode == "SOURCE_DESTINATION" || id == this.state.selectedId ? "visible" : "hidden"
-            };
-            var styleDestination = {
-              visibility: this.state.mode == "ALL" || this.state.mode == "DESTINATION_SOURCE" || id == this.state.selectedId ? "visible" : "hidden"
-            };
-            var style = {
-              visibility: this.state.mode == "ALL" || id == this.state.selectedId ? "visible" : "hidden"
-            };
-            return React.createElement(
-              "li",
-              { onClick: this.onItemClick, "data-id": id, key: id },
-              React.createElement(
-                "a",
-                null,
+            "div",
+            { className: "row buttonbar" },
+            React.createElement(
+              "button",
+              { className: "fullwidthButton", onClick: this.onShuffle },
+              "Shuffle"
+            )
+          ),
+          React.createElement(
+            "ul",
+            { className: "listView" },
+            this.state.ids.map(function (id) {
+              var styleSource = {
+                visibility: this.state.mode == "ALL" || this.state.mode == "SOURCE_DESTINATION" || id == this.state.selectedId ? "visible" : "hidden"
+              };
+              var styleDestination = {
+                visibility: this.state.mode == "ALL" || this.state.mode == "DESTINATION_SOURCE" || id == this.state.selectedId ? "visible" : "hidden"
+              };
+              var style = {
+                visibility: this.state.mode == "ALL" || id == this.state.selectedId ? "visible" : "hidden"
+              };
+              return React.createElement(
+                "li",
+                { onClick: this.onItemClick, "data-id": id, key: id },
                 React.createElement(
-                  "div",
-                  { style: styleSource },
-                  this.props.entries[id].source
-                ),
-                React.createElement(
-                  "div",
-                  { style: styleDestination },
-                  this.props.entries[id].destination
-                ),
-                React.createElement(
-                  "div",
-                  { style: style },
+                  "a",
+                  null,
                   React.createElement(
-                    "em",
-                    null,
-                    this.props.entries[id].phone
+                    "div",
+                    { style: styleSource },
+                    this.props.entries[id].source
+                  ),
+                  React.createElement(
+                    "div",
+                    { style: styleDestination },
+                    this.props.entries[id].destination
+                  ),
+                  React.createElement(
+                    "div",
+                    { style: style },
+                    React.createElement(
+                      "em",
+                      null,
+                      this.props.entries[id].phone
+                    )
                   )
                 )
-              )
-            );
-          }, this)
+              );
+            }, this)
+          )
         ),
         this.state.showMore ? React.createElement(
           "ul",

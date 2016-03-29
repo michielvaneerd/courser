@@ -220,3 +220,11 @@ button.fullwidthButton {
   right:14px;
   bottom:14px;
 }
+
+ul.editMode li {
+  display:none;
+}
+
+ul.editMode li#activeEditListItem {
+  display:block;
+}

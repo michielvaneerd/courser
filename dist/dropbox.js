@@ -82,12 +82,14 @@
             });
           }
         } catch (ex) {
+          console.log(ex);
           reject(ex);
         } finally {
           xhr = null;
         }
       };
       xhr.onerror = function(error) {
+        console.log(error);
         reject(error);
       };
       xhr.open(options.method || "POST", url);
@@ -177,7 +179,8 @@
    */
   Dropbox.prototype.upload = function(path, content) {
     return request(this, get_url("content", "/files/upload"), {
-      body : encodeURIComponent(content),
+      //body : encodeURIComponent(content),
+      body : content,
       headers : {
         "Content-Type" : "application/octet-stream",
         "Dropbox-API-Arg" : JSON.stringify({

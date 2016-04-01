@@ -11,6 +11,7 @@
   }
 
   var App = React.createClass({
+    store : null,
     propTypes : {
       store : React.PropTypes.shape({
         dispatch : React.PropTypes.func,
@@ -19,34 +20,50 @@
       })
     },
     componentWillMount : function() {
-      var me = this;
-      this.props.store.subscribe(function() {
-        me.setState(me.props.store.getState());
-      });
+      // var me = this;
+      // this.store.subscribe(function() {
+        // me.setState(me.store.getState());
+      // });
     },
     componentDidMount : function() {
       // 
-      // if (DP.accessToken) {
-       // this.props.store.dispatch({
-         // type : "REQUEST_DROPBOX_ACCOUNT"
-       // });
-      // }
-      if (this.state.screen === null) {
-        this.props.store.dispatch({
-          type : "SELECT_COURSES"
+      
+      //if (this.state.screen === null) {
+      //  this.store.dispatch({
+      //    type : "SELECT_COURSES"
+      //  });
+      //}
+      var me = this;
+      win.Storage.ready().then(function() {
+        win.initStore(win.Storage, me.props.dropbox);
+        me.store = win.Store;
+        me.store.subscribe(function() {
+          me.setState(me.store.getState());
         });
-      }
+        if (me.props.dropbox.accessToken) {
+          me.store.dispatch({
+            type : "REQUEST_DROPBOX_ACCOUNT"
+          });
+        } else {
+          me.store.dispatch({
+            type : "SELECT_COURSES"
+          });
+        }
+      }).catch(function(error) {
+        console.log(error);
+        alert(error);
+      });
     },
     getInitialState : function() {
-      return this.props.store.getState();
+      return win.getDefaultState();
     },
     onMain : function() {
-      this.props.store.dispatch({
+      this.store.dispatch({
         type : "SELECT_COURSES"
       });
     },
     onClearType : function(type) {
-      this.props.store.dispatch({
+      this.store.dispatch({
         type : type
       });
     },
@@ -75,7 +92,7 @@
         case "ENTRIES_SCREEN":
           screen = <EntriesScreen
             forceBackToMainScreen={this.state.forceBackToMainScreen}
-            store={this.props.store}
+            store={this.store}
             course={course}
             entry={entry}
             onMain={this.onMain}
@@ -86,13 +103,13 @@
         case "COURSE_EDIT_SCREEN":
           screen = <CourseScreen
             onMain={this.onMain}
-            store={this.props.store}            
+            store={this.store}            
             course={course} />
           break;
         case "COURSE_ACTION_SCREEN":
           screen = <CourseActionScreen
             onMain={this.onMain}
-            store={this.props.store}            
+            store={this.store}            
             course={course} />
           break;
         case "DO_COURSE_SCREEN":
@@ -104,7 +121,7 @@
             answerEntryId={this.state.answerEntryId}
             doCourseSuccess={this.state.doCourseSuccess}
             forceBackToMainScreen={this.state.forceBackToMainScreen}
-            store={this.props.store}
+            store={this.store}
             onMain={this.onMain}
             entries={this.state.entries}
             success={this.state.success}
@@ -114,7 +131,7 @@
         case "SHUFFLE_SCREEN":
           screen = <ShuffleScreen
             forceBackToMainScreen={this.state.forceBackToMainScreen}
-            store={this.props.store}
+            store={this.store}
             course={course}
             entry={entry}
             onMain={this.onMain}
@@ -123,7 +140,7 @@
         default:
           screen = <CoursesList
             dropboxAccount={this.state.dropboxAccount}
-            store={this.props.store}
+            store={this.store}
             courses={this.state.courses} />
           break;
       }
@@ -145,27 +162,21 @@
     }
   });
   
-  var DP = null;
-  // var DP = new Dropbox("r0rft8iznsi5atw", {
-    // accessToken : window.localStorage.getItem("access_token"),
-    // onAccessToken : function(accessToken) {
-      // window.localStorage.setItem("access_token", accessToken);
-    // }
-  // });
-  // try {
-    // DP.handleAuthorizationRedirect();
-  // } catch (ex) {
-    // alert(ex);
-  // }
-  
-  
-  win.Storage.ready().then(function() {
-    win.initStore(win.Storage, DP);
-    ReactDOM.render(<App store={win.Store} />, win.document.getElementById("app"));
-  }).catch(function(error) {
-    alert(error);
-   console.error(error);
+  var dropbox = new Dropbox("r0rft8iznsi5atw", {
+    accessToken : window.localStorage.getItem("access_token"),
+    onAccessToken : function(accessToken) {
+      window.localStorage.setItem("access_token", accessToken);
+    }
   });
+  try {
+    if (dropbox.handleAuthorizationRedirect()) {
+      return;
+    }
+  } catch (ex) {
+    alert(ex);
+  }
+  
+  ReactDOM.render(<App dropbox={dropbox} />, win.document.getElementById("app"));
   
   for (var key in localStorage) {
     console.log(key);

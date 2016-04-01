@@ -127,14 +127,17 @@
   };
 
 	var appReducer = function(state, action) {
+    
+    console.log(action.type);
 
     if (typeof state === "undefined") {
       return getStateFromLocalStorage();
     }
     
     if (state.inRequest) {
-      state.warning = "In request...";
-	    return state;
+      console.warn("In request!");
+    //  state.warning = "In request...";
+	  //  return state;
 	  }
 	  
 	  var me = this;
@@ -390,28 +393,50 @@
       case "DROPBOX_CONNECT":
         dropbox.authorize();
         break;
-      case "DROPBOX_DISCONNECT":
-        //win.localStorage.removeItem("access_token");
-        //state.dropboxAccount = null;
-        dropbox.upload("/courser.json", JSON.stringify(storage.getStorage()))
-            .then(function(response) {
-          console.log(response);
+      case "DROPBOX_SAVE":
+        var courses = storage._getCourses();
+        var requests = [];
+        Object.keys(courses).forEach(function(courseId) {
+          var course = courses[courseId];
+          requests.push(dropbox.upload("/" + storage.getCourseName(courseId) + ".json",
+            JSON.stringify(course)));
         });
+        return Promise.all(requests).then(function() {
+          me.dispatch({
+            type : "SELECT_COURSES"
+          });
+        }).catch(function(error) {
+          console.log(error);
+        });
+        break;
+      case "DROPBOX_DISCONNECT":
+        win.localStorage.removeItem("access_token");
+        state.dropboxAccount = null;
         break;
       case "REQUEST_DROPBOX_ACCOUNT":
         suppressInRequest = true;
         dropbox.getCurrentAccount().then(function(response) {
           state.dropboxAccount = response;
-          // TODO: create one if not exists...
-          return dropbox.download("/courser.json");
+          return dropbox.listFolder("");
         }).then(function(response) {
           state.inRequest = false;
-          storage.storage = JSON.parse(response.content);
-          storage.saveStorage(storage.storage);
+          var downloadRequests = [];
+          response.entries.forEach(function(entry) {
+            if (entry.path_lower.startsWith("/" + storage.storageCoursePrefix)) {
+              downloadRequests.push(dropbox.download(entry.path_lower));
+            }
+          });
+          return Promise.all(downloadRequests);
+        })
+        .then(function(responses) {
+          responses.forEach(function(response) {
+            storage.saveCourse(JSON.parse(response.content));
+          });
           me.dispatch({
             type : "SELECT_COURSES"
           });
-        }).catch(function(error) {
+        })
+        .catch(function(error) {
           state.inRequest = false;
           errorHandler(error, state);
         });
@@ -435,6 +460,8 @@
     return state;
 
   };
+  
+  win.getDefaultState = getStateFromLocalStorage;
 
   win.initStore = function(readyStorage, DP) {
     storage = readyStorage;

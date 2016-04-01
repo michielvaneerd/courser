@@ -38,6 +38,12 @@
 
   win.Storage = {
     
+    storageCoursePrefix : storageCoursePrefix,
+    
+    getCourseName : function(courseId) {
+      return storageCoursePrefix + courseId;
+    },
+    
     ready : function() {
       var me = this;
       return new Promise(function(resolve, reject) {
@@ -46,6 +52,8 @@
         }, 400);
       });
     },
+  
+    _getCourses : _getCourses,
   
     getCourses : function() {
       var courses = _getCourses();

@@ -1,6 +1,12 @@
 (function(win) {
 
   win.CoursesList = React.createClass({
+    getInitialState : function() {
+      return {showMore : false};
+    },
+    componentWillReceiveProps : function(nextProps) {
+      this.setState({showMore : false});
+    },
     onCourseClick : function(e) {
       e.preventDefault();
       this.props.store.dispatch({
@@ -14,11 +20,18 @@
       });
     },
     onMore : function() {
-      
+      this.setState({
+        showMore : !this.state.showMore
+      });
     },
     onDropboxConnect : function() {
       this.props.store.dispatch({
         type : "DROPBOX_CONNECT"
+      });
+    },
+    onDropboxSave : function() {
+      this.props.store.dispatch({
+        type : "DROPBOX_SAVE"
       });
     },
     onDropboxDisconnect : function() {
@@ -32,14 +45,31 @@
               <button onClick={this.onMore}>:</button>
             </div>
             */
+
+      var moreMenu = "";
+      var moreMenuItems = null;
+      if (this.state.showMore) {
+        if (this.props.dropboxAccount) {
+          moreMenuItems = [
+            <li key="dropboxsave"><a onClick={this.onDropboxSave}>Save</a></li>,
+            <li key="dropboxdisconnect"><a onClick={this.onDropboxDisconnect}>Disconnect {this.props.dropboxAccount.name.display_name}</a></li>
+          ];
+        } else {
+          moreMenuItems = [
+            <li key="dropboxconnect"><a onClick={this.onDropboxConnect}>Dropbox</a></li>
+          ];
+        }
+        moreMenu = (
+          <ul id="popup" className="listView">{moreMenuItems}</ul>
+        );
+      }
+            
       return (
         <div id="screen">
           <div id="navbar">
             <div id="navbarTitle">Courses</div>
             <div className="navbarButtonContainer" id="navbarRight">
-            {this.props.dropboxAccount
-              ? <button onClick={this.onDropboxDisconnect}>{this.props.dropboxAccount.name.display_name}</button>
-              : <button onClick={this.onDropboxConnect}>Dropbox</button>}
+              <button onClick={this.onMore}>:</button>
             </div>
           </div>
           <div id="main">
@@ -56,6 +86,7 @@
             </ul>
           </div>
           <button className="floatingButton" id="floatingBottomButton" onClick={this.onCreateCourse}>+</button>
+            {moreMenu}
         </div>
       );
     }

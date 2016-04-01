@@ -1,11 +1,34 @@
 (function(win) {
   
+  // Also prefix for localStorage items
+  // Each course has ites own item, that way you can easily share a course.
   var storageName = "courser";
+  var storageCoursePrefix = "courser_course_";
   
   var saveStorage = function(storage) {
     win.localStorage.setItem(storageName, JSON.stringify(storage));
   };
-    
+  
+  var _saveCourse = function(course) {
+    win.localStorage.setItem(storageCoursePrefix + course.id, JSON.stringify(course));
+  };
+  
+  var _deleteCourse = function(id) {
+    win.localStorage.removeItem(storageCoursePrefix + id);
+  };
+  
+  var _getCourse = function(id) {
+    return getStorageItem(storageCoursePrefix + id);
+  };
+  
+  var getStorageItem = function(key) {
+    var item = win.localStorage.getItem(key);
+    if (item) {
+      return JSON.parse(item);
+    }
+    return null;
+  };
+  
   var getStorage = function() {
     var storage = win.localStorage.getItem(storageName);
     if (storage) {
@@ -16,6 +39,17 @@
       entries : {} // courseid => entryid => object
     }
   };
+  
+  var _getCourses = function() {
+    var courses = {};
+    Object.keys(localStorage).forEach(function(key) {
+      if (key.startsWith(storageCoursePrefix)) {
+        var course = getStorageItem(key);
+        courses[course.id] = course;
+      }
+    });
+    return courses;
+  };
 
   win.Storage = {
     
@@ -25,8 +59,6 @@
     storage : null,
     
     ready : function() {
-      // TODO: hier dropbox check doen en als je deze hebt,
-      // dan deze gebruiken!
       var me = this;
       return new Promise(function(resolve, reject) {
         setTimeout(function() {
@@ -37,10 +69,10 @@
     },
   
     getCourses : function() {
-      var courses = this.storage.courses;
+      var courses = _getCourses();
       Object.keys(courses).forEach(function(courseId) {
         var course = courses[courseId];
-        var courseEntries = this.storage.entries[courseId];
+        var courseEntries = course.entries;
         course.count = Object.keys(courseEntries).length;
         course.count_attempt_success = 0;
         course.count_attempt_failure = 0;
@@ -59,36 +91,36 @@
     
     saveCourse : function(course) {
       if (!course.id) {
-        course.id = Object.keys(this.storage.courses).length
-          ? Math.max.apply(null, Object.keys(this.storage.courses)) + 1 : 1;
-        this.storage.entries[course.id] = {};
+        var courses = _getCourses();
+        course.id = Object.keys(courses).length
+          ? Math.max.apply(null, Object.keys(courses)) + 1 : 1;
+        course.entries = {};
       }
       course.count = course.count || 0;
-      this.storage.courses[course.id] = course;
-      saveStorage(this.storage);
+      _saveCourse(course);
       return Promise.resolve(course);
     },
 
     deleteCourse : function(id) {
-      delete this.storage.entries[id];
-      delete this.storage.courses[id];
-      saveStorage(this.storage);
+      _deleteCourse(id);
       return Promise.resolve();
     },
     
     resetCourse : function(courseId) {
-      var entries = this.storage.entries[courseId];
+      var course = _getCourse(courseId);
+      var entries = course.entries;
       Object.keys(entries).forEach(function(entryId) {
         var entry = entries[entryId];
         entry.attempt_success = 0;
         entry.attempt_failure = 0;
       });
-      saveStorage(this.storage);
-      return Promise.resolve();
+      _saveCourse(course);
+      return Promise.resolve(course);
     },
 
     getEntries : function(courseId, onlyNonSuccess) {
-      var entries = this.storage.entries[courseId];
+      var course = _getCourse(courseId);
+      var entries = course.entries;
       if (onlyNonSuccess) {
         Object.keys(entries).forEach(function(id) {
           if (entries[id].attempt_success) {
@@ -100,20 +132,25 @@
     },
 
     saveEntry : function(entry, courseId) {
-      if (!entry.id) {
-        entry.id = Object.keys(this.storage.entries[courseId]).length
-          ? Math.max.apply(null, Object.keys(this.storage.entries[courseId])) + 1 : 1;
-      }
-      entry.course_id = entry.course_id
+      var realCourseId = entry.course_id
           ? parseInt(entry.course_id) : parseInt(courseId);
-      this.storage.entries[entry.course_id][entry.id] = entry;
-      saveStorage(this.storage);
+      var course = _getCourse(realCourseId);
+      var entries = course.entries;
+      if (!entry.id) {
+        entry.id = Object.keys(entries).length
+          ? Math.max.apply(null, Object.keys(entries)) + 1 : 1;
+      }
+      entry.course_id = realCourseId;
+      entries[entry.id] = entry;
+      _saveCourse(course);
       return Promise.resolve(entry);
     },
 
     deleteEntry : function(entryId, courseId) {
-      delete this.storage.entries[courseId][entryId];
-      saveStorage(this.storage);
+      var course = _getCourse(courseId);
+      var entries = course.entries;
+      delete entries[entryId];
+      _saveCourse(course);
       return Promise.resolve();
     }
     

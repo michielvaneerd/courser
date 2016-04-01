@@ -241,7 +241,7 @@
       case "SAVE_COURSE":
         state.courseId = action.value.id;
         state.courses[state.courseId] = action.value;
-        state.success = "OK";
+        state.screen = "COURSE_ACTION_SCREEN";
         break;
       case "SELECT_ENTRY":
         state.entryId = action.value;
@@ -309,7 +309,7 @@
       	break;
       case "REQUEST_RESET":
         suppressInRequest = true;
-        storage.resetCourse(state.courseId).then(function(entries) {
+        storage.resetCourse(state.courseId).then(function(course) {
           state.inRequest = false;
           state.courses[state.courseId].count_attempt_success = 0;
           state.courses[state.courseId].count_attempt_failure = 0;

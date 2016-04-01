@@ -27,11 +27,12 @@
       });
     },
     componentDidMount: function () {
-      if (DP.accessToken) {
-        this.props.store.dispatch({
-          type: "REQUEST_DROPBOX_ACCOUNT"
-        });
-      }
+      //
+      // if (DP.accessToken) {
+      // this.props.store.dispatch({
+      // type : "REQUEST_DROPBOX_ACCOUNT"
+      // });
+      // }
       if (this.state.screen === null) {
         this.props.store.dispatch({
           type: "SELECT_COURSES"
@@ -142,19 +143,18 @@
     }
   });
 
-  var DP = new Dropbox("r0rft8iznsi5atw", {
-    accessToken: window.localStorage.getItem("access_token"),
-    onAccessToken: function (accessToken) {
-      window.localStorage.setItem("access_token", accessToken);
-    }
-  });
-  var authResult = DP.handleAuthorizationRedirect();
-  if (authResult === false) {
-    console.log("Kan nu iets doen, want geen redirect!");
-    console.log(DP.accessToken);
-  } else if (authResult !== true) {
-    alert(authResult);
-  }
+  var DP = null;
+  // var DP = new Dropbox("r0rft8iznsi5atw", {
+  // accessToken : window.localStorage.getItem("access_token"),
+  // onAccessToken : function(accessToken) {
+  // window.localStorage.setItem("access_token", accessToken);
+  // }
+  // });
+  // try {
+  // DP.handleAuthorizationRedirect();
+  // } catch (ex) {
+  // alert(ex);
+  // }
 
   win.Storage.ready().then(function () {
     win.initStore(win.Storage, DP);
@@ -163,6 +163,10 @@
     alert(error);
     console.error(error);
   });
+
+  for (var key in localStorage) {
+    console.log(key);
+  }
 
   // Start service worker
   // if ('serviceWorker' in navigator) {

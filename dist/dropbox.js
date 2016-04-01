@@ -140,7 +140,7 @@
         o[pair[0]] = pair[1];
       });
       if (o.error) {
-        return o.error;
+        throw new Error(o.error);
       }
       if (o.access_token && o.state == "123") {
         this.onAccessToken(o.access_token);

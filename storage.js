@@ -5,10 +5,6 @@
   var storageName = "courser";
   var storageCoursePrefix = "courser_course_";
   
-  var saveStorage = function(storage) {
-    win.localStorage.setItem(storageName, JSON.stringify(storage));
-  };
-  
   var _saveCourse = function(course) {
     win.localStorage.setItem(storageCoursePrefix + course.id, JSON.stringify(course));
   };
@@ -29,17 +25,6 @@
     return null;
   };
   
-  var getStorage = function() {
-    var storage = win.localStorage.getItem(storageName);
-    if (storage) {
-      return JSON.parse(storage);
-    }
-    return {
-      courses : {}, // courseid => object
-      entries : {} // courseid => entryid => object
-    }
-  };
-  
   var _getCourses = function() {
     var courses = {};
     Object.keys(localStorage).forEach(function(key) {
@@ -53,16 +38,10 @@
 
   win.Storage = {
     
-    getStorage : getStorage,
-    saveStorage : saveStorage,
-    
-    storage : null,
-    
     ready : function() {
       var me = this;
       return new Promise(function(resolve, reject) {
         setTimeout(function() {
-          me.storage = getStorage();
           resolve();
         }, 400);
       });

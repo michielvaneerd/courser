@@ -295,12 +295,19 @@
         suppressInRequest = true;
         // Simulate long during action:
         setTimeout(function() {
-          storage.deleteCourse(state.courseId).then(function() {
+          return storage.deleteCourse(state.courseId).then(function() {
             state.inRequest = false;
+          })
+          .then(function() {
+            var course = me.state.courses[me.state.courseId];
+            return dropbox.delete("/" + course.filename + ".json");
+          })
+          .then(function() {
             me.dispatch({
               type : "DELETE_COURSE"
             });
-          }).catch(function(error) {
+          })
+          .catch(function(error) {
             errorHandler(error, state);
           });
         }, 1000);
@@ -398,7 +405,7 @@
         var requests = [];
         Object.keys(courses).forEach(function(courseId) {
           var course = courses[courseId];
-          requests.push(dropbox.upload("/" + storage.getCourseName(courseId) + ".json",
+          requests.push(dropbox.upload("/" + course.filename + ".json",
             JSON.stringify(course)));
         });
         return Promise.all(requests).then(function() {

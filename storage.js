@@ -6,15 +6,18 @@
   var storageCoursePrefix = "courser_course_";
   
   var _saveCourse = function(course) {
-    win.localStorage.setItem(storageCoursePrefix + course.id, JSON.stringify(course));
+    win.localStorage.setItem(course.filename, JSON.stringify(course));
   };
   
   var _deleteCourse = function(id) {
-    win.localStorage.removeItem(storageCoursePrefix + id);
+    var courses = _getCourses();
+    var course = courses[id];
+    win.localStorage.removeItem(course.filename);
   };
   
   var _getCourse = function(id) {
-    return getStorageItem(storageCoursePrefix + id);
+    var courses = _getCourses();
+    return courses[id];
   };
   
   var getStorageItem = function(key) {
@@ -39,10 +42,6 @@
   win.Storage = {
     
     storageCoursePrefix : storageCoursePrefix,
-    
-    getCourseName : function(courseId) {
-      return storageCoursePrefix + courseId;
-    },
     
     ready : function() {
       var me = this;
@@ -82,6 +81,9 @@
         course.id = Object.keys(courses).length
           ? Math.max.apply(null, Object.keys(courses)) + 1 : 1;
         course.entries = {};
+      }
+      if (!course.filename) {
+        course.filename = storageCoursePrefix + course.id + "_" + Date.now();
       }
       course.count = course.count || 0;
       _saveCourse(course);

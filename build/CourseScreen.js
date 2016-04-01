@@ -62,64 +62,18 @@
         destination_title: e.target.value
       });
     },
-    onEntriesClick: function (e) {
-      e.preventDefault();
-      this.props.store.dispatch({
-        type: "REQUEST_SELECT_ENTRIES",
-        value: this.props.course.id,
-        forceBackToMainScreen: false
-      });
-    },
-    onDoClick: function (e) {
-      e.preventDefault();
-      this.props.store.dispatch({
-        type: "REQUEST_DO_COURSE",
-        value: this.props.course.id,
-        forceBackToMainScreen: false
-      });
-    },
-    onShuffleClick: function (e) {
-      e.preventDefault();
-      this.props.store.dispatch({
-        type: "REQUEST_DO_SHUFFLE",
-        value: this.props.course.id,
-        forceBackToMainScreen: false
-      });
-    },
     onMore: function () {
       this.setState({
         showMore: !this.state.showMore
       });
     },
+    onBack: function () {
+      this.props.store.dispatch({
+        type: "SELECT_COURSE",
+        value: this.props.course.id
+      });
+    },
     render: function () {
-      var topbar = this.props.course.id ? React.createElement(
-        "div",
-        { className: "row buttonbar buttonbar-3" },
-        React.createElement(
-          "button",
-          { "data-id": this.props.course.id,
-            onClick: this.onEntriesClick },
-          "Entries (",
-          this.props.course.count,
-          ")"
-        ),
-        React.createElement(
-          "button",
-          {
-            disabled: this.props.course.count <= 4,
-            "data-id": this.props.course.id,
-            onClick: this.onDoClick },
-          "Test"
-        ),
-        React.createElement(
-          "button",
-          {
-            disabled: this.props.course.count == 0,
-            "data-id": this.props.course.id,
-            onClick: this.onShuffleClick },
-          "Shuffle"
-        )
-      ) : "";
       return React.createElement(
         "div",
         { id: "screen" },
@@ -131,7 +85,7 @@
             { className: "navbarButtonContainer", id: "navbarLeft" },
             React.createElement(
               "button",
-              { onClick: this.props.onMain },
+              { onClick: this.onBack },
               "<"
             )
           ),
@@ -153,7 +107,6 @@
         React.createElement(
           "div",
           { id: "main" },
-          topbar,
           React.createElement(
             "div",
             { className: "row formLabelInputPair" },

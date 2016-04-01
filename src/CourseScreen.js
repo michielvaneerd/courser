@@ -60,56 +60,23 @@
         destination_title : e.target.value
       });
     },
-    onEntriesClick : function(e) {
-      e.preventDefault();
-      this.props.store.dispatch({
-        type : "REQUEST_SELECT_ENTRIES",
-        value : this.props.course.id,
-        forceBackToMainScreen : false
-      });
-    },
-    onDoClick : function(e) {
-      e.preventDefault();
-      this.props.store.dispatch({
-        type : "REQUEST_DO_COURSE",
-        value : this.props.course.id,
-        forceBackToMainScreen : false
-      });
-    },
-    onShuffleClick : function(e) {
-      e.preventDefault();
-      this.props.store.dispatch({
-        type : "REQUEST_DO_SHUFFLE",
-        value : this.props.course.id,
-        forceBackToMainScreen : false
-      });
-    },
     onMore : function() {
       this.setState({
         showMore : !this.state.showMore
       });
     },
+    onBack : function() {
+      this.props.store.dispatch({
+        type : "SELECT_COURSE",
+        value : this.props.course.id
+      });
+    },
     render : function() {
-      var topbar = this.props.course.id
-        ? (
-            <div className="row buttonbar buttonbar-3">
-              <button data-id={this.props.course.id}
-                onClick={this.onEntriesClick}>Entries ({this.props.course.count})</button>
-              <button
-                disabled={this.props.course.count <= 4}
-                data-id={this.props.course.id}
-                onClick={this.onDoClick}>Test</button>
-              <button
-                disabled={this.props.course.count == 0}
-                data-id={this.props.course.id}
-                onClick={this.onShuffleClick}>Shuffle</button>
-            </div>
-          ) : "";
       return (
         <div id="screen">
           <div id="navbar">
             <div className="navbarButtonContainer" id="navbarLeft">
-              <button onClick={this.props.onMain}>&lt;</button>
+              <button onClick={this.onBack}>&lt;</button>
             </div>
             <div id="navbarTitle">{this.props.course.id
               ? this.props.course.title : "Create course"}</div>
@@ -121,7 +88,6 @@
                 : ""}
           </div>
           <div id="main">
-            {topbar}
             <div className="row formLabelInputPair">
               <label htmlFor="courseTitleInput">Title</label>
               <input id="courseTitleInput" placeholder="Title" autoFocus={true} required={true}

@@ -1,29 +1,20 @@
 (function(win) {
 
-  var Emitter = function() {
-    this.listeners = {};
-  };
-  Emitter.prototype.on = function(type, callback) {
-    if (!(type in this.listeners)) {
-      this.listeners[type] = [];
-    }
-    this.listeners[type].push(callback);
-  };
-  Emitter.prototype.off = function(type, callback) {
-    var index = this.listeners[type].indexOf(callback);
-    if (index !== -1) {
-      this.listeners[type].splice(index, 1);
-    }
-  };
-  Emitter.prototype.notify = function(type, arg) {
-    if (type in this.listeners) {
-      this.listeners[type].forEach(function(callback) {
-        callback(type, arg);
-      });
-    }
-  };
-
-  
+  /**
+   * Some remarks:
+   * 
+   * Normally calls have JSON in request body and JSON in response body.
+   *
+   * Content download calls have JSON in Dropbox-API-Arg request header and
+   * the content in the response body and the JSON result in the
+   * dropbox-api-result response header.
+   *
+   * Content upload calls have JSON in Dropbox-API-Arg request header and
+   * the content in the request body and the JSON result in the response body.
+   *
+   * Paths always starts with "/", only the root itself can be questionned
+   * with "" (empty string).
+   */
 
   // Private static variables
   var apiProtocol = "https";
@@ -32,10 +23,14 @@
   var apiSubdomain = "api";
 
   // Constructor
-  var Dropbox = win.Dropbox = function(appKey, accessToken) {
+  var Dropbox = win.Dropbox = function(appKey, options) {
+    options = options || {};
+    if (!appKey || !options.onAccessToken) {
+      throw new Error("Pass appKey and onAccessToken callback");
+    }
     this.appKey = appKey;
-    this.accessToken = accessToken;
-    this.emitter = new Emitter();
+    this.accessToken = options.accessToken;
+    this.onAccessToken = options.onAccessToken;
   };
   
   // Private static methods 
@@ -61,18 +56,28 @@
 
   var request = function(dropbox, url, options) {
     options = options || {};
+    var headers = options.headers || {};
     return new Promise(function(resolve, reject) {
       var xhr = new XMLHttpRequest();
       xhr.onload = function() {
         try {
-          var response = xhr.response;
           if (xhr.status == 200) {
-            //var h = xhr.getResponseHeader("dropbox-api-result");
-            //console.log("Header: " + h);
-            resolve(response);
+            var response = xhr.responseText;
+            if (options.responseType != "text") {
+              response = JSON.parse(xhr.responseText);
+            }
+            var apiResult = xhr.getResponseHeader("dropbox-api-result");
+            if (apiResult) {
+              resolve({
+                content : decodeURIComponent(response),
+                apiResult : JSON.parse(apiResult)
+              });
+            } else {
+              resolve(response);
+            }
           } else {
             reject({
-              response : response,
+              response : xhr.responseText,
               status : xhr.status
             });
           }
@@ -85,32 +90,47 @@
       xhr.onerror = function(error) {
         reject(error);
       };
-      xhr.open(options.method || "GET", url);
-      xhr.responseType = (typeof options.responseType !== "undefined")
-        ? options.responseType : "json";
+      xhr.open(options.method || "POST", url);
+      // It is tempting to use responseType "json", but then errors won't
+      // be visible, as they are plain text response body.
+      //xhr.responseType = (typeof options.responseType !== "undefined")
+      //  ? options.responseType : "json";
       if (dropbox.accessToken) {
         xhr.setRequestHeader("Authorization",
           "Bearer " + dropbox.accessToken);
       }
-      if (options.headers) {
-        Object.keys(options.headers).forEach(function(h) {
-          xhr.setRequestHeader(h, options.headers[h]);
-        });
+      Object.keys(headers).forEach(function(h) {
+        xhr.setRequestHeader(h, headers[h]);
+      });
+      if (!("Content-Type" in headers)) {
+        xhr.setRequestHeader("Content-Type", "application/json");
       }
       xhr.send(options.body || null);
     });
   };
 
-  // Public instance methods
+  /**
+   * Goes to the Dropbox authorization page. After authorization the user
+   * will be redirected back with the access_token attached to the URL.
+   * @return void
+   */
   Dropbox.prototype.authorize = function() {
     win.location.assign(get_url("www", "/oauth2/authorize", {
       "client_id" : this.appKey,
       "response_type" : "token",
-      "redirect_uri" : win.location.href,
+      // No hashes are allowed, so we cannot blindly use win.location.href
+      "redirect_uri" : win.location.origin + win.location.pathname,
       "state" : "123"
     }, "dropbox.com", 1));
   };
 
+  /**
+   * Handles the redirect after authorization. Should always be called on
+   * page load so the access_token can be saved for use.
+   * @return {boolean|string} Set to a string in case of an error;
+   * set to true in case the access_token was saved and redirection started;
+   * set to false in case nothing happened;
+   */
   Dropbox.prototype.handleAuthorizationRedirect = function() {
     if (win.location.hash) {
       var parts = win.location.hash.substr(1).split("&");
@@ -119,74 +139,75 @@
         var pair = part.split("=");
         o[pair[0]] = pair[1];
       });
+      if (o.error) {
+        return o.error;
+      }
       if (o.access_token && o.state == "123") {
-        this.emitter.notify("accesstoken", {
-          access_token : o.access_token
-        });
+        this.onAccessToken(o.access_token);
         win.location.assign(win.location.origin + win.location.pathname);
         return true;
-      } else {
-        return o.error;
       }
     }
     return false;
   };
 
+  /**
+   * @returns {Promise} Resolves with JSON response
+   */
   Dropbox.prototype.getCurrentAccount = function() {
     return request(this, get_url("api", "/users/get_current_account"), {
-      method : "POST"
-    });
-  };
-  
-  Dropbox.prototype.getAccount = function(accountId) {
-    return request(this, get_url("api", "/users/get_account"), {
-      method : "POST",
-      body : JSON.stringify({account_id : accountId}),
       headers : {
-        "Content-Type" : "application/json"
+        // Prevent default application/json
+        "Content-Type" : ""
       }
     });
   };
   
+  /**
+   * @returns {Promise} Resolves with JSON response
+   */
+  Dropbox.prototype.getAccount = function(accountId) {
+    return request(this, get_url("api", "/users/get_account"), {
+      body : JSON.stringify({account_id : accountId})
+    });
+  };
+  
+  /**
+   * @returns {Promise} Resolves with JSON response
+   */
   Dropbox.prototype.upload = function(path, content) {
     return request(this, get_url("content", "/files/upload"), {
-      method : "POST",
       body : encodeURIComponent(content),
       headers : {
         "Content-Type" : "application/octet-stream",
         "Dropbox-API-Arg" : JSON.stringify({
-          "path" : path,
+          path : path,
           mode : "overwrite"
         })
       }
     });
   };
   
+  /**
+   * @returns {Promise} Resolves with JSON response
+   */
   Dropbox.prototype.listFolder = function(path) {
     return request(this, get_url("api", "/files/list_folder"), {
-      method : "POST",
-      body : JSON.stringify({"path" : path}),
-      headers : {
-        "Content-Type" : "application/json"
-      }
+      body : JSON.stringify({"path" : path})
     });
   };
   
   Dropbox.prototype.listFolderContinue = function(cursor) {
     return request(this, get_url("api", "/files/list_folder/continue"), {
-      method : "POST",
-      body : JSON.stringify({"cursor" : cursor}),
-      headers : {
-        "Content-Type" : "application/json"
-      }
+      body : JSON.stringify({"cursor" : cursor})
     });
   };
   
   Dropbox.prototype.download = function(path) {
     return request(this, get_url("content", "/files/download"), {
-      method : "POST",
       responseType : "text",
       headers : {
+        "Content-Type" : "",
         "Dropbox-API-Arg" : JSON.stringify({
           "path" : path
         })
@@ -196,11 +217,7 @@
   
   Dropbox.prototype.delete = function(path) {
     return request(this, get_url("api", "/files/delete"), {
-      method : "POST",
-      body : JSON.stringify({"path" : path}),
-      headers : {
-        "Content-Type" : "application/json"
-      }
+      body : JSON.stringify({"path" : path})
     });
   };
 

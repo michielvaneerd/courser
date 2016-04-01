@@ -78,19 +78,15 @@
       this.setState({answer : e.target.value});
     },
     onBack : function() {
-      if (!this.props.forceBackToMainScreen) {
-        this.props.store.dispatch({
-          type : "SHOW_COURSE_SCREEN"
-        });
-      } else {
-        this.props.onMain();
-      }
+      this.props.store.dispatch({
+        type : "SELECT_COURSE",
+        value : this.props.course.id
+      });
     },
     dispatchNewItem : function() {
       this.props.store.dispatch(Object.assign(
         this.getNewTest(),
-        {type : "DO_COURSE_NEW_RANDOM_ITEM",
-        forceBackToMainScreen : this.props.forceBackToMainScreen})
+        {type : "DO_COURSE_NEW_RANDOM_ITEM"})
       );
     },
     onReset : function() {
@@ -102,8 +98,7 @@
         type : "REQUEST_RESET",
         entryId : newEntryId,
         entryIds : entryIds,
-        testType : testType,
-        forceBackToMainScreen : this.props.forceBackToMainScreen
+        testType : testType
       });
     },
     onSave : function() {
@@ -111,8 +106,7 @@
       this.props.store.dispatch({
         type : "REQUEST_SAVE_ANSWER",
         answer : this.state.answer,
-        doCourseSuccess : success,
-        forceBackToMainScreen : this.props.forceBackToMainScreen
+        doCourseSuccess : success
       });
     },
     answerClick : function(e) {
@@ -122,8 +116,7 @@
       this.props.store.dispatch({
         type : "REQUEST_SAVE_ANSWER",
         answerEntryId : id,
-        doCourseSuccess : success,
-        forceBackToMainScreen : this.props.forceBackToMainScreen
+        doCourseSuccess : success
       });
     },
     onWriteKeyDown : function(e) {

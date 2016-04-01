@@ -40,8 +40,7 @@
       });
       this.props.store.dispatch({
         type: "REQUEST_SAVE_ENTRY",
-        value: entry,
-        forceBackToMainScreen: this.props.forceBackToMainScreen
+        value: entry
       });
     },
     onSrcChange: function (e) {
@@ -65,32 +64,26 @@
       scrollTop = win.document.getElementById("main").scrollTop;
       this.props.store.dispatch({
         type: "SELECT_ENTRY",
-        value: id,
-        forceBackToMainScreen: this.props.forceBackToMainScreen
+        value: id
       });
     },
     onActivate: function (e) {
       this.selectEntry(e.currentTarget.dataset.id);
     },
     onBack: function () {
-      if (!this.props.forceBackToMainScreen) {
-        this.props.store.dispatch({
-          type: "SHOW_COURSE_SCREEN"
-        });
-      } else {
-        this.props.onMain();
-      }
+      this.props.store.dispatch({
+        type: "SELECT_COURSE",
+        value: this.props.course.id
+      });
     },
     onDelete: function () {
       this.props.store.dispatch({
-        type: "REQUEST_DELETE_ENTRY",
-        forceBackToMainScreen: this.props.forceBackToMainScreen
+        type: "REQUEST_DELETE_ENTRY"
       });
     },
     onCancel: function () {
       this.props.store.dispatch({
-        type: "SELECT_ENTRY",
-        forceBackToMainScreen: this.props.forceBackToMainScreen
+        type: "SELECT_ENTRY"
       });
     },
     onMore: function () {
@@ -102,8 +95,7 @@
       scrollTop = 0;
       this.props.store.dispatch({
         type: "ENTRIES_ORDER",
-        value: orderValue,
-        forceBackToMainScreen: this.props.forceBackToMainScreen
+        value: orderValue
       });
     },
     onOrderChangeALPHABETIC_SOURCE_DESC: function () {

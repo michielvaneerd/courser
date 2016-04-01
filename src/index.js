@@ -25,9 +25,6 @@
       });
     },
     componentDidMount : function() {
-      DP.emitter.on("accesstoken", function(type, e) {
-        window.localStorage.setItem("access_token", e.access_token);
-      });
       if (DP.accessToken) {
        this.props.store.dispatch({
          type : "REQUEST_DROPBOX_ACCOUNT"
@@ -85,8 +82,14 @@
             entriesOrder={this.state.entriesOrder}
             entries={this.state.entries} />
           break;
-        case "COURSE_SCREEN":
+        case "COURSE_EDIT_SCREEN":
           screen = <CourseScreen
+            onMain={this.onMain}
+            store={this.props.store}            
+            course={course} />
+          break;
+        case "COURSE_ACTION_SCREEN":
+          screen = <CourseActionScreen
             onMain={this.onMain}
             store={this.props.store}            
             course={course} />
@@ -141,10 +144,11 @@
     }
   });
   
-  var DP = new Dropbox("r0rft8iznsi5atw",
-    window.localStorage.getItem("access_token"));
-  DP.emitter.on("accesstoken", function(type, e) {
-    window.localStorage.setItem("access_token", e.access_token);
+  var DP = new Dropbox("r0rft8iznsi5atw", {
+    accessToken : window.localStorage.getItem("access_token"),
+    onAccessToken : function(accessToken) {
+      window.localStorage.setItem("access_token", accessToken);
+    }
   });
   var authResult = DP.handleAuthorizationRedirect();
   if (authResult === false) {

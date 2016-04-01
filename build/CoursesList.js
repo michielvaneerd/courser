@@ -12,34 +12,10 @@
     },
     onCreateCourse: function () {
       this.props.store.dispatch({
-        type: "SHOW_COURSE_SCREEN"
-      });
-    },
-    onEntriesClick: function (e) {
-      e.preventDefault();
-      this.props.store.dispatch({
-        type: "REQUEST_SELECT_ENTRIES",
-        value: e.currentTarget.dataset.id,
-        forceBackToMainScreen: true
+        type: "CREATE_COURSE"
       });
     },
     onMore: function () {},
-    onDoClick: function (e) {
-      e.preventDefault();
-      this.props.store.dispatch({
-        type: "REQUEST_DO_COURSE",
-        value: e.currentTarget.dataset.id,
-        forceBackToMainScreen: true
-      });
-    },
-    onShuffleClick: function (e) {
-      e.preventDefault();
-      this.props.store.dispatch({
-        type: "REQUEST_DO_SHUFFLE",
-        value: e.currentTarget.dataset.id,
-        forceBackToMainScreen: true
-      });
-    },
     onDropboxConnect: function () {
       this.props.store.dispatch({
         type: "DROPBOX_CONNECT"

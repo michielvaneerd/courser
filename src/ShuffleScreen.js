@@ -15,13 +15,10 @@
       };
     },
     onBack : function() {
-      if (!this.props.forceBackToMainScreen) {
-        this.props.store.dispatch({
-          type : "SHOW_COURSE_SCREEN"
-        });
-      } else {
-        this.props.onMain();
-      }
+      this.props.store.dispatch({
+        type : "SELECT_COURSE",
+        value : this.props.course.id
+      });
     },
     onShuffle : function() {
       this.setState({

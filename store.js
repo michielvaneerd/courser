@@ -23,7 +23,6 @@
 	  inRequest : false,
     error : false,
     courseId : 0,
-    forceBackToMainScreen : false,
     entryId : 0,
     screen : null,
     courses : {}, // courseId => course
@@ -150,10 +149,6 @@
     if (action.type != "SUCCESS") {
       state.success = false;
     }
-    
-    if (action.type != "ERROR" && action.type != "SUCCESS") {
-      state.forceBackToMainScreen = action.forceBackToMainScreen;
-    }
 	  
 	  state.inRequest = true;
 	  var suppressInRequest = false;
@@ -181,7 +176,13 @@
       case "SELECT_COURSE":
       	state.courseId = action.value;
         state.entryId = 0;
-      	state.screen = state.courseId ? "COURSE_SCREEN" : null;
+      	state.screen = state.courseId ? "COURSE_ACTION_SCREEN" : null;
+        break;
+      case "CREATE_COURSE":
+      	state.screen = "COURSE_EDIT_SCREEN";
+      	break;
+      case "SELECT_COURSE_EDIT":
+        state.screen = "COURSE_EDIT_SCREEN";
         break;
       case "REQUEST_DO_SHUFFLE":
         suppressInRequest = true;
@@ -190,8 +191,7 @@
           state.courseId = action.value;
           me.dispatch({
             type : "DO_SHUFFLE",
-            value : entries,
-            forceBackToMainScreen : action.forceBackToMainScreen
+            value : entries
           });
         }).catch(function(error) {
           errorHandler(error, state);
@@ -209,8 +209,7 @@
           state.courseId = action.value;
           me.dispatch({
             type : "SELECT_ENTRIES",
-            value : entries,
-            forceBackToMainScreen : action.forceBackToMainScreen
+            value : entries
           });
         }).catch(function(error) {
           errorHandler(error, state);
@@ -253,8 +252,7 @@
           state.inRequest = false;
           me.dispatch({
             type : "SAVE_ENTRY",
-            value : entry,
-            forceBackToMainScreen : action.forceBackToMainScreen
+            value : entry
           });
         }).catch(function(error) {
           errorHandler(error, state);
@@ -276,8 +274,7 @@
         storage.deleteEntry(state.entryId, state.courseId).then(function() {
           state.inRequest = false;
           me.dispatch({
-            type : "DELETE_ENTRY",
-            forceBackToMainScreen : action.forceBackToMainScreen
+            type : "DELETE_ENTRY"
           });
         }).catch(function(error) {
           errorHandler(error, state);
@@ -291,9 +288,6 @@
         state.entriesOrder = action.value;
         state.entryIds = sortEntries(state.entries, state.entriesOrder);
         break;
-      case "SHOW_COURSE_SCREEN":
-      	state.screen = "COURSE_SCREEN";
-      	break;
       case "REQUEST_DELETE_COURSE":
         suppressInRequest = true;
         // Simulate long during action:
@@ -324,8 +318,7 @@
             value : state.courseId,
             testEntryId : action.entryId,
             testAnswerEntryIds : action.entryIds,
-            testType : action.testType,
-            forceBackToMainScreen : action.forceBackToMainScreen
+            testType : action.testType
           });
         }).catch(function(error) {
           errorHandler(error, state);
@@ -343,8 +336,7 @@
           state.doCourseSuccess = null;
           me.dispatch({
             type : "DO_COURSE",
-            value : entries,
-            forceBackToMainScreen : action.forceBackToMainScreen
+            value : entries
           });
         }).catch(function(error) {
           errorHandler(error, state);
@@ -388,8 +380,7 @@
             doCourseEntry : entry,
             answer : action.answer,
             answerEntryId : action.answerEntryId,
-            doCourseSuccess : action.doCourseSuccess,
-            forceBackToMainScreen : action.forceBackToMainScreen
+            doCourseSuccess : action.doCourseSuccess
           });
         }).catch(function(error) {
           // TODO: revert what you did above.
@@ -415,7 +406,7 @@
           return dropbox.download("/courser.json");
         }).then(function(response) {
           state.inRequest = false;
-          storage.storage = JSON.parse(decodeURIComponent(response));
+          storage.storage = JSON.parse(response.content);
           storage.saveStorage(storage.storage);
           me.dispatch({
             type : "SELECT_COURSES"

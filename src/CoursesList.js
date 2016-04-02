@@ -51,12 +51,12 @@
       if (this.state.showMore) {
         if (this.props.dropboxAccount) {
           moreMenuItems = [
-            <li key="dropboxsave"><a onClick={this.onDropboxSave}>Save</a></li>,
-            <li key="dropboxdisconnect"><a onClick={this.onDropboxDisconnect}>Disconnect {this.props.dropboxAccount.name.display_name}</a></li>
+            <li key="dropboxsave"><a onClick={this.onDropboxSave}>Save to Dropbox</a></li>,
+            <li key="dropboxdisconnect"><a onClick={this.onDropboxDisconnect}>Disconnect from Dropbox</a></li>
           ];
         } else {
           moreMenuItems = [
-            <li key="dropboxconnect"><a onClick={this.onDropboxConnect}>Dropbox</a></li>
+            <li key="dropboxconnect"><a onClick={this.onDropboxConnect}>Connect to Dropbox</a></li>
           ];
         }
         moreMenu = (
@@ -69,7 +69,7 @@
           <div id="navbar">
             <div id="navbarTitle">Courses</div>
             <div className="navbarButtonContainer" id="navbarRight">
-              <button onClick={this.onMore}>:</button>
+              <button onClick={this.onMore}>Dropbox</button>
             </div>
           </div>
           <div id="main">

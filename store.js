@@ -293,24 +293,24 @@
         break;
       case "REQUEST_DELETE_COURSE":
         keepInRequest = true;
-        // Simulate long during action:
-        setTimeout(function() {
-          return storage.deleteCourse(state.courseId).then(function() {
-            state.inRequest = false;
-          })
-          .then(function() {
-            var course = me.state.courses[me.state.courseId];
+        storage.deleteCourse(state.courseId).then(function() {
+          var course = me.state.courses[state.courseId];
+          if (navigator.onLine && course.dropbox_id) {
             return dropbox.delete("/" + course.filename + ".json");
-          })
-          .then(function() {
-            me.dispatch({
-              type : "DELETE_COURSE"
-            });
-          })
-          .catch(function(error) {
-            errorHandler(error, state);
+          } else {
+            return Promise.resolve();
+          }
+        })
+        .then(function() {
+          state.inRequest = false;
+          me.dispatch({
+            type : "DELETE_COURSE"
           });
-        }, 1000);
+        })
+        .catch(function(error) {
+          state.inRequest = false;
+          errorHandler(error, state);
+        });
         break;
       case "DELETE_COURSE":
       	delete state.courses[state.courseId];
@@ -409,12 +409,29 @@
           requests.push(dropbox.upload("/" + course.filename + ".json",
             JSON.stringify(course)));
         });
-        Promise.all(requests).then(function() {
+        Promise.all(requests).then(function(responses) {
+          var coursesSave = [];
+          Object.keys(courses).forEach(function(courseId) {
+            var i;
+            var course = courses[courseId];
+            if (!course.dropbox_id) {
+              for (i = 0; i < responses.length; i++) {
+                if (("/" + course.filename + ".json") === responses[i].path_lower) {
+                  course.dropbox_id = responses[i].id;
+                  coursesSave.push(storage.saveCourse(course));
+                }
+              }
+            }
+          });
+          return Promise.all(coursesSave);
+        })
+        .then(function() {
           state.inRequest = false;
           me.dispatch({
             type : "SELECT_COURSES"
           });
-        }).catch(function(error) {
+        })
+        .catch(function(error) {
           state.inRequest = false;
           console.log(error);
         });
@@ -449,7 +466,9 @@
         .then(function(responses) {
           var saveCourseRequests = [];
           responses.forEach(function(response) {
-            saveCourseRequests.push(storage.saveCourse(JSON.parse(response.content)));
+            var course = JSON.parse(response.content);
+            course.dropbox_id = response.apiResult.id;
+            saveCourseRequests.push(storage.saveCourse(course));
           });
           return Promise.all(saveCourseRequests);
         })

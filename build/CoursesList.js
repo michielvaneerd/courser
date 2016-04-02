@@ -58,7 +58,7 @@
             React.createElement(
               "a",
               { onClick: this.onDropboxSave },
-              "Save"
+              "Save to Dropbox"
             )
           ), React.createElement(
             "li",
@@ -66,8 +66,7 @@
             React.createElement(
               "a",
               { onClick: this.onDropboxDisconnect },
-              "Disconnect ",
-              this.props.dropboxAccount.name.display_name
+              "Disconnect from Dropbox"
             )
           )];
         } else {
@@ -77,7 +76,7 @@
             React.createElement(
               "a",
               { onClick: this.onDropboxConnect },
-              "Dropbox"
+              "Connect to Dropbox"
             )
           )];
         }
@@ -105,7 +104,7 @@
             React.createElement(
               "button",
               { onClick: this.onMore },
-              ":"
+              "Dropbox"
             )
           )
         ),

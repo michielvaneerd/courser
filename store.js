@@ -136,8 +136,8 @@
     
     if (state.inRequest) {
       console.warn("In request!");
-    //  state.warning = "In request...";
-	  //  return state;
+      state.warning = "In request...";
+	    return state;
 	  }
 	  
 	  var me = this;
@@ -154,7 +154,7 @@
     }
 	  
 	  state.inRequest = true;
-	  var suppressInRequest = false;
+	  var keepInRequest = false;
 
     switch (action.type) {
       case "SELECT_COURSES":
@@ -164,7 +164,7 @@
           state.entryId = 0;
           state.screen = null;
         } else {
-          suppressInRequest = true;
+          keepInRequest = true;
           storage.getCourses().then(function(courses) {
             state.inRequest = false;
             me.dispatch({
@@ -188,7 +188,7 @@
         state.screen = "COURSE_EDIT_SCREEN";
         break;
       case "REQUEST_DO_SHUFFLE":
-        suppressInRequest = true;
+        keepInRequest = true;
         storage.getEntries(action.value).then(function(entries) {
           state.inRequest = false;
           state.courseId = action.value;
@@ -206,7 +206,7 @@
         state.screen = "SHUFFLE_SCREEN";
         break;
       case "REQUEST_SELECT_ENTRIES":
-        suppressInRequest = true;
+        keepInRequest = true;
         storage.getEntries(action.value).then(function(entries) {
           state.inRequest = false;
           state.courseId = action.value;
@@ -229,7 +229,7 @@
         if (!action.value.title || action.value.title.length == 0) {
           state.error = "Enter title";
         } else {
-          suppressInRequest = true;
+          keepInRequest = true;
           storage.saveCourse(action.value).then(function(course) {
             state.inRequest = false;
             me.dispatch({
@@ -250,7 +250,7 @@
         state.entryId = action.value;
         break;
       case "REQUEST_SAVE_ENTRY":
-        suppressInRequest = true;
+        keepInRequest = true;
         storage.saveEntry(action.value, state.courseId).then(function(entry) {
           state.inRequest = false;
           me.dispatch({
@@ -271,7 +271,7 @@
         state.entryId = 0;
         break;
       case "REQUEST_DELETE_ENTRY":
-        suppressInRequest = true;
+        keepInRequest = true;
         delete state.entries[state.entryId];
         state.entryIds.splice(state.entryIds.indexOf(parseInt(state.entryId)), 1);
         storage.deleteEntry(state.entryId, state.courseId).then(function() {
@@ -292,7 +292,7 @@
         state.entryIds = sortEntries(state.entries, state.entriesOrder);
         break;
       case "REQUEST_DELETE_COURSE":
-        suppressInRequest = true;
+        keepInRequest = true;
         // Simulate long during action:
         setTimeout(function() {
           return storage.deleteCourse(state.courseId).then(function() {
@@ -318,7 +318,7 @@
       	state.courseId = 0;
       	break;
       case "REQUEST_RESET":
-        suppressInRequest = true;
+        keepInRequest = true;
         storage.resetCourse(state.courseId).then(function(course) {
           state.inRequest = false;
           state.courses[state.courseId].count_attempt_success = 0;
@@ -335,7 +335,7 @@
         });
         break;
       case "REQUEST_DO_COURSE":        
-        suppressInRequest = true;
+        keepInRequest = true;
         storage.getEntries(action.value).then(function(entries) {
           state.inRequest = false;
           state.courseId = action.value;
@@ -379,7 +379,7 @@
           doCourseEntry.attempt_failure += 1;
           state.courses[state.courseId].count_attempt_failure += 1;
         }
-        suppressInRequest = true;
+        keepInRequest = true;
         state.answer = action.answer;
         state.answerEntryId = action.answerEntryId;
         state.doCourseSuccess = action.doCourseSuccess;
@@ -421,24 +421,37 @@
         state.dropboxAccount = null;
         break;
       case "REQUEST_DROPBOX_ACCOUNT":
-        suppressInRequest = true;
+        keepInRequest = true;
         dropbox.getCurrentAccount().then(function(response) {
           state.dropboxAccount = response;
-          return dropbox.listFolder("");
+          if (localStorage.getItem("courser_cursor")) {
+            return dropbox.listFolderContinue(localStorage.getItem("courser_cursor"));
+          } else {
+            return dropbox.listFolder("");
+          }
         }).then(function(response) {
-          state.inRequest = false;
+          if (response.cursor) {
+            localStorage.setItem("courser_cursor", response.cursor)
+          }
           var downloadRequests = [];
           response.entries.forEach(function(entry) {
             if (entry.path_lower.startsWith("/" + storage.storageCoursePrefix)) {
-              downloadRequests.push(dropbox.download(entry.path_lower));
+              if (entry[".tag"] !== "deleted") {
+                downloadRequests.push(dropbox.download(entry.path_lower));
+              }
             }
           });
           return Promise.all(downloadRequests);
         })
         .then(function(responses) {
+          var saveCourseRequests = [];
           responses.forEach(function(response) {
-            storage.saveCourse(JSON.parse(response.content));
+            saveCourseRequests.push(storage.saveCourse(JSON.parse(response.content)));
           });
+          return Promise.all(saveCourseRequests);
+        })
+        .then(function() {
+          state.inRequest = false;
           me.dispatch({
             type : "SELECT_COURSES"
           });
@@ -459,7 +472,7 @@
         break;
     }
     
-    if (!suppressInRequest) {
+    if (!keepInRequest) {
       state.inRequest = false;
     }
     

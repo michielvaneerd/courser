@@ -77,13 +77,14 @@
     
     saveCourse : function(course) {
       if (!course.id) {
-        var courses = _getCourses();
-        course.id = Object.keys(courses).length
-          ? Math.max.apply(null, Object.keys(courses)) + 1 : 1;
+        //var courses = _getCourses();
+        //course.id = Object.keys(courses).length
+        //  ? Math.max.apply(null, Object.keys(courses)) + 1 : 1;
+        course.id = Date.now();
         course.entries = {};
       }
       if (!course.filename) {
-        course.filename = storageCoursePrefix + course.id + "_" + Date.now();
+        course.filename = storageCoursePrefix + course.id;
       }
       course.count = course.count || 0;
       _saveCourse(course);

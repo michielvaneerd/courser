@@ -7,7 +7,7 @@
       if (el) {
         el.className = "visibleSpinner";
       }
-    }, 300);
+    }, 0);
   }
 
   var App = React.createClass({
@@ -21,20 +21,7 @@
         getState: React.PropTypes.func
       })
     },
-    componentWillMount: function () {
-      // var me = this;
-      // this.store.subscribe(function() {
-      // me.setState(me.store.getState());
-      // });
-    },
     componentDidMount: function () {
-      //
-
-      //if (this.state.screen === null) {
-      //  this.store.dispatch({
-      //    type : "SELECT_COURSES"
-      //  });
-      //}
       var me = this;
       win.Storage.ready().then(function () {
         win.initStore(win.Storage, me.props.dropbox);
@@ -42,7 +29,7 @@
         me.store.subscribe(function () {
           me.setState(me.store.getState());
         });
-        if (me.props.dropbox.accessToken) {
+        if (me.props.dropbox.accessToken && navigator.onLine) {
           me.store.dispatch({
             type: "REQUEST_DROPBOX_ACCOUNT"
           });

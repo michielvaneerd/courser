@@ -181,7 +181,7 @@ button.fullwidthButton {
 .floatright button {
   float:right;
 }
-#dialog {
+#dialog, #inProgress {
   position: absolute;
   top: 66px;
   background-color: white;
@@ -202,6 +202,10 @@ button.fullwidthButton {
 
 .dialog_success {
   color:green;
+}
+
+#inProgress {
+  color:orange;
 }
 
 .floatingButton {

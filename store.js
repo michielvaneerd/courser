@@ -401,6 +401,7 @@
         dropbox.authorize();
         break;
       case "DROPBOX_SAVE":
+        keepInRequest = true;
         var courses = storage._getCourses();
         var requests = [];
         Object.keys(courses).forEach(function(courseId) {
@@ -408,11 +409,13 @@
           requests.push(dropbox.upload("/" + course.filename + ".json",
             JSON.stringify(course)));
         });
-        return Promise.all(requests).then(function() {
+        Promise.all(requests).then(function() {
+          state.inRequest = false;
           me.dispatch({
             type : "SELECT_COURSES"
           });
         }).catch(function(error) {
+          state.inRequest = false;
           console.log(error);
         });
         break;
@@ -476,7 +479,9 @@
       state.inRequest = false;
     }
     
-    setStateToLocalStorage(state);
+    if (!state.inRequest && !state.warning && !state.error && !state.success) {
+      setStateToLocalStorage(state);
+    }
     return state;
 
   };

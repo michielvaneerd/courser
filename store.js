@@ -499,7 +499,7 @@
     }
     
     if (!state.inRequest && !state.warning && !state.error && !state.success) {
-      setStateToLocalStorage(state);
+      setStateToLocalStorage(Object.assign({}, state, {screen : null}));
     }
     return state;
 

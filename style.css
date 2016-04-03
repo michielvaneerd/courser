@@ -164,6 +164,22 @@ ul#popup.listView li a, ul#popup.listView li label {
 #answerOptionWrapper button {
   width:50%;
   min-height:100px;
+  border: none;
+  outline: 1px solid black;
+  display:block;
+  float:left;
+}
+
+#answerOptionWrapper button span {
+  display:block;
+}
+
+#answerOptionWrapper button span.phone {
+  visibility:hidden;
+}
+
+#answerOptionWrapper button.wrong span.phone, #answerOptionWrapper button.success span.phone {
+  visibility:visible;
 }
 
 input.success, button.success {
@@ -231,4 +247,8 @@ ul.editMode li {
 
 ul.editMode li#activeEditListItem {
   display:block;
+}
+
+.doCourseQuestionTitleSource {
+  margin-right:1rem;
 }

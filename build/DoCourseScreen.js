@@ -107,7 +107,7 @@
       });
     },
     answerClick: function (e) {
-      var id = e.target.dataset.id;
+      var id = e.currentTarget.dataset.id;
       var answerEntry = this.props.entries[id];
       var success = this.getSuccess(answerEntry);
       this.props.store.dispatch({
@@ -243,6 +243,18 @@
           { className: "row", id: "answerOptionWrapper" },
           this.props.doCourseAnswerEntryIds.map(function (entryId, index) {
             var cName = "";
+            var text = [React.createElement(
+              "span",
+              { key: entryId + "other" },
+              this.props.entries[entryId][otherKey]
+            )];
+            if (this.props.entries[entryId].phone) {
+              text.push(React.createElement(
+                "span",
+                { className: "phone", key: entryId + "phone" },
+                this.props.entries[entryId].phone
+              ));
+            }
             if (this.props.answerEntryId) {
               if (this.props.answerEntryId == entryId) {
                 cName = this.props.doCourseSuccess ? "success" : "wrong";
@@ -259,7 +271,7 @@
                 disabled: this.props.doCourseSuccess !== null,
                 key: entryId, "data-id": entryId,
                 onClick: this.answerClick },
-              this.props.entries[entryId][otherKey]
+              text
             );
           }, this)
         ),

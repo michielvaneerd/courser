@@ -29,7 +29,7 @@
         });
         if (me.props.dropbox.accessToken && navigator.onLine) {
           me.store.dispatch({
-            type : "REQUEST_DROPBOX_ACCOUNT"
+            type : "REQUEST_DROPBOX_ACCOUNT" // will call SELECT_COURSES
           });
         } else {
           me.store.dispatch({

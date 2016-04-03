@@ -1,0 +1,19 @@
+CACHE MANIFEST
+# Version 2016-04-03 10:42:00
+style.css
+dist/dropbox.js
+dist/react.js
+dist/react-dom.js
+dist/verysimpleredux.js
+storage.js
+store.js
+build/CoursesList.js
+build/CourseScreen.js
+build/CourseActionScreen.js
+build/DoCourseScreen.js
+build/EntriesScreen.js
+build/ShuffleScreen.js
+build/Dialog.js
+build/index.js
+NETWORK:
+*

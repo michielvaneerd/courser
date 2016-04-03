@@ -101,7 +101,7 @@
             { className: "row buttonbar" },
             React.createElement(
               "button",
-              { className: "fullwidthButton", onClick: this.onShuffle },
+              { className: "normalButton fullwidthButton", onClick: this.onShuffle },
               "Shuffle"
             )
           ),

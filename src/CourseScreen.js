@@ -128,7 +128,7 @@
               }, this)}
             </div>
             <div className="row">
-              <button className="fullwidthButton" disabled={!!!this.state.title}
+              <button className="normalButton fullwidthButton primaryButton" disabled={!!!this.state.title}
                 onClick={this.onSave}>Save</button>
             </div>
           </div>

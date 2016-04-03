@@ -39,7 +39,7 @@
             { className: "navbarButtonContainer", id: "navbarLeft" },
             React.createElement(
               "button",
-              { onClick: this.props.onMain },
+              { className: "fullwidthButton", onClick: this.props.onMain },
               "<"
             )
           ),
@@ -57,7 +57,7 @@
             { className: "row" },
             React.createElement(
               "button",
-              { onClick: this.onEntriesClick },
+              { className: "normalButton fullwidthButton", onClick: this.onEntriesClick },
               "Entries (",
               this.props.course.count,
               ")"
@@ -69,6 +69,7 @@
             React.createElement(
               "button",
               {
+                className: "normalButton fullwidthButton",
                 disabled: this.props.course.count == 0,
                 onClick: this.onShuffleClick },
               "Shuffle"
@@ -80,6 +81,7 @@
             React.createElement(
               "button",
               {
+                className: "normalButton fullwidthButton",
                 disabled: this.props.course.count <= 4,
                 onClick: this.onDoClick },
               "Test"
@@ -90,7 +92,7 @@
             { className: "row" },
             React.createElement(
               "button",
-              { onClick: this.onEditClick },
+              { className: "normalButton fullwidthButton", onClick: this.onEditClick },
               "Edit"
             )
           )

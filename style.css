@@ -119,9 +119,28 @@ input[type='text'], input[type='number'] {
   background-color:#f0f0f0;
 }
 
-button {
+button.normalButton {
   padding:4px;
   box-sizing:border-box;
+  border:none;
+  border-radius:2px;
+  min-width:64px;
+  height: 36px;
+  padding: 0 16px;
+  display: inline-block;
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  line-height: 36px;
+  vertical-align: middle;
+  outline:1px solid #c0c0c0;
+}
+
+button.primaryButton {
+  background: #3f51b5;
+    color: #fff;
 }
 
 .buttonbar {
@@ -165,7 +184,7 @@ ul#popup.listView li a, ul#popup.listView li label {
   width:50%;
   min-height:100px;
   border: none;
-  outline: 1px solid black;
+  outline:1px solid #c0c0c0;
   display:block;
   float:left;
 }

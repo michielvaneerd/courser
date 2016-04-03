@@ -217,13 +217,14 @@
           React.createElement(
             "button",
             {
+              className: "normalButton",
               disabled: !(this.state.source.length && this.state.destination.length),
               onClick: this.onSave },
             "Save"
           ),
           React.createElement(
             "button",
-            { onClick: this.onCancel },
+            { className: "normalButton", onClick: this.onCancel },
             "Cancel"
           ),
           this.state.id ? React.createElement(
@@ -231,7 +232,7 @@
             null,
             React.createElement(
               "button",
-              { className: "deleteButton", onClick: this.onDelete },
+              { className: "normalButton deleteButton", onClick: this.onDelete },
               "Delete"
             )
           ) : null

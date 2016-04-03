@@ -286,6 +286,7 @@
                   el.focus();
                 }
               },
+              className: "normalButton",
               disabled: this.props.doCourseSuccess === null,
               onClick: this.dispatchNewItem },
             "Next"

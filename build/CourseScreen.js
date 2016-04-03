@@ -179,7 +179,7 @@
             { className: "row" },
             React.createElement(
               "button",
-              { className: "fullwidthButton", disabled: !!!this.state.title,
+              { className: "normalButton fullwidthButton primaryButton", disabled: !!!this.state.title,
                 onClick: this.onSave },
               "Save"
             )

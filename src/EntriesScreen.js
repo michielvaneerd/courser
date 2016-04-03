@@ -203,13 +203,14 @@
           </div>
           <div className="row buttonbar buttonbar-3">
               <button
+                className="normalButton"
                 disabled={!(this.state.source.length && this.state.destination.length)}
                 onClick={this.onSave}>Save</button>
-              <button onClick={this.onCancel}>Cancel</button>
+              <button className="normalButton" onClick={this.onCancel}>Cancel</button>
               {this.state.id
                 ? (
                     <span>
-                      <button className="deleteButton" onClick={this.onDelete}>Delete</button>
+                      <button className="normalButton deleteButton" onClick={this.onDelete}>Delete</button>
                     </span>
                   ) : null}
             </div>

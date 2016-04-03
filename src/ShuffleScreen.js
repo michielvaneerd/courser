@@ -75,7 +75,7 @@
           </div>
           <div id="main">
             <div className="row buttonbar">
-              <button className="fullwidthButton" onClick={this.onShuffle}>Shuffle</button>
+              <button className="normalButton fullwidthButton" onClick={this.onShuffle}>Shuffle</button>
             </div>
           
             <ul className="listView">

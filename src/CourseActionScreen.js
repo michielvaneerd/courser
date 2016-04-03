@@ -30,26 +30,28 @@
         <div id="screen">
           <div id="navbar">
             <div className="navbarButtonContainer" id="navbarLeft">
-              <button onClick={this.props.onMain}>&lt;</button>
+              <button className="fullwidthButton" onClick={this.props.onMain}>&lt;</button>
             </div>
             <div id="navbarTitle">{this.props.course.title}</div>
           </div>
           <div id="main">
             <div className="row">
-              <button onClick={this.onEntriesClick}>Entries ({this.props.course.count})</button>
+              <button className="normalButton fullwidthButton" onClick={this.onEntriesClick}>Entries ({this.props.course.count})</button>
             </div>
             <div className="row">
               <button
+                className="normalButton fullwidthButton"
                 disabled={this.props.course.count == 0}
                 onClick={this.onShuffleClick}>Shuffle</button>
             </div>
             <div className="row">
               <button
+                className="normalButton fullwidthButton"
                 disabled={this.props.course.count <= 4}
                 onClick={this.onDoClick}>Test</button>
             </div>
             <div className="row">
-              <button onClick={this.onEditClick}>Edit</button>
+              <button className="normalButton fullwidthButton" onClick={this.onEditClick}>Edit</button>
             </div>
           </div>
         </div>

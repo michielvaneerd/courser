@@ -257,6 +257,7 @@ button.fullwidthButton {
   position:absolute;
   border:none;
   font-size:140%;
+  line-height:56px;
 }
 
 #floatingBottomButton {
@@ -274,4 +275,11 @@ ul.editMode li#activeEditListItem {
 
 .doCourseQuestionTitleSource {
   margin-right:1rem;
+}
+
+.entryItemSource {
+  font-size:200%;
+}
+.entryItemPhone {
+  font-style:italic;
 }

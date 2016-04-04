@@ -288,22 +288,18 @@
                   null,
                   React.createElement(
                     "div",
-                    null,
+                    { className: "entryItemSource" },
                     entry.source
                   ),
                   React.createElement(
                     "div",
-                    null,
+                    { className: "entryItemDestination" },
                     entry.destination
                   ),
                   entry.phone ? React.createElement(
                     "div",
-                    null,
-                    React.createElement(
-                      "em",
-                      null,
-                      entry.phone
-                    )
+                    { className: "entryItemPhone" },
+                    entry.phone
                   ) : ""
                 )
               );

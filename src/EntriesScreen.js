@@ -241,10 +241,10 @@
                   :
                   <li onClick={this.onActivate} data-id={entryId} key={entryId}>
                     <a>
-                    <div>{entry.source}</div>
-                    <div>{entry.destination}</div>
+                    <div className="entryItemSource">{entry.source}</div>
+                    <div className="entryItemDestination">{entry.destination}</div>
                       {entry.phone
-                        ? <div><em>{entry.phone}</em></div>
+                        ? <div className="entryItemPhone">{entry.phone}</div>
                       : ""}
                     </a>
                   </li>

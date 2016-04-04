@@ -126,7 +126,7 @@
                   null,
                   React.createElement(
                     "div",
-                    { style: styleSource },
+                    { className: "entryItemSource", style: styleSource },
                     this.props.entries[id].source
                   ),
                   React.createElement(
@@ -136,12 +136,8 @@
                   ),
                   React.createElement(
                     "div",
-                    { style: style },
-                    React.createElement(
-                      "em",
-                      null,
-                      this.props.entries[id].phone
-                    )
+                    { className: "entryItemPhone", style: style },
+                    this.props.entries[id].phone
                   )
                 )
               );

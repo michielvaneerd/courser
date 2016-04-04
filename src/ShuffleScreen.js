@@ -95,7 +95,7 @@
               return (
                 <li onClick={this.onItemClick} data-id={id} key={id}><a>
                   <div className="entryItemSource" style={styleSource}>{this.props.entries[id].source}</div>
-                  <div style={styleDestination}>{this.props.entries[id].destination}</div>
+                  <div className="entryItemDestination" style={styleDestination}>{this.props.entries[id].destination}</div>
                   <div className="entryItemPhone" style={style}>{this.props.entries[id].phone}</div></a>
                 </li>
               );

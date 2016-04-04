@@ -191,6 +191,7 @@ ul#popup.listView li a, ul#popup.listView li label {
   display:block;
   float:left;
   background-color: rgba(158,158,158,.2);
+  font-size:16px;
 }
 
 #answerOptionWrapper button span {
@@ -199,6 +200,8 @@ ul#popup.listView li a, ul#popup.listView li label {
 
 #answerOptionWrapper button span.phone {
   visibility:hidden;
+  font-style:italic;
+  font-size:80%;
 }
 
 #answerOptionWrapper button.wrong span.phone, #answerOptionWrapper button.success span.phone {
@@ -277,8 +280,13 @@ ul.editMode li#activeEditListItem {
   margin-right:1rem;
 }
 
-.entryItemSource {
-  font-size:200%;
+.doCourseQuestionTitleSourceValue {
+  font-size:16px;
+  font-weight:bold;
+}
+
+.entryItemSource, .entryItemDestination {
+  font-size:140%;
 }
 .entryItemPhone {
   font-style:italic;

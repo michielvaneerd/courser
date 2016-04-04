@@ -131,7 +131,7 @@
                   ),
                   React.createElement(
                     "div",
-                    { style: styleDestination },
+                    { className: "entryItemDestination", style: styleDestination },
                     this.props.entries[id].destination
                   ),
                   React.createElement(

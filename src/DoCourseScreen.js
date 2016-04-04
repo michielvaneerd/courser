@@ -185,7 +185,7 @@
         <div>
           <div className="row">
             <span className="doCourseQuestionTitleSource">{this.props.course[key + "_title"]}:</span>
-            <span><strong>{doCourseEntry[key]}</strong></span>
+            <span className="doCourseQuestionTitleSourceValue">{doCourseEntry[key]}</span>
           </div>
           <div className="row">
             <div className="doCourseQuestionTitle">{this.props.course[otherKey + "_title"]}?</div>

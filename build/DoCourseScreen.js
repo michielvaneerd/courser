@@ -220,12 +220,8 @@
           ),
           React.createElement(
             "span",
-            null,
-            React.createElement(
-              "strong",
-              null,
-              doCourseEntry[key]
-            )
+            { className: "doCourseQuestionTitleSourceValue" },
+            doCourseEntry[key]
           )
         ),
         React.createElement(

@@ -113,10 +113,11 @@ input[type='text'], input[type='number'] {
   box-sizing:border-box;
   width:100%;
   display:block;
-  padding:4px;
+  padding:8px;
   border:none;
   border-bottom:1px solid #c0c0c0;
-  background-color:#f0f0f0;
+  background-color:#fcfcfc;
+  font-size:16px;
 }
 
 button.normalButton {
@@ -136,6 +137,8 @@ button.normalButton {
   line-height: 36px;
   vertical-align: middle;
   outline:1px solid #c0c0c0;
+  background: rgba(158,158,158,.2);
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
 }
 
 button.primaryButton {
@@ -187,6 +190,7 @@ ul#popup.listView li a, ul#popup.listView li label {
   outline:1px solid #c0c0c0;
   display:block;
   float:left;
+  background-color: rgba(158,158,158,.2);
 }
 
 #answerOptionWrapper button span {
@@ -201,12 +205,12 @@ ul#popup.listView li a, ul#popup.listView li label {
   visibility:visible;
 }
 
-input.success, button.success {
+#answerOptionWrapper input.success, #answerOptionWrapper button.success {
   background-color:lime;
-  color:white;
+  color:black;
 }
 
-input.wrong, button.wrong {
+#answerOptionWrapper input.wrong, #answerOptionWrapper button.wrong {
   background-color:red;
   color:white;
 }
@@ -249,7 +253,7 @@ button.fullwidthButton {
   border-radius:28px;
   background-color:rgb(255,64,129);
   color:white;
-  box-shadow:0 0 4px black;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
   position:absolute;
   border:none;
   font-size:140%;

@@ -310,7 +310,11 @@
         ),
         !this.state.showCreate && !this.state.id ? React.createElement(
           "button",
-          { className: "floatingButton", id: "floatingBottomButton", onClick: this.onCreateEntry },
+          { ref: function (el) {
+              if (el) {
+                el.focus();
+              }
+            }, className: "floatingButton", id: "floatingBottomButton", onClick: this.onCreateEntry },
           "+"
         ) : "",
         this.state.showMore ? React.createElement(

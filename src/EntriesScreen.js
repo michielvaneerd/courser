@@ -256,7 +256,12 @@
             </ul>
           </div>
           {!this.state.showCreate && !this.state.id
-            ? <button className="floatingButton" id="floatingBottomButton" onClick={this.onCreateEntry}>+</button>
+            ? <button ref={function(el) {
+                if (el)
+                {
+                  el.focus();
+                }
+              }} className="floatingButton" id="floatingBottomButton" onClick={this.onCreateEntry}>+</button>
           : ""}
           {this.state.showMore
             ? (

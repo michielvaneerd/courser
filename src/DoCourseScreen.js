@@ -253,13 +253,13 @@
       } else {
         editArea = (
           <div>
-            <div className="formRow">
+            <div className="row">
               <p><strong>Course finished!</strong></p>
               <p>Good answers: {this.props.course.count_attempt_success}</p>
               <p>Wrong answers: {this.props.course.count_attempt_failure}</p>
             </div>
-            <div className="formRow">
-              <p><button className="deleteButton" onClick={this.onReset}>Reset</button></p>
+            <div className="row">
+              <p><button className="normalButton fullwidthButton" onClick={this.onReset}>Reset</button></p>
             </div>
           </div>
         );
@@ -272,7 +272,7 @@
             </div>
             <div id="navbarTitle">Test</div>
             <div className="navbarButtonContainer" id="navbarRight">
-              <button onClick={this.onMore}>:</button>
+              <button onClick={this.onMore}>&#9776;</button>
             </div>
           </div>
           <div id="main">

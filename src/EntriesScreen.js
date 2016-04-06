@@ -228,7 +228,7 @@
             </div>
             <div id="navbarTitle">Entries</div>
             <div className="navbarButtonContainer" id="navbarRight">
-              <button onClick={this.onMore}>:</button>
+              <button onClick={this.onMore}>&#9776;</button>
             </div>
           </div>
           <div id="main">

@@ -315,7 +315,7 @@
           null,
           React.createElement(
             "div",
-            { className: "formRow" },
+            { className: "row" },
             React.createElement(
               "p",
               null,
@@ -340,13 +340,13 @@
           ),
           React.createElement(
             "div",
-            { className: "formRow" },
+            { className: "row" },
             React.createElement(
               "p",
               null,
               React.createElement(
                 "button",
-                { className: "deleteButton", onClick: this.onReset },
+                { className: "normalButton fullwidthButton", onClick: this.onReset },
                 "Reset"
               )
             )
@@ -379,7 +379,7 @@
             React.createElement(
               "button",
               { onClick: this.onMore },
-              ":"
+              "☰"
             )
           )
         ),

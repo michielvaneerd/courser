@@ -70,7 +70,7 @@
             </div>
             <div id="navbarTitle">Shuffle</div>
             <div className="navbarButtonContainer" id="navbarRight">
-              <button onClick={this.onMore}>:</button>
+              <button onClick={this.onMore}>&#9776;</button>
             </div>
           </div>
           <div id="main">

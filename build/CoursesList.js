@@ -104,7 +104,7 @@
             React.createElement(
               "button",
               { onClick: this.onMore },
-              "Dropbox"
+              "☰"
             )
           )
         ),

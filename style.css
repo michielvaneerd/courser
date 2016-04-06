@@ -14,9 +14,13 @@ body {
   letter-spacing: .04em;
 }
 
+a, button {
+  cursor:pointer;
+}
+
 #navbar {
   height:56px;
-  background-color:rgb(63,81,181);
+  background-color:#3e4eb8;
   overflow:hidden;
   box-shadow:0 0 10px black;
 }
@@ -142,8 +146,8 @@ button.normalButton {
 }
 
 button.primaryButton {
-  background: #3f51b5;
-    color: #fff;
+  background: #3e4eb8;
+  color: #ffffff;
 }
 
 .buttonbar {
@@ -192,6 +196,10 @@ ul#popup.listView li a, ul#popup.listView li label {
   float:left;
   background-color: rgba(158,158,158,.2);
   font-size:16px;
+}
+
+#answerOptionWrapper button:focus, button:focus {
+  outline:1px solid #000000;
 }
 
 #answerOptionWrapper button span {

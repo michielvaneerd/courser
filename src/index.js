@@ -78,6 +78,8 @@
       switch (this.state.screen) {
         case "ENTRIES_SCREEN":
           screen = <EntriesScreen
+            entriesMenuShow={this.state.entriesMenuShow}
+            entriesFilter={this.state.entriesFilter}
             forceBackToMainScreen={this.state.forceBackToMainScreen}
             store={this.store}
             course={course}

@@ -5,8 +5,7 @@
   var invalidity = {
     invalidSrc : false,
     invalidDest : false,
-    showCreate : false,
-    showMore : false
+    showCreate : false
   };
 
   var emptyEntry = {
@@ -85,8 +84,9 @@
       });
     },
     onMore : function() {
-      this.setState({
-        showMore : !this.state.showMore
+      this.props.store.dispatch({
+        type : "SHOW_ENTRIES_MENU",
+        value : !this.props.entriesMenuShow
       });
     },
     dispatchOrder : function(orderValue) {
@@ -261,7 +261,7 @@
               
             </ul>
           </div>
-          {!this.state.showCreate && !this.state.id
+          {!this.state.showCreate && !this.state.id && !this.props.entriesMenuShow
             ? <button ref={function(el) {
                 if (el)
                 {
@@ -269,12 +269,12 @@
                 }
               }} className="floatingButton" id="floatingBottomButton" onClick={this.onCreateEntry}>+</button>
           : ""}
-          {this.state.showMore
+          {this.props.entriesMenuShow
             ? (
               <ul id="popup" className="listView">
                 <li>
                   <input type="text" name="filter"
-                    value={this.props.filterValue}
+                    value={this.props.entriesFilter}
                     id="filter"
                     placeholder="Filter"
                     onChange={this.onFilterChange} />

@@ -21,6 +21,7 @@
 	  success : false,
     sortOrder : null,
     entriesMenuShow : false,
+    entriesFilter : null,
 	  inRequest : false,
     error : false,
     courseId : 0,
@@ -57,74 +58,99 @@
     });
   };
   
-  var sortEntries = function(entries, entriesOrder) {
+  var sortEntries = function(entries, entriesOrder, entriesFilter) {
+    var hasEntriesFilter = entriesFilter.length !== 0;
+    entriesFilter = entriesFilter.toLowerCase();
     switch (entriesOrder) {
       case "ID_DESC":
-        return Object.keys(entries).sort(function(a, b) {
-          return b - a;
-        }).map(function(id) {
-          return parseInt(id);
-        });
-      break;
+        return Object.keys(entries)
+          .filter(function(id) {
+            if (!hasEntriesFilter) return true;
+            return entries[id].source.toLowerCase().indexOf(entriesFilter) > -1 || entries[id].destination.toLowerCase().indexOf(entriesFilter) > -1;
+          })
+          .sort(function(a, b) {
+            return b - a;
+          }).map(function(id) {
+            return parseInt(id);
+          });
       case "ALPHABETIC_SOURCE_ASC":
-        return Object.keys(entries).sort(function(a, b) {
-          if (entries[a].source > entries[b].source) {
-            return 1;
-          }
-          if (entries[a].source < entries[b].source) {
-            return -1;
-          }
-          return 0;
-        }).map(function(id) {
-          return parseInt(id);
-        });
-      break;
+        return Object.keys(entries)
+          .filter(function(id) {
+            if (!hasEntriesFilter) return true;
+            return entries[id].source.toLowerCase().indexOf(entriesFilter) > -1 || entries[id].destination.toLowerCase().indexOf(entriesFilter) > -1;
+          })
+          .sort(function(a, b) {
+            if (entries[a].source > entries[b].source) {
+              return 1;
+            }
+            if (entries[a].source < entries[b].source) {
+              return -1;
+            }
+            return 0;
+          }).map(function(id) {
+            return parseInt(id);
+          });
       case "ALPHABETIC_SOURCE_DESC":
-        return Object.keys(entries).sort(function(a, b) {
-          if (entries[a].source < entries[b].source) {
-            return 1;
-          }
-          if (entries[a].source > entries[b].source) {
-            return -1;
-          }
-          return 0;
-        }).map(function(id) {
-          return parseInt(id);
-        });
-      break;
+        return Object.keys(entries)
+          .filter(function(id) {
+            if (!hasEntriesFilter) return true;
+            return entries[id].source.toLowerCase().indexOf(entriesFilter) > -1 || entries[id].destination.toLowerCase().indexOf(entriesFilter) > -1;
+          })
+          .sort(function(a, b) {
+            if (entries[a].source < entries[b].source) {
+              return 1;
+            }
+            if (entries[a].source > entries[b].source) {
+              return -1;
+            }
+            return 0;
+          }).map(function(id) {
+            return parseInt(id);
+          });
       case "ALPHABETIC_DESTINATION_ASC":
-        return Object.keys(entries).sort(function(a, b) {
-          if (entries[a].destination > entries[b].destination) {
-            return 1;
-          }
-          if (entries[a].destination < entries[b].destination) {
-            return -1;
-          }
-          return 0;
-        }).map(function(id) {
-          return parseInt(id);
-        });
-      break;
+        return Object.keys(entries)
+          .filter(function(id) {
+            if (!hasEntriesFilter) return true;
+            return entries[id].source.toLowerCase().indexOf(entriesFilter) > -1 || entries[id].destination.toLowerCase().indexOf(entriesFilter) > -1;
+          })
+          .sort(function(a, b) {
+            if (entries[a].destination > entries[b].destination) {
+              return 1;
+            }
+            if (entries[a].destination < entries[b].destination) {
+              return -1;
+            }
+            return 0;
+          }).map(function(id) {
+            return parseInt(id);
+          });
       case "ALPHABETIC_DESTINATION_DESC":
-        return Object.keys(entries).sort(function(a, b) {
-          if (entries[a].destination < entries[b].destination) {
-            return 1;
-          }
-          if (entries[a].destination > entries[b].destination) {
-            return -1;
-          }
-          return 0;
-        }).map(function(id) {
-          return parseInt(id);
-        });
-      break;
+        return Object.keys(entries)
+          .filter(function(id) {
+            if (!hasEntriesFilter) return true;
+            return entries[id].source.toLowerCase().indexOf(entriesFilter) > -1 || entries[id].destination.toLowerCase().indexOf(entriesFilter) > -1;
+          })
+          .sort(function(a, b) {
+            if (entries[a].destination < entries[b].destination) {
+              return 1;
+            }
+            if (entries[a].destination > entries[b].destination) {
+              return -1;
+            }
+            return 0;
+          }).map(function(id) {
+            return parseInt(id);
+          });
       default:
-        return Object.keys(entries).sort().map(function(id) {
-          return parseInt(id);
-        });
-      break;
+        return Object.keys(entries)
+          .filter(function(id) {
+            if (!hasEntriesFilter) return true;
+            return entries[id].source.toLowerCase().indexOf(entriesFilter) > -1 || entries[id].destination.toLowerCase().indexOf(entriesFilter) > -1;
+          })
+          .sort().map(function(id) {
+            return parseInt(id);
+          });
     }
-    return entryIds;
   };
 
 	var appReducer = function(state, action) {
@@ -158,6 +184,13 @@
 	  var keepInRequest = false;
 
     switch (action.type) {
+      case "SHOW_ENTRIES_MENU":
+        state.entriesMenuShow = action.value || false;
+        break;
+      case "ENTRIES_FILTER":
+        state.entriesFilter = action.value;
+        state.entryIds = sortEntries(state.entries, state.entriesOrder, state.entriesFilter);
+        break;
       case "SELECT_COURSES":
         if (action.value) {
           state.courses = action.value;
@@ -223,7 +256,7 @@
         state.entryId = 0;
         // TODO: sort in storage, for now I do it here...
         state.entries = action.value;
-        state.entryIds = sortEntries(action.value, state.entriesOrder);
+        state.entryIds = sortEntries(state.entries, state.entriesOrder, state.entriesFilter);
         state.screen = "ENTRIES_SCREEN";
         break;
       case "REQUEST_SAVE_COURSE":
@@ -290,7 +323,7 @@
         break;
       case "ENTRIES_ORDER":
         state.entriesOrder = action.value;
-        state.entryIds = sortEntries(state.entries, state.entriesOrder);
+        state.entryIds = sortEntries(state.entries, state.entriesOrder, state.entriesFilter);
         break;
       case "REQUEST_DELETE_COURSE":
         keepInRequest = true;

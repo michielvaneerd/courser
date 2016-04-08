@@ -82,6 +82,8 @@
       switch (this.state.screen) {
         case "ENTRIES_SCREEN":
           screen = React.createElement(EntriesScreen, {
+            entriesMenuShow: this.state.entriesMenuShow,
+            entriesFilter: this.state.entriesFilter,
             forceBackToMainScreen: this.state.forceBackToMainScreen,
             store: this.store,
             course: course,

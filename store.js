@@ -21,7 +21,7 @@
 	  success : false,
     sortOrder : null,
     entriesMenuShow : false,
-    entriesFilter : null,
+    entriesFilter : "",
 	  inRequest : false,
     error : false,
     courseId : 0,

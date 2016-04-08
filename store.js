@@ -38,7 +38,7 @@
   var getStateFromLocalStorage = function() {
     var item = win.localStorage.getItem(localStorageName);
     if (item) {
-      return JSON.parse(item);
+      return Object.assign({}, defaultState, JSON.parse(item));
     }
     return defaultState;
   };

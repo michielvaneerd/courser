@@ -13,7 +13,11 @@
 <script src="dist/polyfills.js"></script>
 <script src="dist/react.min.js"></script>
 <script src="dist/react-dom.min.js"></script>
-<script src="dist/bluebird.min.js"></script>
+<script>
+if (typeof Promise === "undefined") {
+  document.write('<script src="dist/bluebird.min.js"><\/script>');
+}
+</script>
 <script src="dist/dropbox.js"></script>
 <script src="dist/verysimpleredux.js"></script>
 <!--<script src="storage-indexeddb.js"></script>-->

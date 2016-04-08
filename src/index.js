@@ -7,7 +7,7 @@
       if (el) {
         el.className = "visibleSpinner";
       }
-    }, 0);
+    }, 500);
   }
 
   var App = React.createClass({

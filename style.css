@@ -216,12 +216,12 @@ ul#popup.listView li a, ul#popup.listView li label {
   visibility:visible;
 }
 
-#answerOptionWrapper input.success, #answerOptionWrapper button.success {
+input.success, #answerOptionWrapper button.success {
   background-color:lime;
   color:black;
 }
 
-#answerOptionWrapper input.wrong, #answerOptionWrapper button.wrong {
+input.wrong, #answerOptionWrapper button.wrong {
   background-color:red;
   color:white;
 }
@@ -270,6 +270,11 @@ button.fullwidthButton {
   font-size:140%;
   line-height:56px;
 }
+
+button.floatingButton:focus {  
+  outline:none;
+}
+
 
 #floatingBottomButton {
   right:14px;

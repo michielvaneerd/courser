@@ -145,7 +145,7 @@
         <div>
           <div className="row">
             <span className="doCourseQuestionTitleSource">{this.props.course[key + "_title"]}:</span>
-            <span><strong>{doCourseEntry[key]}</strong></span>
+            <span className="doCourseQuestionTitleSourceValue">{doCourseEntry[key]}</span>
           </div>
           <div className="row">
             <input className={cName}
@@ -161,10 +161,11 @@
               onChange={this.onChange} value={this.state.answer} />
           </div>
           <div className="row">
-            <button className="fullwidthButton" disabled={this.state.answer.length == 0 || this.props.doCourseSuccess !== null} onClick={this.onSave}>Save</button>
+            <button className="normalButton primaryButton fullwidthButton" disabled={this.state.answer.length == 0 || this.props.doCourseSuccess !== null} onClick={this.onSave}>Save</button>
           </div>
           <div id="bottombar" className="row floatright">
             <button disabled={this.props.doCourseSuccess === null}
+              className="normalButton"
               ref={function(el) {
                 if (el && me.props.doCourseSuccess !== null) {
                   el.focus();

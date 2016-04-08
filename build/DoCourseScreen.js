@@ -152,12 +152,8 @@
           ),
           React.createElement(
             "span",
-            null,
-            React.createElement(
-              "strong",
-              null,
-              doCourseEntry[key]
-            )
+            { className: "doCourseQuestionTitleSourceValue" },
+            doCourseEntry[key]
           )
         ),
         React.createElement(
@@ -180,7 +176,7 @@
           { className: "row" },
           React.createElement(
             "button",
-            { className: "fullwidthButton", disabled: this.state.answer.length == 0 || this.props.doCourseSuccess !== null, onClick: this.onSave },
+            { className: "normalButton primaryButton fullwidthButton", disabled: this.state.answer.length == 0 || this.props.doCourseSuccess !== null, onClick: this.onSave },
             "Save"
           )
         ),
@@ -190,6 +186,7 @@
           React.createElement(
             "button",
             { disabled: this.props.doCourseSuccess === null,
+              className: "normalButton",
               ref: function (el) {
                 if (el && me.props.doCourseSuccess !== null) {
                   el.focus();

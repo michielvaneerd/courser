@@ -158,6 +158,12 @@
         break;
       }
     },
+    onFilterChange : function(e) {
+      this.props.store.dispatch({
+        type : "ENTRIES_FILTER",
+        value : e.target.value
+      });
+    },
     onCreateEntry : function() {
       scrollTop = win.document.getElementById("main").scrollTop;
       this.setState(Object.assign({}, emptyEntry, invalidity, {showCreate : true}));
@@ -203,7 +209,7 @@
           </div>
           <div className="row buttonbar buttonbar-3">
               <button
-                className="normalButton"
+                className="normalButton primaryButton"
                 disabled={!(this.state.source.length && this.state.destination.length)}
                 onClick={this.onSave}>Save</button>
               <button className="normalButton" onClick={this.onCancel}>Cancel</button>
@@ -266,6 +272,13 @@
           {this.state.showMore
             ? (
               <ul id="popup" className="listView">
+                <li>
+                  <input type="text" name="filter"
+                    value={this.props.filterValue}
+                    id="filter"
+                    placeholder="Filter"
+                    onChange={this.onFilterChange} />
+                </li>
                 <li>
                   <label htmlFor="orderIdAsc"><input name="order" type="radio"
                     checked={this.props.entriesOrder == "ID_ASC"}

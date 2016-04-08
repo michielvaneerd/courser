@@ -11,7 +11,9 @@
         source_title : "Source",
         destination_title : "Destination",
         test_ok_success_count : 1,
-        title : ""
+        title : "",
+        DESTINATION_SOURCE_CHOOSE : true,
+        SOURCE_DESTINATION_CHOOSE : true,
       }, invalidity, this.props.course);
     },
     componentWillReceiveProps : function(nextProps) {

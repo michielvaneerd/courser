@@ -164,6 +164,12 @@
           break;
       }
     },
+    onFilterChange: function (e) {
+      this.props.store.dispatch({
+        type: "ENTRIES_FILTER",
+        value: e.target.value
+      });
+    },
     onCreateEntry: function () {
       scrollTop = win.document.getElementById("main").scrollTop;
       this.setState(Object.assign({}, emptyEntry, invalidity, { showCreate: true }));
@@ -217,7 +223,7 @@
           React.createElement(
             "button",
             {
-              className: "normalButton",
+              className: "normalButton primaryButton",
               disabled: !(this.state.source.length && this.state.destination.length),
               onClick: this.onSave },
             "Save"
@@ -320,6 +326,15 @@
         this.state.showMore ? React.createElement(
           "ul",
           { id: "popup", className: "listView" },
+          React.createElement(
+            "li",
+            null,
+            React.createElement("input", { type: "text", name: "filter",
+              value: this.props.filterValue,
+              id: "filter",
+              placeholder: "Filter",
+              onChange: this.onFilterChange })
+          ),
           React.createElement(
             "li",
             null,

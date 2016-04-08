@@ -175,7 +175,7 @@ ul#popup.listView li {
   min-height:28px;
 }
 
-ul#popup.listView li a, ul#popup.listView li label {
+ul#popup.listView li a, ul#popup.listView li label, ul#popup.listView li input[type='text'] {
   padding:14px;
   min-width:200px;
 }

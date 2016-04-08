@@ -4,22 +4,23 @@
   win.Constants = {
     testTypes : [
       "SOURCE_DESTINATION_CHOOSE",
-      "DESTINATION_SOURCE_CHOOSE",
-      "SOURCE_DESTINATION_WRITE",
-      "DESTINATION_SOURCE_WRITE"
+      "DESTINATION_SOURCE_CHOOSE"
+      //"SOURCE_DESTINATION_WRITE",
+      //"DESTINATION_SOURCE_WRITE"
     ]
   };
   
   win.Language = {
     "SOURCE_DESTINATION_CHOOSE" : "Show %source%, select %destination%",
-    "DESTINATION_SOURCE_CHOOSE" : "Show %destination%, select %source%",
-    "SOURCE_DESTINATION_WRITE" : "Show %source%, type %destination%",
-    "DESTINATION_SOURCE_WRITE" : "Show %destination%, type %source%"
+    "DESTINATION_SOURCE_CHOOSE" : "Show %destination%, select %source%"
+    //"SOURCE_DESTINATION_WRITE" : "Show %source%, type %destination%",
+    //"DESTINATION_SOURCE_WRITE" : "Show %destination%, type %source%"
   };
 
 	var defaultState = {
 	  success : false,
     sortOrder : null,
+    entriesMenuShow : false,
 	  inRequest : false,
     error : false,
     courseId : 0,

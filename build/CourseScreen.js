@@ -111,10 +111,10 @@
           { id: "main" },
           React.createElement(
             "div",
-            { className: "row formLabelInputPair" },
+            { className: "row" },
             React.createElement(
               "label",
-              { htmlFor: "courseTitleInput" },
+              { className: "titleLabel", htmlFor: "courseTitleInput" },
               "Title"
             ),
             React.createElement("input", { id: "courseTitleInput", placeholder: "Title", autoFocus: true, required: true,
@@ -123,10 +123,10 @@
           ),
           React.createElement(
             "div",
-            { className: "row formLabelInputPair" },
+            { className: "row" },
             React.createElement(
               "label",
-              { htmlFor: "courseSourceTitleInput" },
+              { className: "titleLabel", htmlFor: "courseSourceTitleInput" },
               "Source"
             ),
             React.createElement("input", { id: "courseSourceTitleInput", placeholder: "Source title", required: true,
@@ -135,10 +135,10 @@
           ),
           React.createElement(
             "div",
-            { className: "row formLabelInputPair" },
+            { className: "row" },
             React.createElement(
               "label",
-              { htmlFor: "courseDestinationTitleInput" },
+              { className: "titleLabel", htmlFor: "courseDestinationTitleInput" },
               "Destination"
             ),
             React.createElement("input", { id: "courseDestinationTitleInput", placeholder: "Destination title", required: true,
@@ -147,10 +147,10 @@
           ),
           React.createElement(
             "div",
-            { className: "row formLabelInputPair" },
+            { className: "row" },
             React.createElement(
               "label",
-              { htmlFor: "courseTestOkSuccessCountInput" },
+              { className: "titleLabel", htmlFor: "courseTestOkSuccessCountInput" },
               "Test success count"
             ),
             React.createElement("input", { id: "courseTestOkSuccessCountInput", type: "number",
@@ -160,6 +160,11 @@
           React.createElement(
             "div",
             { className: "row" },
+            React.createElement(
+              "label",
+              { className: "titleLabel" },
+              "Test types"
+            ),
             win.Constants.testTypes.map(function (testType) {
               var text = win.Language[testType].replace("%source%", this.state.source_title).replace("%destination%", this.state.destination_title);
               return React.createElement(

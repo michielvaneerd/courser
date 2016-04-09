@@ -73,11 +73,7 @@
               <button onClick={this.onMore}>&#9776;</button>
             </div>
           </div>
-          <div id="main">
-            <div className="row buttonbar">
-              <button className="normalButton fullwidthButton" onClick={this.onShuffle}>Shuffle</button>
-            </div>
-          
+          <div id="main">          
             <ul className="listView">
             {this.state.ids.map(function(id) {
               var styleSource = {
@@ -105,6 +101,9 @@
           {this.state.showMore
             ? (
               <ul id="popup" className="listView">
+                <li>
+                  <button className="primaryButton normalButton fullwidthButton" onClick={this.onShuffle}>Shuffle</button>
+                </li>
                 <li>
                   <label htmlFor="modeSD"><input name="mode" type="radio"
                     checked={this.state.mode == "SOURCE_DESTINATION"}

@@ -97,15 +97,6 @@
           "div",
           { id: "main" },
           React.createElement(
-            "div",
-            { className: "row buttonbar" },
-            React.createElement(
-              "button",
-              { className: "normalButton fullwidthButton", onClick: this.onShuffle },
-              "Shuffle"
-            )
-          ),
-          React.createElement(
             "ul",
             { className: "listView" },
             this.state.ids.map(function (id) {
@@ -147,6 +138,15 @@
         this.state.showMore ? React.createElement(
           "ul",
           { id: "popup", className: "listView" },
+          React.createElement(
+            "li",
+            null,
+            React.createElement(
+              "button",
+              { className: "primaryButton normalButton fullwidthButton", onClick: this.onShuffle },
+              "Shuffle"
+            )
+          ),
           React.createElement(
             "li",
             null,

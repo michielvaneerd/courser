@@ -113,6 +113,11 @@ label {
   display:block;
 }
 
+label.titleLabel {
+  font-weight:bold;
+  margin-bottom:7px;
+}
+
 input[type='text'], input[type='number'] {
   box-sizing:border-box;
   width:100%;

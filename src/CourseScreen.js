@@ -90,31 +90,32 @@
                 : ""}
           </div>
           <div id="main">
-            <div className="row formLabelInputPair">
-              <label htmlFor="courseTitleInput">Title</label>
+            <div className="row">
+              <label className="titleLabel" htmlFor="courseTitleInput">Title</label>
               <input id="courseTitleInput" placeholder="Title" autoFocus={true} required={true}
                 type="text" onChange={this.onTitleInputChange}
                 value={this.state.title} />
             </div>
-            <div className="row formLabelInputPair">
-              <label htmlFor="courseSourceTitleInput">Source</label>
+            <div className="row">
+              <label className="titleLabel" htmlFor="courseSourceTitleInput">Source</label>
               <input id="courseSourceTitleInput" placeholder="Source title" required={true}
                 type="text" onChange={this.onSourceTitleInputChange}
                 value={this.state.source_title} />
             </div>
-            <div className="row formLabelInputPair">
-              <label htmlFor="courseDestinationTitleInput">Destination</label>
+            <div className="row">
+              <label className="titleLabel" htmlFor="courseDestinationTitleInput">Destination</label>
               <input id="courseDestinationTitleInput" placeholder="Destination title" required={true}
                 type="text" onChange={this.onDestinationTitleInputChange}
                 value={this.state.destination_title} />
             </div>
-            <div className="row formLabelInputPair">
-              <label htmlFor="courseTestOkSuccessCountInput">Test success count</label>
+            <div className="row">
+              <label className="titleLabel" htmlFor="courseTestOkSuccessCountInput">Test success count</label>
               <input id="courseTestOkSuccessCountInput" type="number"
                 value={this.state.test_ok_success_count}
                 onChange={this.onTestOkSuccessCountChange} />
             </div>
             <div className="row">
+              <label className="titleLabel">Test types</label>
               {win.Constants.testTypes.map(function(testType) {
                 var text = win.Language[testType]
                   .replace("%source%", this.state.source_title)

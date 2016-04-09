@@ -10,6 +10,21 @@
       });
     },
     onDoClick: function () {
+
+      var disableTestInfo = [];
+      if (this.props.course.count <= 4) {
+        disableTestInfo.push("- create at least 5 entries");
+      }
+      if (win.Constants.testTypes.filter(function (testType) {
+        return this.props.course[testType] === true;
+      }, this).length == 0) {
+        disableTestInfo.push("- choose at least 1 test type in Edit course screen");
+      }
+      if (disableTestInfo.length) {
+        alert("Please make sure to:\n\n" + disableTestInfo.join("\n"));
+        return;
+      }
+
       this.props.store.dispatch({
         type: "REQUEST_DO_COURSE",
         value: this.props.course.id
@@ -28,6 +43,15 @@
       });
     },
     render: function () {
+      var disableTestInfo = [];
+      if (this.props.course.count <= 4) {
+        disableTestInfo.push("Create at least 5 entries");
+      }
+      if (win.Constants.testTypes.filter(function (testType) {
+        return this.props.course[testType] === true;
+      }, this).length == 0) {
+        disableTestInfo.push("Choose at least 1 test type");
+      }
       return React.createElement(
         "div",
         { id: "screen" },
@@ -82,7 +106,6 @@
               "button",
               {
                 className: "normalButton fullwidthButton",
-                disabled: this.props.course.count <= 4,
                 onClick: this.onDoClick },
               "Test"
             )

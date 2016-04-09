@@ -154,8 +154,6 @@
   };
 
 	var appReducer = function(state, action) {
-    
-    console.log(action.type);
 
     if (typeof state === "undefined") {
       return getStateFromLocalStorage();

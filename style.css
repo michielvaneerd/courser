@@ -7,6 +7,10 @@ html, body, #app, #app > div, #screen {
   height:100%;
 }
 
+#app, #screen {
+  position:relative;
+}
+
 body {
   font-family: "Helvetica","Arial",sans-serif;
   font-size: 16px;
@@ -23,6 +27,7 @@ a, button {
   background-color:#3e4eb8;
   overflow:hidden;
   box-shadow:0 0 10px black;
+  position:relative;
 }
 
 #main {
@@ -308,4 +313,50 @@ ul.editMode li#activeEditListItem {
 }
 .entryItemPhone {
   font-style:italic;
+}
+
+@media (min-width: 768px) {
+  
+  #app {
+    max-width:768px;
+    margin:0 auto;
+    box-shadow:0 0 10px black;
+  }
+  
+  #inProgress {
+    width:728px;
+    margin:0 auto;
+    box-shadow:0 0 10px black;
+    left:20px;
+  }
+  
+  #navbarRight {
+    position:absolute;
+    left:calc(768px - 56px);
+  }
+  
+  #popup {
+    width:300px;
+    left:calc(768px - 300px);
+  }
+  
+  #floatingBottomButton {
+    position:absolute;
+    top:0;
+    left:calc(768px - 112px);
+    height: 56px;
+    width: 56px;
+    box-sizing: border-box;
+    border: none;
+    background-color: transparent;
+    color: white;
+    border-radius:0;
+    box-shadow:none;
+  }
+  
+  #floatingBottomButton:active, #floatingBottomButton:focus {
+    background-color:blue;
+    font-weight:bold;
+  }
+  
 }

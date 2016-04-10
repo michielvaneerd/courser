@@ -27,13 +27,16 @@ a, button {
   background-color:#3e4eb8;
   overflow:hidden;
   box-shadow:0 0 10px black;
+  position:relative;
+  z-index:1;
 }
 
 #main {
   box-sizing:border-box;
   height:calc(100% - 56px);
   background-color:white;
-  overflow:auto;
+  overflow-y:scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 #navbarTitle {
@@ -285,6 +288,7 @@ button.fullwidthButton {
   border:none;
   font-size:140%;
   line-height:56px;
+  z-index:2;
 }
 
 button.floatingButton:focus {  
@@ -321,16 +325,16 @@ ul.editMode li#activeEditListItem {
   font-style:italic;
 }
 
-@media (min-width: 800px) {
+@media (min-width: 768px) {
   
   #app {
-    max-width:800px;
+    max-width:768px;
     margin:0 auto;
     box-shadow:0 0 10px black;
   }
   
   #inProgress {
-    width:760px;
+    width:728px;
     margin:0 auto;
     box-shadow:0 0 10px black;
     left:20px;
@@ -338,18 +342,18 @@ ul.editMode li#activeEditListItem {
   
   #navbarRight {
     position:absolute;
-    left:calc(800px - 56px);
+    left:calc(768px - 56px);
   }
   
   #popup {
     width:300px;
-    left:calc(800px - 300px);
+    left:calc(768px - 300px);
   }
   
   #floatingBottomButton {
     position:absolute;
     top:0;
-    left:calc(800px - 112px);
+    left:calc(768px - 112px);
     height: 56px;
     width: 56px;
     box-sizing: border-box;

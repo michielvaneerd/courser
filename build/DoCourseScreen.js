@@ -378,7 +378,7 @@
             React.createElement(
               "button",
               { onClick: this.onMore },
-              "☰"
+              "="
             )
           )
         ),

@@ -234,7 +234,7 @@
             </div>
             <div id="navbarTitle">Entries ({this.props.course.count})</div>
             <div className="navbarButtonContainer" id="navbarRight">
-              <button onClick={this.onMore}>&#9776;</button>
+              <button onClick={this.onMore}>=</button>
             </div>
           </div>
           <div id="main">

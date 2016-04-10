@@ -222,13 +222,20 @@ ul#popup.listView li a, ul#popup.listView li label, ul#popup.listView li input[t
   font-size:80%;
 }
 
-#answerOptionWrapper button.wrong span.phone, #answerOptionWrapper button.success span.phone {
+#answerOptionWrapper button.wrong span.phone,
+#answerOptionWrapper button.success span.phone,
+#answerOptionWrapper button.shouldbesuccess span.phone {
   visibility:visible;
 }
 
 input.success, #answerOptionWrapper button.success {
   background-color:lime;
   color:black;
+}
+
+#answerOptionWrapper button.shouldbesuccess {
+  color:green;
+  font-weight:bold;
 }
 
 input.wrong, #answerOptionWrapper button.wrong {
@@ -315,16 +322,16 @@ ul.editMode li#activeEditListItem {
   font-style:italic;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 800px) {
   
   #app {
-    max-width:768px;
+    max-width:800px;
     margin:0 auto;
     box-shadow:0 0 10px black;
   }
   
   #inProgress {
-    width:728px;
+    width:760px;
     margin:0 auto;
     box-shadow:0 0 10px black;
     left:20px;
@@ -332,18 +339,18 @@ ul.editMode li#activeEditListItem {
   
   #navbarRight {
     position:absolute;
-    left:calc(768px - 56px);
+    left:calc(800px - 56px);
   }
   
   #popup {
     width:300px;
-    left:calc(768px - 300px);
+    left:calc(800px - 300px);
   }
   
   #floatingBottomButton {
     position:absolute;
     top:0;
-    left:calc(768px - 112px);
+    left:calc(800px - 112px);
     height: 56px;
     width: 56px;
     box-sizing: border-box;

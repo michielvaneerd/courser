@@ -203,6 +203,8 @@
               if (this.props.answerEntryId) {
                 if (this.props.answerEntryId == entryId) {
                   cName = this.props.doCourseSuccess ? "success" : "wrong";
+                } else if (this.props.doCourseEntryId == entryId) {
+                  cName = "shouldbesuccess";
                 }
               }
               return (

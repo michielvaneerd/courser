@@ -181,6 +181,7 @@ button.primaryButton {
   background-color:white;
   list-style-type:none;
   box-shadow:1px 1px 10px black;
+  z-index:2;
 }
 
 ul#popup.listView li {

@@ -232,7 +232,7 @@
             <div className="navbarButtonContainer" id="navbarLeft">
               <button onClick={this.onBack}>&lt;</button>
             </div>
-            <div id="navbarTitle">Entries</div>
+            <div id="navbarTitle">Entries ({this.props.course.count})</div>
             <div className="navbarButtonContainer" id="navbarRight">
               <button onClick={this.onMore}>&#9776;</button>
             </div>

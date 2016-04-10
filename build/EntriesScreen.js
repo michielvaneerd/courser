@@ -266,7 +266,9 @@
           React.createElement(
             "div",
             { id: "navbarTitle" },
-            "Entries"
+            "Entries (",
+            this.props.course.count,
+            ")"
           ),
           React.createElement(
             "div",

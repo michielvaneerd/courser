@@ -45,6 +45,9 @@
       this.setState(o);
     },
     onDelete: function () {
+      if (!confirm("Delete course '" + this.props.course.title + "' with " + this.props.course.count + " entries?")) {
+        return;
+      }
       this.props.store.dispatch({
         type: "REQUEST_DELETE_COURSE"
       });

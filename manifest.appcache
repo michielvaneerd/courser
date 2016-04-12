@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Version 2016-04-10 14:17:00
+# Version 2016-04-12 11:45:00
 style.css
 dist/dropbox.js
 dist/react.min.js
@@ -9,6 +9,7 @@ dist/polyfills.js
 dist/verysimpleredux.js
 storage.js
 store.js
+manifest.json
 build/CoursesList.js
 build/CourseScreen.js
 build/CourseActionScreen.js

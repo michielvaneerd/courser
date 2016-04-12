@@ -1,0 +1,2 @@
+# Courser
+With Courser you can easily learn words. Just create a course, add words to them and learn them even when no network connection is available. You can also save your courses to Dropbox and even share courses with others.

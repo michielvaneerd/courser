@@ -64,6 +64,7 @@
             <li key="dropboxconnect"><a className={disabledClass} onClick={navigator.onLine ? this.onDropboxConnect : win.noop}>Connect to Dropbox</a></li>
           ];
         }
+        moreMenuItems.push(<li key="about"><a href="https://github.com/michielvaneerd/courser" target="_blank">About</a></li>);
         moreMenu = (
           <ul id="popup" className="listView">{moreMenuItems}</ul>
         );

@@ -92,6 +92,15 @@
             )
           )];
         }
+        moreMenuItems.push(React.createElement(
+          "li",
+          { key: "about" },
+          React.createElement(
+            "a",
+            { href: "https://github.com/michielvaneerd/courser", target: "_blank" },
+            "About"
+          )
+        ));
         moreMenu = React.createElement(
           "ul",
           { id: "popup", className: "listView" },

@@ -79,6 +79,7 @@
       }, this).length == 0) {
         disableTestInfo.push("Choose at least 1 test type");
       }
+      var disabledClass = navigator.onLine ? "" : "disabledLink";
       return (
         <div id="screen">
           <div id="navbar">
@@ -110,7 +111,7 @@
             ? (
               <ul id="popup" className="listView">
                 <li><a onClick={this.onEditClick}>Edit</a></li>
-                {this.props.course.dropbox_id ? (<li><a onClick={this.onShare}>Get shared link</a></li>) : ""}
+                {this.props.course.dropbox_id ? (<li><a className={disabledClass} onClick={navigator.onLine ? this.onShare : win.noop}>Get shared link</a></li>) : ""}
                 <li><a onClick={this.onDelete}>Delete</a></li>
               </ul>
             ) : ""}

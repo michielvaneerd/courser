@@ -10,6 +10,8 @@
     }, 500);
   }
 
+  win.noop = function () {};
+
   var App = React.createClass({
     displayName: "App",
 

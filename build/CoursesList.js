@@ -54,13 +54,14 @@
       var moreMenu = "";
       var moreMenuItems = null;
       if (this.state.showMore) {
+        var disabledClass = navigator.onLine ? "" : "disabledLink";
         if (this.props.dropboxAccount) {
           moreMenuItems = [React.createElement(
             "li",
             { key: "dropboxsave" },
             React.createElement(
               "a",
-              { onClick: this.onDropboxSave },
+              { className: disabledClass, onClick: navigator.onLine ? this.onDropboxSave : win.noop },
               "Save to Dropbox"
             )
           ), React.createElement(
@@ -68,7 +69,7 @@
             { key: "dropboxshare" },
             React.createElement(
               "a",
-              { onClick: this.onDropboxAddFromSharedLink },
+              { className: disabledClass, onClick: navigator.onLine ? this.onDropboxAddFromSharedLink : win.noop },
               "Add course from shared link"
             )
           ), React.createElement(
@@ -76,7 +77,7 @@
             { key: "dropboxdisconnect" },
             React.createElement(
               "a",
-              { onClick: this.onDropboxDisconnect },
+              { className: disabledClass, onClick: this.onDropboxDisconnect },
               "Disconnect from Dropbox"
             )
           )];
@@ -86,7 +87,7 @@
             { key: "dropboxconnect" },
             React.createElement(
               "a",
-              { onClick: this.onDropboxConnect },
+              { className: disabledClass, onClick: navigator.onLine ? this.onDropboxConnect : win.noop },
               "Connect to Dropbox"
             )
           )];

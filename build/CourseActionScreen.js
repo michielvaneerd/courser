@@ -81,6 +81,7 @@
       }, this).length == 0) {
         disableTestInfo.push("Choose at least 1 test type");
       }
+      var disabledClass = navigator.onLine ? "" : "disabledLink";
       return React.createElement(
         "div",
         { id: "screen" },
@@ -166,7 +167,7 @@
             null,
             React.createElement(
               "a",
-              { onClick: this.onShare },
+              { className: disabledClass, onClick: navigator.onLine ? this.onShare : win.noop },
               "Get shared link"
             )
           ) : "",

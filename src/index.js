@@ -9,6 +9,8 @@
       }
     }, 500);
   }
+  
+  win.noop = function() {};
 
   var App = React.createClass({
     store : null,

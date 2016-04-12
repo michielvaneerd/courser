@@ -327,6 +327,10 @@ ul.editMode li#activeEditListItem {
   font-style:italic;
 }
 
+.disabledLink {
+  opacity:.4;
+}
+
 @media (min-width: 768px) {
   
   #app {

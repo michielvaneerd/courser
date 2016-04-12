@@ -550,6 +550,7 @@
           });
         })
         .catch(function(error) {
+          console.log(error);
           state.inRequest = false;
           errorHandler(error, state);
         });

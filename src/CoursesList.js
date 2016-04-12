@@ -52,15 +52,16 @@
       var moreMenu = "";
       var moreMenuItems = null;
       if (this.state.showMore) {
+        var disabledClass = navigator.onLine ? "" : "disabledLink";
         if (this.props.dropboxAccount) {
           moreMenuItems = [
-            <li key="dropboxsave"><a onClick={this.onDropboxSave}>Save to Dropbox</a></li>,
-            <li key="dropboxshare"><a onClick={this.onDropboxAddFromSharedLink}>Add course from shared link</a></li>,
-            <li key="dropboxdisconnect"><a onClick={this.onDropboxDisconnect}>Disconnect from Dropbox</a></li>
+            <li key="dropboxsave"><a className={disabledClass} onClick={navigator.onLine ? this.onDropboxSave: win.noop}>Save to Dropbox</a></li>,
+            <li key="dropboxshare"><a className={disabledClass} onClick={navigator.onLine ? this.onDropboxAddFromSharedLink : win.noop}>Add course from shared link</a></li>,
+            <li key="dropboxdisconnect"><a className={disabledClass} onClick={this.onDropboxDisconnect}>Disconnect from Dropbox</a></li>
           ];
         } else {
           moreMenuItems = [
-            <li key="dropboxconnect"><a onClick={this.onDropboxConnect}>Connect to Dropbox</a></li>
+            <li key="dropboxconnect"><a className={disabledClass} onClick={navigator.onLine ? this.onDropboxConnect : win.noop}>Connect to Dropbox</a></li>
           ];
         }
         moreMenu = (

@@ -92,7 +92,14 @@
         console.log(error);
         reject(error);
       };
+      xhr.onabort = function(error) {
+        reject(error.type);
+      };
+      xhr.ontimeout = function(error) {
+        reject(error.type);
+      };
       xhr.open(options.method || "POST", url);
+      xhr.timeout = 10000; // 10 seconds
       // It is tempting to use responseType "json", but then errors won't
       // be visible, as they are plain text response body.
       //xhr.responseType = (typeof options.responseType !== "undefined")

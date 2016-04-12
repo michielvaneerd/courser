@@ -41,13 +41,16 @@
         type: "DROPBOX_DISCONNECT"
       });
     },
+    onDropboxAddFromSharedLink: function () {
+      var link = prompt("Enter shared link");
+      if (link) {
+        this.props.store.dispatch({
+          type: "REQUEST_ADD_COURSE_FROM_SHARED_LINK",
+          value: link
+        });
+      }
+    },
     render: function () {
-      /*
-      <div className="navbarButtonContainer" id="navbarRight">
-              <button onClick={this.onMore}>:</button>
-            </div>
-            */
-
       var moreMenu = "";
       var moreMenuItems = null;
       if (this.state.showMore) {
@@ -59,6 +62,14 @@
               "a",
               { onClick: this.onDropboxSave },
               "Save to Dropbox"
+            )
+          ), React.createElement(
+            "li",
+            { key: "dropboxshare" },
+            React.createElement(
+              "a",
+              { onClick: this.onDropboxAddFromSharedLink },
+              "Add course from shared link"
             )
           ), React.createElement(
             "li",
@@ -86,7 +97,6 @@
           moreMenuItems
         );
       }
-
       return React.createElement(
         "div",
         { id: "screen" },

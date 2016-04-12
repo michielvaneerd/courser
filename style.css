@@ -26,7 +26,7 @@ a, button {
   height:56px;
   background-color:#3e4eb8;
   overflow:hidden;
-  box-shadow:0 0 10px black;
+  box-shadow:0 0 2px black;
   position:relative;
   z-index:1;
 }
@@ -180,7 +180,7 @@ button.primaryButton {
   right:10px;
   background-color:white;
   list-style-type:none;
-  box-shadow:1px 1px 10px black;
+  box-shadow:0 0 2px black;
   z-index:2;
 }
 
@@ -255,12 +255,13 @@ button.fullwidthButton {
   position: absolute;
   top: 66px;
   background-color: white;
-  box-shadow: 0 0 10px black;
+  box-shadow: 0 0 2px black;
   box-sizing: border-box;
   width: 80%;
   margin-left: 10%;
   padding: 28px;
   text-align: center;
+  z-index:3;
 }
 .dialog_error {
   color:red;
@@ -331,13 +332,13 @@ ul.editMode li#activeEditListItem {
   #app {
     max-width:768px;
     margin:0 auto;
-    box-shadow:0 0 10px black;
+    box-shadow:0 0 2px black;
   }
   
   #inProgress {
     width:728px;
     margin:0 auto;
-    box-shadow:0 0 10px black;
+    box-shadow:0 0 2px black;
     left:20px;
   }
   

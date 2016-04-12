@@ -223,5 +223,23 @@
       body : JSON.stringify({"path" : path})
     });
   };
+  
+  Dropbox.prototype.createSharedLink = function(path) {
+    return request(this, get_url("api", "/sharing/create_shared_link_with_settings"), {
+      body : JSON.stringify({"path" : path})
+    });
+  };
+  
+  Dropbox.prototype.getSharedLinkFile = function(url) {
+    return request(this, get_url("content", "/sharing/get_shared_link_file"), {
+      responseType : "text",
+      headers : {
+        "Content-Type" : "",
+        "Dropbox-API-Arg" : JSON.stringify({
+          "url" : url
+        })
+      }
+    });
+  };
 
 }(window));

@@ -44,14 +44,6 @@
       o[key] = checked;
       this.setState(o);
     },
-    onDelete: function () {
-      if (!confirm("Delete course '" + this.props.course.title + "' with " + this.props.course.count + " entries?")) {
-        return;
-      }
-      this.props.store.dispatch({
-        type: "REQUEST_DELETE_COURSE"
-      });
-    },
     onTestOkSuccessCountChange: function (e) {
       this.setState({
         test_ok_success_count: e.target.value
@@ -98,16 +90,7 @@
             "div",
             { id: "navbarTitle" },
             this.props.course.id ? this.props.course.title : "Create course"
-          ),
-          this.props.course.id ? React.createElement(
-            "div",
-            { className: "navbarButtonContainer", id: "navbarRight" },
-            React.createElement(
-              "button",
-              { onClick: this.onMore },
-              "="
-            )
-          ) : ""
+          )
         ),
         React.createElement(
           "div",
@@ -194,20 +177,7 @@
               "Save"
             )
           )
-        ),
-        this.state.showMore ? React.createElement(
-          "ul",
-          { id: "popup", className: "listView" },
-          React.createElement(
-            "li",
-            null,
-            React.createElement(
-              "a",
-              { onClick: this.onDelete },
-              "Delete"
-            )
-          )
-        ) : ""
+        )
       );
     }
   });

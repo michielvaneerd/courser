@@ -39,19 +39,23 @@
         type : "DROPBOX_DISCONNECT"
       });
     },
+    onDropboxAddFromSharedLink : function() {
+      var link = prompt("Enter shared link");
+      if (link) {
+        this.props.store.dispatch({
+          type : "REQUEST_ADD_COURSE_FROM_SHARED_LINK",
+          value : link
+        });
+      }
+    },
     render : function() {
-      /*
-      <div className="navbarButtonContainer" id="navbarRight">
-              <button onClick={this.onMore}>:</button>
-            </div>
-            */
-
       var moreMenu = "";
       var moreMenuItems = null;
       if (this.state.showMore) {
         if (this.props.dropboxAccount) {
           moreMenuItems = [
             <li key="dropboxsave"><a onClick={this.onDropboxSave}>Save to Dropbox</a></li>,
+            <li key="dropboxshare"><a onClick={this.onDropboxAddFromSharedLink}>Add course from shared link</a></li>,
             <li key="dropboxdisconnect"><a onClick={this.onDropboxDisconnect}>Disconnect from Dropbox</a></li>
           ];
         } else {
@@ -63,7 +67,6 @@
           <ul id="popup" className="listView">{moreMenuItems}</ul>
         );
       }
-            
       return (
         <div id="screen">
           <div id="navbar">

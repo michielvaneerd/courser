@@ -98,6 +98,7 @@
         case "COURSE_ACTION_SCREEN":
           screen = <CourseActionScreen
             onMain={this.onMain}
+            sharedLink={this.state.sharedLink}
             store={this.store}            
             course={course} />
           break;

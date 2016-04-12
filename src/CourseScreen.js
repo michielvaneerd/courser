@@ -42,14 +42,6 @@
       o[key] = checked;
       this.setState(o);
     },
-    onDelete : function() {
-      if (!confirm("Delete course '" + this.props.course.title + "' with " + this.props.course.count + " entries?")) {
-        return;
-      }
-      this.props.store.dispatch({
-        type : "REQUEST_DELETE_COURSE"
-      });
-    },
     onTestOkSuccessCountChange : function(e) {
       this.setState({
         test_ok_success_count : e.target.value
@@ -85,12 +77,6 @@
             </div>
             <div id="navbarTitle">{this.props.course.id
               ? this.props.course.title : "Create course"}</div>
-              {this.props.course.id
-                ?
-                (<div className="navbarButtonContainer" id="navbarRight">
-                <button onClick={this.onMore}>=</button>
-                </div>)
-                : ""}
           </div>
           <div id="main">
             <div className="row">
@@ -138,12 +124,6 @@
                 onClick={this.onSave}>Save</button>
             </div>
           </div>
-          {this.state.showMore
-            ? (
-              <ul id="popup" className="listView">
-                <li><a onClick={this.onDelete}>Delete</a></li>
-              </ul>
-            ) : ""}
         </div>
       );
     }

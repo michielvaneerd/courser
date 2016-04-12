@@ -7,6 +7,17 @@
         value : this.props.course.id
       });
     },
+    getInitialState : function() {
+      return {showMore : false};
+    },
+    componentDidUpdate : function() {
+      if (this.props.sharedLink) {
+        alert(this.props.sharedLink);
+        this.props.store.dispatch({
+          type : "SHARE_COURSE"
+        });
+      }
+    },
     onDoClick : function() {
       
       var disableTestInfo = [];
@@ -40,6 +51,24 @@
         value : this.props.course.id
       });
     },
+    onMore : function() {
+      this.setState({
+        showMore : !this.state.showMore
+      });
+    },
+    onDelete : function() {
+      if (!confirm("Delete course '" + this.props.course.title + "' with " + this.props.course.count + " entries?")) {
+        return;
+      }
+      this.props.store.dispatch({
+        type : "REQUEST_DELETE_COURSE"
+      });
+    },
+    onShare : function() {
+      this.props.store.dispatch({
+        type : "REQUEST_SHARE_COURSE"
+      });
+    },
     render : function() {
       var disableTestInfo = [];
       if (this.props.course.count <= 4) {
@@ -57,6 +86,9 @@
               <button className="fullwidthButton" onClick={this.props.onMain}>&lt;</button>
             </div>
             <div id="navbarTitle">{this.props.course.title}</div>
+            <div className="navbarButtonContainer" id="navbarRight">
+              <button onClick={this.onMore}>=</button>
+            </div>
           </div>
           <div id="main">
             <div className="row">
@@ -73,10 +105,15 @@
                 className="normalButton fullwidthButton"
                 onClick={this.onDoClick}>Test</button>
             </div>
-            <div className="row">
-              <button className="normalButton fullwidthButton" onClick={this.onEditClick}>Edit</button>
-            </div>
           </div>
+          {this.state.showMore
+            ? (
+              <ul id="popup" className="listView">
+                <li><a onClick={this.onEditClick}>Edit</a></li>
+                {this.props.course.dropbox_id ? (<li><a onClick={this.onShare}>Get shared link</a></li>) : ""}
+                <li><a onClick={this.onDelete}>Delete</a></li>
+              </ul>
+            ) : ""}
         </div>
       );
     }

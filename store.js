@@ -30,7 +30,8 @@
     courses : {}, // courseId => course
     entries : {}, // entryId => entry (only for active course)
     entryIds : [], // to make sortable possible
-    entriesOrder : "ID_ASC"
+    entriesOrder : "ID_ASC",
+    sharedLink : ""
   };
   
   var localStorageName = "courser_store";
@@ -471,6 +472,44 @@
       case "DROPBOX_DISCONNECT":
         win.localStorage.removeItem("access_token");
         state.dropboxAccount = null;
+        break;
+      case "REQUEST_ADD_COURSE_FROM_SHARED_LINK":
+        keepInRequest = true;
+        dropbox.getSharedLinkFile(action.value)
+          .then(function(response) {
+            var course = JSON.parse(response.content);
+            course.dropbox_id = response.apiResult.id;
+            return storage.saveCourse(course);
+          })
+          .then(function() {
+            state.inRequest = false;
+            me.dispatch({
+              type : "SELECT_COURSES"
+            });
+          })
+          .catch(function(error) {
+            state.inRequest = false;
+            errorHandler(error, state);
+          });
+        break;
+      case "REQUEST_SHARE_COURSE":
+        keepInRequest = true;
+        var course = state.courses[state.courseId];
+        dropbox.createSharedLink("/" + course.filename + ".json")
+          .then(function(response) {
+            state.inRequest = false;
+            me.dispatch({
+              type : "SHARE_COURSE",
+              value : response.url
+            });
+          })
+          .catch(function(error) {
+            state.inRequest = false;
+            errorHandler(error, state);
+          });
+        break;
+      case "SHARE_COURSE":
+        state.sharedLink = action.value || "";
         break;
       case "REQUEST_DROPBOX_ACCOUNT":
         keepInRequest = true;

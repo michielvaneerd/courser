@@ -55,7 +55,7 @@
     state.inRequest = false;
     Store.dispatch({
       type : "ERROR",
-      value : error.toString()
+      value : error.error || error.toString()
     });
   };
   
@@ -177,6 +177,10 @@
     
     if (action.type != "SUCCESS") {
       state.success = false;
+    }
+    
+    if (action.type != "SHARE_COURSE") {
+      state.sharedLink = "";
     }
 	  
 	  state.inRequest = true;

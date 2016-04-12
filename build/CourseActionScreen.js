@@ -12,14 +12,14 @@
     getInitialState: function () {
       return { showMore: false };
     },
-    componentDidUpdate: function () {
-      if (this.props.sharedLink) {
-        alert(this.props.sharedLink);
-        this.props.store.dispatch({
-          type: "SHARE_COURSE"
-        });
-      }
-    },
+    // componentDidUpdate : function() {
+    // if (this.props.sharedLink) {
+    // alert(this.props.sharedLink);
+    // this.props.store.dispatch({
+    // type : "SHARE_COURSE"
+    // });
+    // }
+    // },
     onDoClick: function () {
 
       var disableTestInfo = [];
@@ -82,6 +82,26 @@
         disableTestInfo.push("Choose at least 1 test type");
       }
       var disabledClass = navigator.onLine ? "" : "disabledLink";
+      var shareMenuItem = "";
+      if (this.props.course.dropbox_id) {
+        if (this.props.sharedLink) {
+          shareMenuItem = React.createElement(
+            "li",
+            null,
+            React.createElement("input", { type: "text", defaultValue: this.props.sharedLink })
+          );
+        } else {
+          shareMenuItem = React.createElement(
+            "li",
+            null,
+            React.createElement(
+              "a",
+              { className: disabledClass, onClick: navigator.onLine ? this.onShare : win.noop },
+              "Get shared link"
+            )
+          );
+        }
+      }
       return React.createElement(
         "div",
         { id: "screen" },
@@ -162,15 +182,7 @@
               "Edit"
             )
           ),
-          this.props.course.dropbox_id ? React.createElement(
-            "li",
-            null,
-            React.createElement(
-              "a",
-              { className: disabledClass, onClick: navigator.onLine ? this.onShare : win.noop },
-              "Get shared link"
-            )
-          ) : "",
+          shareMenuItem,
           React.createElement(
             "li",
             null,

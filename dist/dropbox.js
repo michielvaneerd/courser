@@ -76,8 +76,15 @@
               resolve(response);
             }
           } else {
+            var errorText = xhr.responseText;
+            try {
+              errorText = JSON.parse(errorText);
+              errorText = errorText.error_summary || errorText.error && errorText.error[".tag"] || errorText;
+            } catch (ex) {
+              console.log(ex);
+            }
             reject({
-              response : xhr.responseText,
+              error : errorText,
               status : xhr.status
             });
           }

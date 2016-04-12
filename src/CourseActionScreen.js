@@ -10,14 +10,14 @@
     getInitialState : function() {
       return {showMore : false};
     },
-    componentDidUpdate : function() {
-      if (this.props.sharedLink) {
-        alert(this.props.sharedLink);
-        this.props.store.dispatch({
-          type : "SHARE_COURSE"
-        });
-      }
-    },
+    // componentDidUpdate : function() {
+      // if (this.props.sharedLink) {
+        // alert(this.props.sharedLink);
+        // this.props.store.dispatch({
+          // type : "SHARE_COURSE"
+        // });
+      // }
+    // },
     onDoClick : function() {
       
       var disableTestInfo = [];
@@ -80,6 +80,15 @@
         disableTestInfo.push("Choose at least 1 test type");
       }
       var disabledClass = navigator.onLine ? "" : "disabledLink";
+      var shareMenuItem = "";
+      if (this.props.course.dropbox_id) {
+        if (this.props.sharedLink) {
+          shareMenuItem = (<li><input type="text" defaultValue={this.props.sharedLink} /></li>);
+        } else {
+          shareMenuItem = (<li><a className={disabledClass} onClick={navigator.onLine ? this.onShare : win.noop}>Get shared link</a></li>);
+        }
+        
+      }
       return (
         <div id="screen">
           <div id="navbar">
@@ -111,7 +120,7 @@
             ? (
               <ul id="popup" className="listView">
                 <li><a onClick={this.onEditClick}>Edit</a></li>
-                {this.props.course.dropbox_id ? (<li><a className={disabledClass} onClick={navigator.onLine ? this.onShare : win.noop}>Get shared link</a></li>) : ""}
+                {shareMenuItem}
                 <li><a onClick={this.onDelete}>Delete</a></li>
               </ul>
             ) : ""}

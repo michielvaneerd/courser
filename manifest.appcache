@@ -10,7 +10,7 @@ dist/verysimpleredux.js
 storage.js
 store.js
 manifest.json
-launcher-icon.png
+appicon.png
 build/CoursesList.js
 build/CourseScreen.js
 build/CourseActionScreen.js

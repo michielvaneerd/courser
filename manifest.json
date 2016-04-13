@@ -3,8 +3,9 @@
   "start_url": "index.html",
   "display": "standalone",
   "theme_color": "#3e4eb8",
+  "background_color": "#3e4eb8",
   "icons": [{
-     "src": "launcher-icon.png",
+     "src": "appicon.png",
      "sizes": "192x192",
      "type": "image/png"
    }]

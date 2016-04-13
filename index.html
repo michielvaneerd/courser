@@ -3,10 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Courser</title>
+
+<!-- Start Android -->
 <link rel="manifest" href="manifest.json">
-<!-- Meta "mobile-web-app-capable" only works if user has page added to homescreen -->
-<!--<meta name="mobile-web-app-capable" content="yes">-->
-<!--<meta name="theme-color" content="#3e4eb8">-->
+<!-- End Android -->
+
+<!-- Start IOS -->
+<link rel="apple-touch-icon" href="appicon.png">
+<!-- Splash screen does not work on IOS 9 as far as I know -->
+<link rel="apple-touch-startup-image" href="splash.png">
+<!-- Can be queried with window.navigator.standalone -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<!-- End IOS -->
+
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>

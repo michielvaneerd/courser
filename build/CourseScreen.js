@@ -141,6 +141,7 @@
             ),
             React.createElement("input", { id: "courseTestOkSuccessCountInput", type: "number",
               value: this.state.test_ok_success_count,
+              min: "1", step: "1",
               onChange: this.onTestOkSuccessCountChange })
           ),
           React.createElement(
@@ -172,7 +173,8 @@
             { className: "row" },
             React.createElement(
               "button",
-              { className: "normalButton fullwidthButton primaryButton", disabled: !!!this.state.title,
+              { className: "normalButton fullwidthButton primaryButton",
+                disabled: !!!this.state.title || !!!this.state.destination_title || !!!this.state.source_title,
                 onClick: this.onSave },
               "Save"
             )

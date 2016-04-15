@@ -73,7 +73,7 @@
         ? this.state.entries[this.state.entryId] : {};
       var progressSpinner = "";
       if (this.state.inRequest) {
-        progressSpinner = <div id="inProgress">Busy!</div>
+        progressSpinner = <div id="inProgress">{typeof this.state.inRequest === "string" ? this.state.inRequest : "Please wait, I'm doing something..."}</div>
         countDownForInRequestSpinner();
       }
         
@@ -169,10 +169,6 @@
   }
   
   ReactDOM.render(<App dropbox={dropbox} />, win.document.getElementById("app"));
-  
-  for (var key in localStorage) {
-    console.log(key);
-  }
   
   // Start service worker
   // if ('serviceWorker' in navigator) {

@@ -121,7 +121,7 @@
               <ul id="popup" className="listView">
                 <li><a onClick={this.onEditClick}>Edit</a></li>
                 {shareMenuItem}
-                <li><a onClick={this.onDelete}>Delete</a></li>
+                <li><a className="deleteLink" onClick={this.onDelete}>Delete</a></li>
               </ul>
             ) : ""}
         </div>

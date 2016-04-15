@@ -170,7 +170,7 @@ button.primaryButton {
   width:calc(100% / 3);
 }
 
-.deleteButton {
+.deleteButton, a.deleteLink, ul.listView li a.deleteLink {
   color:red;
 }
 
@@ -276,7 +276,7 @@ button.fullwidthButton {
 }
 
 #inProgress {
-  color:orange;
+  color:#3e4eb8;
 }
 
 .floatingButton {
@@ -329,6 +329,14 @@ ul.editMode li#activeEditListItem {
 
 .disabledLink {
   opacity:.4;
+}
+
+button:disabled {
+  opacity:.4;
+}
+
+#answerOptionWrapper button:disabled {
+  opacity:1;
 }
 
 @media (min-width: 768px) {

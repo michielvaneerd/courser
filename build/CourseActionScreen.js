@@ -188,7 +188,7 @@
             null,
             React.createElement(
               "a",
-              { onClick: this.onDelete },
+              { className: "deleteLink", onClick: this.onDelete },
               "Delete"
             )
           )

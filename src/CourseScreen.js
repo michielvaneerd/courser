@@ -101,6 +101,7 @@
               <label className="titleLabel" htmlFor="courseTestOkSuccessCountInput">Test success count</label>
               <input id="courseTestOkSuccessCountInput" type="number"
                 value={this.state.test_ok_success_count}
+                min="1" step="1"
                 onChange={this.onTestOkSuccessCountChange} />
             </div>
             <div className="row">
@@ -120,7 +121,8 @@
               }, this)}
             </div>
             <div className="row">
-              <button className="normalButton fullwidthButton primaryButton" disabled={!!!this.state.title}
+              <button className="normalButton fullwidthButton primaryButton"
+                disabled={!!!this.state.title || !!!this.state.destination_title || !!!this.state.source_title}
                 onClick={this.onSave}>Save</button>
             </div>
           </div>

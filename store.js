@@ -439,6 +439,7 @@
         break;
       case "DROPBOX_SAVE":
         keepInRequest = true;
+        state.inRequest = "Saving to Dropbox...";
         var courses = storage._getCourses();
         var requests = [];
         Object.keys(courses).forEach(function(courseId) {
@@ -498,6 +499,7 @@
         break;
       case "REQUEST_SHARE_COURSE":
         keepInRequest = true;
+        state.inRequest = "Requesting shared link...";
         var course = state.courses[state.courseId];
         dropbox.createSharedLink("/" + course.filename + ".json")
           .then(function(response) {
@@ -517,6 +519,7 @@
         break;
       case "REQUEST_DROPBOX_ACCOUNT":
         keepInRequest = true;
+        state.inRequest = "Requesting Dropbox info...";
         dropbox.getCurrentAccount().then(function(response) {
           state.dropboxAccount = response;
           if (localStorage.getItem("courser_cursor")) {

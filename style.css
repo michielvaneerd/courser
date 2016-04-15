@@ -24,7 +24,7 @@ a, button {
 
 #navbar {
   height:56px;
-  background-color:#3e4eb8;
+  background-color:#607D8B;
   overflow:hidden;
   box-shadow:0 0 2px black;
   position:relative;
@@ -71,7 +71,7 @@ a, button {
 }
 
 .navbarButtonContainer button:active, .navbarButtonContainer button:focus {
-  background-color:blue;
+  background-color:#263238;
   font-weight:bold;
 }
 
@@ -158,7 +158,7 @@ button.normalButton {
 }
 
 button.primaryButton {
-  background: #3e4eb8;
+  background: #263238;
   color: #ffffff;
 }
 
@@ -232,17 +232,17 @@ ul#popup.listView li a, ul#popup.listView li label, ul#popup.listView li input[t
 }
 
 input.success, #answerOptionWrapper button.success {
-  background-color:lime;
-  color:black;
+  background-color:#1B5E20;
+  color:white;
 }
 
 #answerOptionWrapper button.shouldbesuccess {
-  color:green;
+  color:#1B5E20;
   font-weight:bold;
 }
 
 input.wrong, #answerOptionWrapper button.wrong {
-  background-color:red;
+  background-color:#DD2C00;
   color:white;
 }
 button.fullwidthButton {
@@ -268,22 +268,22 @@ button.fullwidthButton {
 }
 
 .dialog_warning {
-  color:orange;
+  color:#FF5722;
 }
 
 .dialog_success {
-  color:green;
+  color:#1B5E20;
 }
 
 #inProgress {
-  color:#3e4eb8;
+  color:black;
 }
 
 .floatingButton {
   width:56px;
   height:56px;
   border-radius:28px;
-  background-color:rgb(255,64,129);
+  background-color:#FF5722;
   color:white;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
   position:absolute;
@@ -379,7 +379,7 @@ button:disabled {
   }
   
   #floatingBottomButton:active, #floatingBottomButton:focus {
-    background-color:blue;
+    background-color:#263238;
     font-weight:bold;
   }
   

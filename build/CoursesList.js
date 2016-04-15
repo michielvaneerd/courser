@@ -98,7 +98,7 @@
           React.createElement(
             "a",
             { href: "https://github.com/michielvaneerd/courser", target: "_blank" },
-            "About"
+            "About Courser"
           )
         ));
         moreMenu = React.createElement(

@@ -480,6 +480,7 @@
         break;
       case "REQUEST_ADD_COURSE_FROM_SHARED_LINK":
         keepInRequest = true;
+        state.inRequest = "Getting course from shared link...";
         dropbox.getSharedLinkFile(action.value)
           .then(function(response) {
             var course = JSON.parse(response.content);

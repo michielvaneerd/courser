@@ -172,9 +172,145 @@
               ||
               (entries[id].phone && entries[id].phone.toLowerCase().indexOf(entriesFilter) > -1);
           })
-          .sort().map(function(id) {
+          .sort(function(a, b) {
+            return a - b;
+          }).map(function(id) {
             return parseInt(id);
           });
+    }
+  };
+  
+  var dropboxReducer = function(state, action) {
+    var me = this;
+    switch (action.type) {
+      case "DROPBOX_CONNECT":
+        dropbox.authorize();
+        break;
+      case "DROPBOX_SAVE":
+        state.keepInRequest = true;
+        state.inRequest = "Saving to Dropbox...";
+        var courses = storage._getCourses();
+        var requests = [];
+        Object.keys(courses).forEach(function(courseId) {
+          var course = courses[courseId];
+          requests.push(dropbox.upload("/" + course.filename + ".json",
+            JSON.stringify(course)));
+        });
+        Promise.all(requests).then(function(responses) {
+          var coursesSave = [];
+          Object.keys(courses).forEach(function(courseId) {
+            var i;
+            var course = courses[courseId];
+            if (!course.dropbox_id) {
+              for (i = 0; i < responses.length; i++) {
+                if (("/" + course.filename + ".json") === responses[i].path_lower) {
+                  course.dropbox_id = responses[i].id;
+                  coursesSave.push(storage.saveCourse(course));
+                }
+              }
+            }
+          });
+          return Promise.all(coursesSave);
+        })
+        .then(function() {
+          state.inRequest = false;
+          me.dispatch({
+            type : "SELECT_COURSES"
+          });
+        })
+        .catch(function(error) {
+          state.inRequest = false;
+          console.log(error);
+        });
+        break;
+      case "DROPBOX_DISCONNECT":
+        win.localStorage.removeItem("access_token");
+        state.dropboxAccount = null;
+        break;
+      case "REQUEST_ADD_COURSE_FROM_SHARED_LINK":
+        state.keepInRequest = true;
+        state.inRequest = "Getting course from shared link...";
+        dropbox.getSharedLinkFile(action.value)
+          .then(function(response) {
+            var course = JSON.parse(response.content);
+            course.dropbox_id = response.apiResult.id;
+            return storage.saveCourse(course);
+          })
+          .then(function() {
+            state.inRequest = false;
+            me.dispatch({
+              type : "SELECT_COURSES"
+            });
+          })
+          .catch(function(error) {
+            state.inRequest = false;
+            errorHandler(error, state);
+          });
+        break;
+      case "REQUEST_SHARE_COURSE":
+        state.keepInRequest = true;
+        state.inRequest = "Requesting shared link...";
+        var course = state.courses[state.courseId];
+        dropbox.createSharedLink("/" + course.filename + ".json")
+          .then(function(response) {
+            state.inRequest = false;
+            me.dispatch({
+              type : "SHARE_COURSE",
+              value : response.url
+            });
+          })
+          .catch(function(error) {
+            state.inRequest = false;
+            errorHandler(error, state);
+          });
+        break;
+      case "SHARE_COURSE":
+        state.sharedLink = action.value || "";
+        break;
+      case "REQUEST_DROPBOX_ACCOUNT":
+        state.keepInRequest = true;
+        state.inRequest = "Requesting Dropbox info...";
+        dropbox.getCurrentAccount().then(function(response) {
+          state.dropboxAccount = response;
+          if (localStorage.getItem("courser_cursor")) {
+            return dropbox.listFolderContinue(localStorage.getItem("courser_cursor"));
+          } else {
+            return dropbox.listFolder("");
+          }
+        }).then(function(response) {
+          if (response.cursor) {
+            localStorage.setItem("courser_cursor", response.cursor)
+          }
+          var downloadRequests = [];
+          response.entries.forEach(function(entry) {
+            if (entry.path_lower.startsWith("/" + storage.storageCoursePrefix)) {
+              if (entry[".tag"] !== "deleted") {
+                downloadRequests.push(dropbox.download(entry.path_lower));
+              }
+            }
+          });
+          return Promise.all(downloadRequests);
+        })
+        .then(function(responses) {
+          var saveCourseRequests = [];
+          responses.forEach(function(response) {
+            var course = JSON.parse(response.content);
+            course.dropbox_id = response.apiResult.id;
+            saveCourseRequests.push(storage.saveCourse(course));
+          });
+          return Promise.all(saveCourseRequests);
+        })
+        .then(function() {
+          state.inRequest = false;
+          me.dispatch({
+            type : "SELECT_COURSES"
+          });
+        })
+        .catch(function(error) {
+          state.inRequest = false;
+          errorHandler(error, state);
+        });
+        break;
     }
   };
 
@@ -185,7 +321,6 @@
     }
     
     if (state.inRequest) {
-      console.warn("In request!");
       state.warning = "In request...";
 	    return state;
 	  }
@@ -208,7 +343,7 @@
     }
 	  
 	  state.inRequest = true;
-	  var keepInRequest = false;
+	  state.keepInRequest = false;
 
     switch (action.type) {
       case "SHOW_ENTRIES_MENU":
@@ -225,7 +360,7 @@
           state.entryId = 0;
           state.screen = null;
         } else {
-          keepInRequest = true;
+          state.keepInRequest = true;
           storage.getCourses().then(function(courses) {
             state.inRequest = false;
             me.dispatch({
@@ -249,7 +384,7 @@
         state.screen = "COURSE_EDIT_SCREEN";
         break;
       case "REQUEST_DO_SHUFFLE":
-        keepInRequest = true;
+        state.keepInRequest = true;
         storage.getEntries(action.value).then(function(entries) {
           state.inRequest = false;
           state.courseId = action.value;
@@ -267,7 +402,7 @@
         state.screen = "SHUFFLE_SCREEN";
         break;
       case "REQUEST_SELECT_ENTRIES":
-        keepInRequest = true;
+        state.keepInRequest = true;
         storage.getEntries(action.value).then(function(entries) {
           state.inRequest = false;
           state.courseId = action.value;
@@ -290,7 +425,7 @@
         if (!action.value.title || action.value.title.length == 0) {
           state.error = "Enter title";
         } else {
-          keepInRequest = true;
+          state.keepInRequest = true;
           storage.saveCourse(action.value).then(function(course) {
             state.inRequest = false;
             me.dispatch({
@@ -311,7 +446,7 @@
         state.entryId = action.value;
         break;
       case "REQUEST_SAVE_ENTRY":
-        keepInRequest = true;
+        state.keepInRequest = true;
         storage.saveEntry(action.value, state.courseId).then(function(entry) {
           state.inRequest = false;
           me.dispatch({
@@ -332,7 +467,7 @@
         state.entryId = 0;
         break;
       case "REQUEST_DELETE_ENTRY":
-        keepInRequest = true;
+        state.keepInRequest = true;
         delete state.entries[state.entryId];
         state.entryIds.splice(state.entryIds.indexOf(parseInt(state.entryId)), 1);
         storage.deleteEntry(state.entryId, state.courseId).then(function() {
@@ -353,7 +488,7 @@
         state.entryIds = sortEntries(state.entries, state.entriesOrder, state.entriesFilter);
         break;
       case "REQUEST_DELETE_COURSE":
-        keepInRequest = true;
+        state.keepInRequest = true;
         storage.deleteCourse(state.courseId).then(function() {
           var course = me.state.courses[state.courseId];
           if (navigator.onLine && course.dropbox_id) {
@@ -379,7 +514,7 @@
       	state.courseId = 0;
       	break;
       case "REQUEST_RESET":
-        keepInRequest = true;
+        state.keepInRequest = true;
         storage.resetCourse(state.courseId).then(function(course) {
           state.inRequest = false;
           state.courses[state.courseId].count_attempt_success = 0;
@@ -396,7 +531,7 @@
         });
         break;
       case "REQUEST_DO_COURSE":        
-        keepInRequest = true;
+        state.keepInRequest = true;
         storage.getEntries(action.value).then(function(entries) {
           state.inRequest = false;
           state.courseId = action.value;
@@ -440,7 +575,7 @@
           doCourseEntry.attempt_failure += 1;
           state.courses[state.courseId].count_attempt_failure += 1;
         }
-        keepInRequest = true;
+        state.keepInRequest = true;
         state.answer = action.answer;
         state.answerEntryId = action.answerEntryId;
         state.doCourseSuccess = action.doCourseSuccess;
@@ -458,135 +593,6 @@
           errorHandler(error, state);
         });
         break;
-      case "DROPBOX_CONNECT":
-        dropbox.authorize();
-        break;
-      case "DROPBOX_SAVE":
-        keepInRequest = true;
-        state.inRequest = "Saving to Dropbox...";
-        var courses = storage._getCourses();
-        var requests = [];
-        Object.keys(courses).forEach(function(courseId) {
-          var course = courses[courseId];
-          requests.push(dropbox.upload("/" + course.filename + ".json",
-            JSON.stringify(course)));
-        });
-        Promise.all(requests).then(function(responses) {
-          var coursesSave = [];
-          Object.keys(courses).forEach(function(courseId) {
-            var i;
-            var course = courses[courseId];
-            if (!course.dropbox_id) {
-              for (i = 0; i < responses.length; i++) {
-                if (("/" + course.filename + ".json") === responses[i].path_lower) {
-                  course.dropbox_id = responses[i].id;
-                  coursesSave.push(storage.saveCourse(course));
-                }
-              }
-            }
-          });
-          return Promise.all(coursesSave);
-        })
-        .then(function() {
-          state.inRequest = false;
-          me.dispatch({
-            type : "SELECT_COURSES"
-          });
-        })
-        .catch(function(error) {
-          state.inRequest = false;
-          console.log(error);
-        });
-        break;
-      case "DROPBOX_DISCONNECT":
-        win.localStorage.removeItem("access_token");
-        state.dropboxAccount = null;
-        break;
-      case "REQUEST_ADD_COURSE_FROM_SHARED_LINK":
-        keepInRequest = true;
-        state.inRequest = "Getting course from shared link...";
-        dropbox.getSharedLinkFile(action.value)
-          .then(function(response) {
-            var course = JSON.parse(response.content);
-            course.dropbox_id = response.apiResult.id;
-            return storage.saveCourse(course);
-          })
-          .then(function() {
-            state.inRequest = false;
-            me.dispatch({
-              type : "SELECT_COURSES"
-            });
-          })
-          .catch(function(error) {
-            state.inRequest = false;
-            errorHandler(error, state);
-          });
-        break;
-      case "REQUEST_SHARE_COURSE":
-        keepInRequest = true;
-        state.inRequest = "Requesting shared link...";
-        var course = state.courses[state.courseId];
-        dropbox.createSharedLink("/" + course.filename + ".json")
-          .then(function(response) {
-            state.inRequest = false;
-            me.dispatch({
-              type : "SHARE_COURSE",
-              value : response.url
-            });
-          })
-          .catch(function(error) {
-            state.inRequest = false;
-            errorHandler(error, state);
-          });
-        break;
-      case "SHARE_COURSE":
-        state.sharedLink = action.value || "";
-        break;
-      case "REQUEST_DROPBOX_ACCOUNT":
-        keepInRequest = true;
-        state.inRequest = "Requesting Dropbox info...";
-        dropbox.getCurrentAccount().then(function(response) {
-          state.dropboxAccount = response;
-          if (localStorage.getItem("courser_cursor")) {
-            return dropbox.listFolderContinue(localStorage.getItem("courser_cursor"));
-          } else {
-            return dropbox.listFolder("");
-          }
-        }).then(function(response) {
-          if (response.cursor) {
-            localStorage.setItem("courser_cursor", response.cursor)
-          }
-          var downloadRequests = [];
-          response.entries.forEach(function(entry) {
-            if (entry.path_lower.startsWith("/" + storage.storageCoursePrefix)) {
-              if (entry[".tag"] !== "deleted") {
-                downloadRequests.push(dropbox.download(entry.path_lower));
-              }
-            }
-          });
-          return Promise.all(downloadRequests);
-        })
-        .then(function(responses) {
-          var saveCourseRequests = [];
-          responses.forEach(function(response) {
-            var course = JSON.parse(response.content);
-            course.dropbox_id = response.apiResult.id;
-            saveCourseRequests.push(storage.saveCourse(course));
-          });
-          return Promise.all(saveCourseRequests);
-        })
-        .then(function() {
-          state.inRequest = false;
-          me.dispatch({
-            type : "SELECT_COURSES"
-          });
-        })
-        .catch(function(error) {
-          console.log(error);
-          state.inRequest = false;
-          errorHandler(error, state);
-        });
-        break;
       case "ERROR":
         state.error = action.value;
         break;
@@ -596,9 +602,12 @@
       case "WARNING":
         state.warning = action.value;
         break;
+      default:
+        dropboxReducer.call(me, state, action);
+        break;
     }
     
-    if (!keepInRequest) {
+    if (!state.keepInRequest) {
       state.inRequest = false;
     }
     

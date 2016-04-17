@@ -193,8 +193,15 @@
         var requests = [];
         Object.keys(courses).forEach(function(courseId) {
           var course = courses[courseId];
-          requests.push(dropbox.upload("/" + course.filename + ".json",
-            JSON.stringify(course)));
+          if (course.hasLocalChange) {
+            console.log("save course " + course.title);
+            // TODO: if Dropbox save did not succees, we have lost the hasLocalChange!
+            delete course.hasLocalChange;
+            requests.push(dropbox.upload("/" + course.filename + ".json",
+              JSON.stringify(course)));
+          } else {
+            console.log("SKIP course " + course.title);
+          }
         });
         Promise.all(requests).then(function(responses) {
           var coursesSave = [];
@@ -205,10 +212,11 @@
               for (i = 0; i < responses.length; i++) {
                 if (("/" + course.filename + ".json") === responses[i].path_lower) {
                   course.dropbox_id = responses[i].id;
-                  coursesSave.push(storage.saveCourse(course));
+                  //coursesSave.push(storage.saveCourse(course));
                 }
               }
             }
+            coursesSave.push(storage.saveCourse(course));
           });
           return Promise.all(coursesSave);
         })
@@ -295,6 +303,7 @@
           var saveCourseRequests = [];
           responses.forEach(function(response) {
             var course = JSON.parse(response.content);
+            delete course.hasLocalChange;
             course.dropbox_id = response.apiResult.id;
             saveCourseRequests.push(storage.saveCourse(course));
           });
@@ -426,6 +435,7 @@
           state.error = "Enter title";
         } else {
           state.keepInRequest = true;
+          action.value.hasLocalChange = true;
           storage.saveCourse(action.value).then(function(course) {
             state.inRequest = false;
             me.dispatch({
@@ -447,15 +457,22 @@
         break;
       case "REQUEST_SAVE_ENTRY":
         state.keepInRequest = true;
-        storage.saveEntry(action.value, state.courseId).then(function(entry) {
-          state.inRequest = false;
-          me.dispatch({
-            type : "SAVE_ENTRY",
-            value : entry
+        state.courses[state.courseId].hasLocalChange = true;
+        
+        storage.saveCourse(state.courses[state.courseId])
+          .then(function() {
+            return storage.saveEntry(action.value, state.courseId);
+          })
+          .then(function(entry) {
+            state.inRequest = false;
+            me.dispatch({
+              type : "SAVE_ENTRY",
+              value : entry
+            });
+          })
+          .catch(function(error) {
+            errorHandler(error, state);
           });
-        }).catch(function(error) {
-          errorHandler(error, state);
-        });
         break;
       case "SAVE_ENTRY":
         state.entries[action.value.id] = action.value;
@@ -470,14 +487,22 @@
         state.keepInRequest = true;
         delete state.entries[state.entryId];
         state.entryIds.splice(state.entryIds.indexOf(parseInt(state.entryId)), 1);
-        storage.deleteEntry(state.entryId, state.courseId).then(function() {
-          state.inRequest = false;
-          me.dispatch({
-            type : "DELETE_ENTRY"
+        
+        state.courses[state.courseId].hasLocalChange = true;
+        
+        storage.saveCourse(state.courses[state.courseId])
+          .then(function() {
+            return storage.deleteEntry(state.entryId, state.courseId);
+          })
+          .then(function() {
+            state.inRequest = false;
+            me.dispatch({
+              type : "DELETE_ENTRY"
+            });
+          })
+          .catch(function(error) {
+            errorHandler(error, state);
           });
-        }).catch(function(error) {
-          errorHandler(error, state);
-        });
         break;
       case "DELETE_ENTRY":
         state.courses[state.courseId].count -= 1;

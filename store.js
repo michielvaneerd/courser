@@ -67,7 +67,11 @@
         return Object.keys(entries)
           .filter(function(id) {
             if (!hasEntriesFilter) return true;
-            return entries[id].source.toLowerCase().indexOf(entriesFilter) > -1 || entries[id].destination.toLowerCase().indexOf(entriesFilter) > -1;
+            return entries[id].source.toLowerCase().indexOf(entriesFilter) > -1
+              ||
+              entries[id].destination.toLowerCase().indexOf(entriesFilter) > -1
+              ||
+              (entries[id].phone && entries[id].phone.toLowerCase().indexOf(entriesFilter) > -1);
           })
           .sort(function(a, b) {
             return b - a;
@@ -78,7 +82,11 @@
         return Object.keys(entries)
           .filter(function(id) {
             if (!hasEntriesFilter) return true;
-            return entries[id].source.toLowerCase().indexOf(entriesFilter) > -1 || entries[id].destination.toLowerCase().indexOf(entriesFilter) > -1;
+            return entries[id].source.toLowerCase().indexOf(entriesFilter) > -1
+              ||
+              entries[id].destination.toLowerCase().indexOf(entriesFilter) > -1
+              ||
+              (entries[id].phone && entries[id].phone.toLowerCase().indexOf(entriesFilter) > -1);
           })
           .sort(function(a, b) {
             if (entries[a].source > entries[b].source) {
@@ -95,7 +103,11 @@
         return Object.keys(entries)
           .filter(function(id) {
             if (!hasEntriesFilter) return true;
-            return entries[id].source.toLowerCase().indexOf(entriesFilter) > -1 || entries[id].destination.toLowerCase().indexOf(entriesFilter) > -1;
+            return entries[id].source.toLowerCase().indexOf(entriesFilter) > -1
+              ||
+              entries[id].destination.toLowerCase().indexOf(entriesFilter) > -1
+              ||
+              (entries[id].phone && entries[id].phone.toLowerCase().indexOf(entriesFilter) > -1);
           })
           .sort(function(a, b) {
             if (entries[a].source < entries[b].source) {
@@ -112,7 +124,11 @@
         return Object.keys(entries)
           .filter(function(id) {
             if (!hasEntriesFilter) return true;
-            return entries[id].source.toLowerCase().indexOf(entriesFilter) > -1 || entries[id].destination.toLowerCase().indexOf(entriesFilter) > -1;
+            return entries[id].source.toLowerCase().indexOf(entriesFilter) > -1
+              ||
+              entries[id].destination.toLowerCase().indexOf(entriesFilter) > -1
+              ||
+              (entries[id].phone && entries[id].phone.toLowerCase().indexOf(entriesFilter) > -1);
           })
           .sort(function(a, b) {
             if (entries[a].destination > entries[b].destination) {
@@ -129,7 +145,11 @@
         return Object.keys(entries)
           .filter(function(id) {
             if (!hasEntriesFilter) return true;
-            return entries[id].source.toLowerCase().indexOf(entriesFilter) > -1 || entries[id].destination.toLowerCase().indexOf(entriesFilter) > -1;
+            return entries[id].source.toLowerCase().indexOf(entriesFilter) > -1
+              ||
+              entries[id].destination.toLowerCase().indexOf(entriesFilter) > -1
+              ||
+              (entries[id].phone && entries[id].phone.toLowerCase().indexOf(entriesFilter) > -1);
           })
           .sort(function(a, b) {
             if (entries[a].destination < entries[b].destination) {
@@ -146,7 +166,11 @@
         return Object.keys(entries)
           .filter(function(id) {
             if (!hasEntriesFilter) return true;
-            return entries[id].source.toLowerCase().indexOf(entriesFilter) > -1 || entries[id].destination.toLowerCase().indexOf(entriesFilter) > -1;
+            return entries[id].source.toLowerCase().indexOf(entriesFilter) > -1
+              ||
+              entries[id].destination.toLowerCase().indexOf(entriesFilter) > -1
+              ||
+              (entries[id].phone && entries[id].phone.toLowerCase().indexOf(entriesFilter) > -1);
           })
           .sort().map(function(id) {
             return parseInt(id);

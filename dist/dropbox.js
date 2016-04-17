@@ -89,14 +89,12 @@
             });
           }
         } catch (ex) {
-          console.log(ex);
           reject(ex);
         } finally {
           xhr = null;
         }
       };
       xhr.onerror = function(error) {
-        console.log(error);
         reject(error);
       };
       xhr.onabort = function(error) {

@@ -386,7 +386,7 @@
                 null,
                 "Order ",
                 this.props.course.source_title,
-                " alphabetically up"
+                " up"
               )
             )
           ),
@@ -405,7 +405,7 @@
                 null,
                 "Order ",
                 this.props.course.source_title,
-                " alphabetically down"
+                " down"
               )
             )
           ),
@@ -424,7 +424,7 @@
                 null,
                 "Order ",
                 this.props.course.destination_title,
-                " alphabetically up"
+                " up"
               )
             )
           ),
@@ -443,7 +443,7 @@
                 null,
                 "Order ",
                 this.props.course.destination_title,
-                " alphabetically down"
+                " down"
               )
             )
           )

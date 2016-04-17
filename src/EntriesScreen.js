@@ -298,28 +298,28 @@
                     id="orderAlphabeticSourceAsc"
                     checked={this.props.entriesOrder == "ALPHABETIC_SOURCE_ASC"}
                     onChange={this.onOrderChangeALPHABETIC_SOURCE_ASC} />
-                  <span>Order {this.props.course.source_title} alphabetically up</span></label>
+                  <span>Order {this.props.course.source_title} up</span></label>
                 </li>
                 <li>
                   <label htmlFor="orderAlphabeticSourceDesc"><input name="order" type="radio"
                     id="orderAlphabeticSourceDesc"
                     checked={this.props.entriesOrder == "ALPHABETIC_SOURCE_DESC"}
                     onChange={this.onOrderChangeALPHABETIC_SOURCE_DESC} />
-                  <span>Order {this.props.course.source_title} alphabetically down</span></label>
+                  <span>Order {this.props.course.source_title} down</span></label>
                 </li>
                 <li>
                   <label htmlFor="orderAlphabeticDestinationAsc"><input name="order" type="radio"
                     id="orderAlphabeticDestinationAsc"
                     checked={this.props.entriesOrder == "ALPHABETIC_DESTINATION_ASC"}
                     onChange={this.onOrderChangeALPHABETIC_DESTINATION_ASC} />
-                  <span>Order {this.props.course.destination_title} alphabetically up</span></label>
+                  <span>Order {this.props.course.destination_title} up</span></label>
                 </li>
                 <li>
                   <label htmlFor="orderAlphabeticDestinationDesc"><input name="order" type="radio"
                     id="orderAlphabeticDestinationDesc"
                     checked={this.props.entriesOrder == "ALPHABETIC_DESTINATION_DESC"}
                     onChange={this.onOrderChangeALPHABETIC_DESTINATION_DESC} />
-                  <span>Order {this.props.course.destination_title} alphabetically down</span></label>
+                  <span>Order {this.props.course.destination_title} down</span></label>
                 </li>
               </ul>
             ) : ""}

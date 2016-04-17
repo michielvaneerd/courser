@@ -143,7 +143,8 @@
                   "a",
                   { href: "#", className: "linkButton", onClick: this.onCourseClick,
                     "data-id": courseId },
-                  course.title
+                  course.title,
+                  course.hasLocalChange ? " *" : ""
                 )
               );
             }, this)

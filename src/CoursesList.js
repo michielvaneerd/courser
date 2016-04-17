@@ -84,7 +84,7 @@
                 return (
                   <li key={course.id}>
                     <a href="#" className="linkButton" onClick={this.onCourseClick}
-                      data-id={courseId}>{course.title}</a>
+                      data-id={courseId}>{course.title}{course.hasLocalChange ? " *" : ""}</a>
                   </li>
                 );
               }, this)}

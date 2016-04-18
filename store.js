@@ -281,7 +281,15 @@
         dropbox.getCurrentAccount().then(function(response) {
           state.dropboxAccount = response;
           if (localStorage.getItem("courser_cursor")) {
-            return dropbox.listFolderContinue(localStorage.getItem("courser_cursor"));
+            return dropbox.listFolderContinue(localStorage.getItem("courser_cursor"))
+              .catch(function(error) {
+                if (error.status == 400 || error.tag == "reset") {
+                  localStorage.removeItem("courser_cursor");
+                  return dropbox.listFolder("");
+                } else {
+                  return Promise.reject(error);
+                }
+              });
           } else {
             return dropbox.listFolder("");
           }
@@ -516,8 +524,16 @@
         state.keepInRequest = true;
         storage.deleteCourse(state.courseId).then(function() {
           var course = me.state.courses[state.courseId];
-          if (navigator.onLine && course.dropbox_id) {
-            return dropbox.delete("/" + course.filename + ".json");
+          if (course.dropbox_id) {
+            if (state.dropboxAccount && navigator.onLine) {
+              return dropbox.delete("/" + course.filename + ".json");
+            } else {
+              // We have deleted a course local, but in Dropbox it is still available.
+              // So invalidate the cursor, so next time we will download the course again.
+              localStorage.removeItem("courser_cursor");
+              dropbox.cursor
+              return Promise.resolve();
+            }
           } else {
             return Promise.resolve();
           }

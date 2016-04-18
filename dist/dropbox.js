@@ -77,14 +77,19 @@
             }
           } else {
             var errorText = xhr.responseText;
+            var errorTag = "";
             try {
               errorText = JSON.parse(errorText);
+              if ("error" in errorText && ".tag" in errorText.error) {
+                errorTag = errorText.error[".tag"];
+              }
               errorText = errorText.error_summary || errorText.error && errorText.error[".tag"] || errorText;
             } catch (ex) {
               console.log(ex);
             }
             reject({
               error : errorText,
+              tag : errorTag,
               status : xhr.status
             });
           }

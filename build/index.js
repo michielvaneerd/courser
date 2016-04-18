@@ -105,6 +105,7 @@
           screen = React.createElement(CourseActionScreen, {
             onMain: this.onMain,
             sharedLink: this.state.sharedLink,
+            dropboxAccount: this.state.dropboxAccount,
             store: this.store,
             course: course });
           break;

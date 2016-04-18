@@ -144,7 +144,7 @@
                   { href: "#", className: "linkButton", onClick: this.onCourseClick,
                     "data-id": courseId },
                   course.title,
-                  course.hasLocalChange ? " *" : ""
+                  course.dropbox_id && course.hasLocalChange ? " *" : ""
                 )
               );
             }, this)

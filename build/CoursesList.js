@@ -107,6 +107,13 @@
           moreMenuItems
         );
       }
+      var hasLocalChange = "";
+      for (var key in this.props.courses) {
+        if (this.props.courses[key].dropbox_id && this.props.courses[key].hasLocalChange) {
+          hasLocalChange = " *";
+          break;
+        }
+      }
       return React.createElement(
         "div",
         { id: "screen" },
@@ -116,7 +123,8 @@
           React.createElement(
             "div",
             { id: "navbarTitle" },
-            "Courses"
+            "Courses",
+            hasLocalChange
           ),
           React.createElement(
             "div",

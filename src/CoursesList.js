@@ -69,10 +69,17 @@
           <ul id="popup" className="listView">{moreMenuItems}</ul>
         );
       }
+      var hasLocalChange = "";
+      for (var key in this.props.courses) {
+        if (this.props.courses[key].dropbox_id && this.props.courses[key].hasLocalChange) {
+          hasLocalChange = " *";
+          break;
+        }
+      }
       return (
         <div id="screen">
           <div id="navbar">
-            <div id="navbarTitle">Courses</div>
+            <div id="navbarTitle">Courses{hasLocalChange}</div>
             <div className="navbarButtonContainer" id="navbarRight">
               <button onClick={this.onMore}>=</button>
             </div>

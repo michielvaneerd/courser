@@ -699,6 +699,8 @@
         break;
     }
     
+    // See also maybe a better strategy for push state:
+    // http://stackoverflow.com/questions/28028297/js-window-history-delete-a-state
     if (state.screen
       && action.type != "SCREEN_BACK"
       && oldScreen != state.screen

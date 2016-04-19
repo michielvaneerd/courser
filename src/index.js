@@ -46,9 +46,10 @@
       });
     },
     onBack : function() {
-      this.store.dispatch({
-        type : "SCREEN_BACK"
-      });
+      history.back();
+      // this.store.dispatch({
+        // type : "SCREEN_BACK"
+      // });
     },
     componentDidMount : function() {
       var me = this;
@@ -71,7 +72,7 @@
         console.log(error);
         alert(error);
       });
-      //history.pushState({screen : null}, ""); // will remove all forward history.
+      history.pushState(null, null); // will remove all forward history.
       win.addEventListener("beforeunload", this.beforeUnload);
       win.addEventListener("popstate", this.onPopState);
       win.document.documentElement.addEventListener("keydown", this.onKeyDown);

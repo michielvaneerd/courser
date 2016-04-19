@@ -30,6 +30,14 @@
         }
       }
     },
+    onKeyDown : function(e) {
+      var me = this;
+      if (e.keyCode == 27) {
+        me.store.dispatch({
+          type : "ESC_TYPED"
+        });
+      }
+    },
     componentDidMount : function() {
       var me = this;
       win.Storage.ready().then(function() {
@@ -52,9 +60,11 @@
         alert(error);
       });
       win.addEventListener("beforeunload", this.beforeUnload);
+      win.document.documentElement.addEventListener("keydown", this.onKeyDown);
     },
     componentWillUnmount : function() {
       win.removeEventListener("beforeunload", this.beforeUnload);
+      win.document.documentElement.removeEventListener("keydown", this.onKeyDown);
     },
     getInitialState : function() {
       return win.getDefaultState();
@@ -113,6 +123,7 @@
         case "COURSE_ACTION_SCREEN":
           screen = <CourseActionScreen
             onMain={this.onMain}
+            courseActionMenuShow={this.state.courseActionMenuShow}
             sharedLink={this.state.sharedLink}
             dropboxAccount={this.state.dropboxAccount}
             store={this.store}            
@@ -121,6 +132,7 @@
         case "DO_COURSE_SCREEN":
           screen = <DoCourseScreen
             answer={this.state.answer}
+            doCourseMenuShow={this.state.doCourseMenuShow}
             doCourseEntryId={this.state.doCourseEntryId}
             doCourseAnswerEntryIds={this.state.doCourseAnswerEntryIds}
             doCourseTestType={this.state.doCourseTestType}
@@ -137,6 +149,7 @@
         case "SHUFFLE_SCREEN":
           screen = <ShuffleScreen
             forceBackToMainScreen={this.state.forceBackToMainScreen}
+            shuffleMenuShow={this.state.shuffleMenuShow}
             store={this.store}
             course={course}
             entry={entry}
@@ -145,6 +158,7 @@
           break;
         default:
           screen = <CoursesList
+            coursesListMenuShow={this.state.coursesListMenuShow}
             dropboxAccount={this.state.dropboxAccount}
             store={this.store}
             courses={this.state.courses} />

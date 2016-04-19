@@ -92,6 +92,10 @@ ul.listView li a {
   color:black;
 }
 
+ul.listView li a:active {
+  background-color:#B3E5FC;
+}
+
 .row {
   padding:14px 28px;
 }
@@ -382,7 +386,7 @@ button:disabled {
   }
   
   #floatingBottomButton:active, #floatingBottomButton:focus {
-    background-color:#263238;
+    background-color:#0277BD;
     font-weight:bold;
   }
   

@@ -50,14 +50,14 @@
       }, entry);
     },
     getInitialState : function() {
-      return {answer : "", showMore : false};
+      return {answer : ""};
     },
     componentDidMount : function() {
       // Force a rerender with first set of random item + possible answers.
       this.dispatchNewItem();
     },
     componentWillReceiveProps : function(nextProps) {
-      this.setState({answer : nextProps.answer || "", showMore : false});
+      this.setState({answer : nextProps.answer || ""});
     },
     getSuccess : function(entry) {
       var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
@@ -235,8 +235,9 @@
       );
     },
     onMore : function() {
-      this.setState({
-        showMore : !this.state.showMore
+      this.props.store.dispatch({
+        type : "SHOW_DOCOURSE_MENU",
+        value : !this.props.doCourseMenuShow
       });
     },
     render : function() {
@@ -280,7 +281,7 @@
           </div>
           <div id="main">
           {editArea}
-          {this.state.showMore ? (
+          {this.props.doCourseMenuShow ? (
             <ul id="popup" className="listView">
               <li><a onClick={this.onReset}>Reset</a></li>
             </ul>

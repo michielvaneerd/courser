@@ -3,12 +3,6 @@
   win.CoursesList = React.createClass({
     displayName: "CoursesList",
 
-    getInitialState: function () {
-      return { showMore: false };
-    },
-    componentWillReceiveProps: function (nextProps) {
-      this.setState({ showMore: false });
-    },
     onCourseClick: function (e) {
       e.preventDefault();
       this.props.store.dispatch({
@@ -22,8 +16,9 @@
       });
     },
     onMore: function () {
-      this.setState({
-        showMore: !this.state.showMore
+      this.props.store.dispatch({
+        type: "SHOW_COURSESLIST_MENU",
+        value: !this.props.coursesListMenuShow
       });
     },
     onDropboxConnect: function () {
@@ -53,7 +48,7 @@
     render: function () {
       var moreMenu = "";
       var moreMenuItems = null;
-      if (this.state.showMore) {
+      if (this.props.coursesListMenuShow) {
         var disabledClass = navigator.onLine ? "" : "disabledLink";
         if (this.props.dropboxAccount) {
           moreMenuItems = [React.createElement(

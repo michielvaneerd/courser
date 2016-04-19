@@ -12,8 +12,7 @@
       return {
         selectedId: 0,
         mode: "SOURCE_DESTINATION",
-        ids: shuffle(Object.keys(this.props.entries)),
-        showMore: false
+        ids: shuffle(Object.keys(this.props.entries))
       };
     },
     onBack: function () {
@@ -58,8 +57,9 @@
       }
     },
     onMore: function () {
-      this.setState({
-        showMore: !this.state.showMore
+      this.props.store.dispatch({
+        type: "SHOW_SHUFFLE_MENU",
+        value: !this.props.shuffleMenuShow
       });
     },
     render: function () {
@@ -135,7 +135,7 @@
             }, this)
           )
         ),
-        this.state.showMore ? React.createElement(
+        this.props.shuffleMenuShow ? React.createElement(
           "ul",
           { id: "popup", className: "listView" },
           React.createElement(

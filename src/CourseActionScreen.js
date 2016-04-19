@@ -7,17 +7,6 @@
         value : this.props.course.id
       });
     },
-    getInitialState : function() {
-      return {showMore : false};
-    },
-    // componentDidUpdate : function() {
-      // if (this.props.sharedLink) {
-        // alert(this.props.sharedLink);
-        // this.props.store.dispatch({
-          // type : "SHARE_COURSE"
-        // });
-      // }
-    // },
     onDoClick : function() {
       
       var disableTestInfo = [];
@@ -52,8 +41,9 @@
       });
     },
     onMore : function() {
-      this.setState({
-        showMore : !this.state.showMore
+      this.props.store.dispatch({
+        type : "SHOW_COURSEACTION_MENU",
+        value : !this.props.courseActionMenuShow
       });
     },
     onDelete : function() {
@@ -124,7 +114,7 @@
                 onClick={this.onDoClick}>Test</button>
             </div>
           </div>
-          {this.state.showMore
+          {this.props.courseActionMenuShow
             ? (
               <ul id="popup" className="listView">
                 <li><a onClick={this.onEditClick}>Edit</a></li>

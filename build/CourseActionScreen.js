@@ -9,17 +9,6 @@
         value: this.props.course.id
       });
     },
-    getInitialState: function () {
-      return { showMore: false };
-    },
-    // componentDidUpdate : function() {
-    // if (this.props.sharedLink) {
-    // alert(this.props.sharedLink);
-    // this.props.store.dispatch({
-    // type : "SHARE_COURSE"
-    // });
-    // }
-    // },
     onDoClick: function () {
 
       var disableTestInfo = [];
@@ -54,8 +43,9 @@
       });
     },
     onMore: function () {
-      this.setState({
-        showMore: !this.state.showMore
+      this.props.store.dispatch({
+        type: "SHOW_COURSEACTION_MENU",
+        value: !this.props.courseActionMenuShow
       });
     },
     onDelete: function () {
@@ -178,7 +168,7 @@
             )
           )
         ),
-        this.state.showMore ? React.createElement(
+        this.props.courseActionMenuShow ? React.createElement(
           "ul",
           { id: "popup", className: "listView" },
           React.createElement(

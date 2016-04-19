@@ -21,6 +21,10 @@
 	  success : false,
     sortOrder : null,
     entriesMenuShow : false,
+    coursesListMenuShow : false,
+    courseActionMenuShow : false,
+    shuffleMenuShow : false,
+    doCourseMenuShow : false,
     entriesFilter : "",
 	  inRequest : false,
     error : false,
@@ -363,8 +367,27 @@
 	  state.keepInRequest = false;
 
     switch (action.type) {
+      case "ESC_TYPED":
+        state.entriesMenuShow = false;
+        state.coursesListMenuShow = false;
+        state.courseActionMenuShow = false;
+        state.shuffleMenuShow = false;
+        state.doCourseMenuShow = false;
+        break;
+      case "SHOW_COURSESLIST_MENU":
+        state.coursesListMenuShow = action.value || false;
+        break;
+      case "SHOW_COURSEACTION_MENU":
+        state.courseActionMenuShow = action.value || false;
+        break;
       case "SHOW_ENTRIES_MENU":
         state.entriesMenuShow = action.value || false;
+        break;
+      case "SHOW_SHUFFLE_MENU":
+        state.shuffleMenuShow = action.value || false;
+        break;
+      case "SHOW_DOCOURSE_MENU":
+        state.doCourseMenuShow = action.value || false;
         break;
       case "ENTRIES_FILTER":
         state.entriesFilter = action.value;

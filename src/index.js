@@ -21,6 +21,15 @@
         getState : React.PropTypes.func
       })
     },
+    beforeUnload : function(event) {
+      for (var key in this.state.courses) {
+        if (this.state.courses[key].dropbox_id && this.state.courses[key].hasLocalChange) {
+          var msg = "Some changes have not been saved to Dropbox yet and may be overwritten when you start the app the next time. If you don't want this, save to Dropbox first before leaving this page.";
+          event.returnValue = msg;
+          return msg;
+        }
+      }
+    },
     componentDidMount : function() {
       var me = this;
       win.Storage.ready().then(function() {
@@ -42,6 +51,10 @@
         console.log(error);
         alert(error);
       });
+      win.addEventListener("beforeunload", this.beforeUnload);
+    },
+    componentWillUnmount : function() {
+      win.removeEventListener("beforeunload", this.beforeUnload);
     },
     getInitialState : function() {
       return win.getDefaultState();

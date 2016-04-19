@@ -55,6 +55,7 @@
         var disabledClass = navigator.onLine ? "" : "disabledLink";
         if (this.props.dropboxAccount) {
           moreMenuItems = [
+            <li key="dropboxname"><a className="menuLabel">Connected as {this.props.dropboxAccount.name.display_name}</a></li>,
             <li key="dropboxsave"><a className={disabledClass} onClick={navigator.onLine ? this.onDropboxSave: win.noop}>Save to Dropbox</a></li>,
             <li key="dropboxshare"><a className={disabledClass} onClick={navigator.onLine ? this.onDropboxAddFromSharedLink : win.noop}>Add course from shared link</a></li>,
             <li key="dropboxdisconnect"><a className={disabledClass} onClick={this.onDropboxDisconnect}>Disconnect from Dropbox</a></li>

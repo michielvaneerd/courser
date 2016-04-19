@@ -58,6 +58,15 @@
         if (this.props.dropboxAccount) {
           moreMenuItems = [React.createElement(
             "li",
+            { key: "dropboxname" },
+            React.createElement(
+              "a",
+              { className: "menuLabel" },
+              "Connected as ",
+              this.props.dropboxAccount.name.display_name
+            )
+          ), React.createElement(
+            "li",
             { key: "dropboxsave" },
             React.createElement(
               "a",

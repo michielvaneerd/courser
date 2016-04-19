@@ -24,7 +24,7 @@ a, button {
 
 #navbar {
   height:56px;
-  background-color:#607D8B;
+  background-color:#03A9F4;
   overflow:hidden;
   box-shadow:0 0 2px black;
   position:relative;
@@ -71,7 +71,7 @@ a, button {
 }
 
 .navbarButtonContainer button:active, .navbarButtonContainer button:focus {
-  background-color:#263238;
+  background-color:#0277BD;
   font-weight:bold;
 }
 
@@ -82,7 +82,7 @@ ul.listView {
 ul.listView li {
   display:block;
   min-height:56px;
-  border-bottom:1px solid #d0d0d0;
+  border-bottom:1px solid #B3E5FC;
 }
 
 ul.listView li a {
@@ -131,8 +131,8 @@ input[type='text'], input[type='number'] {
   display:block;
   padding:8px;
   border:none;
-  border-bottom:1px solid #c0c0c0;
-  background-color:#fcfcfc;
+  border-bottom:1px solid #03A9F4;
+  background-color:#FFFFFF;
   font-size:16px;
 }
 
@@ -152,14 +152,13 @@ button.normalButton {
   text-align: center;
   line-height: 36px;
   vertical-align: middle;
-  outline:1px solid #c0c0c0;
-  background: rgba(158,158,158,.2);
-  box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+  outline:1px solid #B3E5FC;
+  background: #F0F0F0
 }
 
 button.primaryButton {
-  background: #263238;
-  color: #ffffff;
+  background: #03A9F4;
+  color: #FFFFFF;
 }
 
 .buttonbar {
@@ -337,6 +336,10 @@ button:disabled {
 
 #answerOptionWrapper button:disabled {
   opacity:1;
+}
+
+.menuLabel {
+  opacity:.4;
 }
 
 @media (min-width: 768px) {

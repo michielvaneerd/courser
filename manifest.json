@@ -2,8 +2,8 @@
   "name": "Courser",
   "start_url": "index.html",
   "display": "standalone",
-  "theme_color": "#3e4eb8",
-  "background_color": "#3e4eb8",
+  "theme_color": "#01579B",
+  "background_color": "#03A9F4",
   "icons": [{
      "src": "appicon.png",
      "sizes": "192x192",

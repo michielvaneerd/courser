@@ -33,3 +33,6 @@ To use these course, paste the links below in the "Add course from shared link" 
 1) Create a course
 2) Click the "Get shared link" menu item
 3) Copy the link that is displayed
+
+# Acknowledgements
+The app icon is designed by Freepik.

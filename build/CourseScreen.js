@@ -64,12 +64,6 @@
         showMore: !this.state.showMore
       });
     },
-    onBack: function () {
-      this.props.store.dispatch({
-        type: "SELECT_COURSE",
-        value: this.props.course.id
-      });
-    },
     render: function () {
       return React.createElement(
         "div",
@@ -82,7 +76,7 @@
             { className: "navbarButtonContainer", id: "navbarLeft" },
             React.createElement(
               "button",
-              { onClick: this.onBack },
+              { onClick: this.props.onBack },
               "<"
             )
           ),

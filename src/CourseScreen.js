@@ -62,18 +62,12 @@
         showMore : !this.state.showMore
       });
     },
-    onBack : function() {
-      this.props.store.dispatch({
-        type : "SELECT_COURSE",
-        value : this.props.course.id
-      });
-    },
     render : function() {
       return (
         <div id="screen">
           <div id="navbar">
             <div className="navbarButtonContainer" id="navbarLeft">
-              <button onClick={this.onBack}>&lt;</button>
+              <button onClick={this.props.onBack}>&lt;</button>
             </div>
             <div id="navbarTitle">{this.props.course.id
               ? this.props.course.title : "Create course"}</div>

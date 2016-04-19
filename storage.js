@@ -77,9 +77,6 @@
     
     saveCourse : function(course) {
       if (!course.id) {
-        //var courses = _getCourses();
-        //course.id = Object.keys(courses).length
-        //  ? Math.max.apply(null, Object.keys(courses)) + 1 : 1;
         course.id = Date.now();
         course.entries = {};
       }
@@ -121,27 +118,34 @@
       return Promise.resolve(entries);
     },
 
-    saveEntry : function(entry, courseId) {
+    saveEntry : function(entry, courseId, options) {
+      options = options || {};
       var realCourseId = entry.course_id
           ? parseInt(entry.course_id) : parseInt(courseId);
       var course = _getCourse(realCourseId);
-      var entries = course.entries;
+      if (options.hasLocalChange) {
+        course.hasLocalChange = true;
+      }
+      console.log("Ervoor: " + JSON.stringify(Object.keys(course.entries)));
       if (!entry.id) {
-        entry.id = Object.keys(entries).length
-          ? Math.max.apply(null, Object.keys(entries)) + 1 : 1;
+        entry.id = Object.keys(course.entries).length
+          ? Math.max.apply(null, Object.keys(course.entries)) + 1 : 1;
       }
       entry.course_id = realCourseId;
-      entries[entry.id] = entry;
+      course.entries[entry.id] = entry;
+      console.log("Erna: " + JSON.stringify(Object.keys(course.entries)));
       _saveCourse(course);
-      return Promise.resolve(entry);
+      return Promise.resolve({
+        course : course,
+        entry : entry
+      });
     },
 
     deleteEntry : function(entryId, courseId) {
       var course = _getCourse(courseId);
-      var entries = course.entries;
-      delete entries[entryId];
+      delete course.entries[entryId];
       _saveCourse(course);
-      return Promise.resolve();
+      return Promise.resolve(course);
     }
     
   };

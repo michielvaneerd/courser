@@ -16,6 +16,15 @@
     "SOURCE_DESTINATION_WRITE" : "Show %source%, type %destination%",
     "DESTINATION_SOURCE_WRITE" : "Show %destination%, type %source%"
   };
+  
+  var screenHistory = [];
+  var screenBackActions = {
+    "COURSE_ACTION_SCREEN" : "SELECT_COURSES",
+    "ENTRIES_SCREEN" : "SELECT_COURSE",
+    "SHUFFLE_SCREEN" : "SELECT_COURSE",
+    "DO_COURSE_SCREEN" : "SELECT_COURSE",
+    "COURSE_EDIT_SCREEN" : "SELECT_COURSE"
+  };
 
 	var defaultState = {
 	  success : false,
@@ -188,10 +197,12 @@
     var me = this;
     switch (action.type) {
       case "DROPBOX_CONNECT":
+        state.coursesListMenuShow = false;
         dropbox.authorize();
         break;
       case "DROPBOX_SAVE":
         state.keepInRequest = true;
+        state.coursesListMenuShow = false;
         state.inRequest = "Saving to Dropbox...";
         var courses = storage._getCourses();
         var requests = [];
@@ -236,6 +247,7 @@
         });
         break;
       case "DROPBOX_DISCONNECT":
+        state.coursesListMenuShow = false;
         win.localStorage.removeItem("access_token");
         state.dropboxAccount = null;
         break;
@@ -281,6 +293,7 @@
         break;
       case "REQUEST_DROPBOX_ACCOUNT":
         state.keepInRequest = true;
+        state.coursesListMenuShow = false;
         state.inRequest = "Requesting Dropbox info...";
         dropbox.getCurrentAccount().then(function(response) {
           state.dropboxAccount = response;
@@ -365,8 +378,24 @@
 	  
 	  state.inRequest = true;
 	  state.keepInRequest = false;
+    
+    var oldScreen = state.screen;
 
     switch (action.type) {
+      case "SCREEN_BACK":
+        // Back button clicked
+        var currentScreen = screenHistory.pop(); // pop current
+        if (currentScreen) {
+          var actionType = screenBackActions[currentScreen];
+          console.log("Ga nu dispatchen " + actionType + " voor " + currentScreen + " en lengte hist = " + screenHistory.length);
+          state.inRequest = false;
+          me.dispatch({
+            type : actionType,
+            value : actionType == "SELECT_COURSE" ? state.courseId : null,
+            preventAddToScreenHistory : true
+          });
+        }
+        break;
       case "ESC_TYPED":
         state.entriesMenuShow = false;
         state.coursesListMenuShow = false;
@@ -421,6 +450,7 @@
       	state.screen = "COURSE_EDIT_SCREEN";
       	break;
       case "SELECT_COURSE_EDIT":
+        state.courseActionMenuShow = false;
         state.screen = "COURSE_EDIT_SCREEN";
         break;
       case "REQUEST_DO_SHUFFLE":
@@ -469,36 +499,39 @@
           action.value.hasLocalChange = true;
           storage.saveCourse(action.value).then(function(course) {
             state.inRequest = false;
+            state.courseId = course.id;
+            state.courses[state.courseId] = course;
+            // When we add a new course we do this directly from the main
+            // page
+            if (screenHistory.length == 1) {
+              screenHistory.unshift("COURSE_ACTION_SCREEN");
+              console.log(screenHistory.length);
+            }
             me.dispatch({
-              type : "SAVE_COURSE",
-              value : course
+              type : "SCREEN_BACK"
             });
           }).catch(function(error) {
             errorHandler(error, state);
           });
         }
         break;
-      case "SAVE_COURSE":
-        state.courseId = action.value.id;
-        state.courses[state.courseId] = action.value;
-        state.screen = "COURSE_ACTION_SCREEN";
-        break;
       case "SELECT_ENTRY":
         state.entryId = action.value;
         break;
       case "REQUEST_SAVE_ENTRY":
         state.keepInRequest = true;
-        state.courses[state.courseId].hasLocalChange = true;
-        
-        storage.saveCourse(state.courses[state.courseId])
-          .then(function() {
-            return storage.saveEntry(action.value, state.courseId);
-          })
-          .then(function(entry) {
+        storage.saveEntry(action.value, state.courseId, {hasLocalChange : true})
+          .then(function(arg) {
+            state.courses[state.courseId] = arg.course;
+            state.entries = arg.course.entries;
+            state.courses[state.courseId].count = Object.keys(state.entries).length;
+            if (state.entryIds.indexOf(parseInt(arg.entry.id)) === -1) {
+              state.entryIds.push(parseInt(arg.entry.id));
+            }
+            state.entryId = 0;
             state.inRequest = false;
             me.dispatch({
-              type : "SAVE_ENTRY",
-              value : entry
+              type : "SAVE_ENTRY"
             });
           })
           .catch(function(error) {
@@ -506,13 +539,6 @@
           });
         break;
       case "SAVE_ENTRY":
-        state.entries[action.value.id] = action.value;
-        state.courses[state.courseId].count = Object.keys(state.entries).length;
-        if (state.entryIds.indexOf(parseInt(action.value.id)) === -1) {
-          // TODO: sort as entriesOrder!
-          state.entryIds.push(parseInt(action.value.id));
-        }
-        state.entryId = 0;
         break;
       case "REQUEST_DELETE_ENTRY":
         state.keepInRequest = true;
@@ -525,7 +551,8 @@
           .then(function() {
             return storage.deleteEntry(state.entryId, state.courseId);
           })
-          .then(function() {
+          .then(function(course) {
+            state.courses[state.courseId] = course;
             state.inRequest = false;
             me.dispatch({
               type : "DELETE_ENTRY"
@@ -536,7 +563,8 @@
           });
         break;
       case "DELETE_ENTRY":
-        state.courses[state.courseId].count -= 1;
+        state.courses[state.courseId].count
+          = Object.keys(state.courses[state.courseId].entries).length;
         state.entryId = 0;
         break;
       case "ENTRIES_ORDER":
@@ -563,8 +591,12 @@
         })
         .then(function() {
           state.inRequest = false;
+          delete state.courses[state.courseId];
+          state.courseId = 0;
+          state.courseActionMenuShow = false;
+          state.courseActionMenuShow = false;
           me.dispatch({
-            type : "DELETE_COURSE"
+            type : "SCREEN_BACK"
           });
         })
         .catch(function(error) {
@@ -572,13 +604,9 @@
           errorHandler(error, state);
         });
         break;
-      case "DELETE_COURSE":
-      	delete state.courses[state.courseId];
-      	state.screen = null;
-      	state.courseId = 0;
-      	break;
       case "REQUEST_RESET":
         state.keepInRequest = true;
+        state.doCourseMenuShow = false;
         storage.resetCourse(state.courseId).then(function(course) {
           state.inRequest = false;
           state.courses[state.courseId].count_attempt_success = 0;
@@ -643,11 +671,11 @@
         state.answer = action.answer;
         state.answerEntryId = action.answerEntryId;
         state.doCourseSuccess = action.doCourseSuccess;
-        storage.saveEntry(doCourseEntry).then(function(entry) {
+        storage.saveEntry(doCourseEntry).then(function(arg) {
           state.inRequest = false;
           me.dispatch({
             type : "SAVE_ANSWER",
-            doCourseEntry : entry,
+            doCourseEntry : arg.entry,
             answer : action.answer,
             answerEntryId : action.answerEntryId,
             doCourseSuccess : action.doCourseSuccess
@@ -669,6 +697,16 @@
       default:
         dropboxReducer.call(me, state, action);
         break;
+    }
+    
+    if (state.screen
+      && action.type != "SCREEN_BACK"
+      && oldScreen != state.screen
+      && !action.preventAddToScreenHistory) {
+      console.log(oldScreen + " en " + state.screen);
+      history.pushState({screen : state.screen}, state.screen);
+      screenHistory.push(state.screen);
+      console.log(screenHistory);
     }
     
     if (!state.keepInRequest) {

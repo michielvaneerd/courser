@@ -77,12 +77,6 @@
     onChange: function (e) {
       this.setState({ answer: e.target.value });
     },
-    onBack: function () {
-      this.props.store.dispatch({
-        type: "SELECT_COURSE",
-        value: this.props.course.id
-      });
-    },
     dispatchNewItem: function () {
       this.props.store.dispatch(Object.assign(this.getNewTest(), { type: "DO_COURSE_NEW_RANDOM_ITEM" }));
     },
@@ -364,7 +358,7 @@
             { className: "navbarButtonContainer", id: "navbarLeft" },
             React.createElement(
               "button",
-              { onClick: this.onBack },
+              { onClick: this.props.onBack },
               "<"
             )
           ),

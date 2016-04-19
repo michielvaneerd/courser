@@ -13,12 +13,6 @@
         ids : shuffle(Object.keys(this.props.entries))
       };
     },
-    onBack : function() {
-      this.props.store.dispatch({
-        type : "SELECT_COURSE",
-        value : this.props.course.id
-      });
-    },
     onShuffle : function() {
       this.setState({
         selectedId : 0,
@@ -66,7 +60,7 @@
         <div id="screen">
           <div id="navbar">
             <div className="navbarButtonContainer" id="navbarLeft">
-              <button onClick={this.onBack}>&lt;</button>
+              <button onClick={this.props.onBack}>&lt;</button>
             </div>
             <div id="navbarTitle">Shuffle</div>
             <div className="navbarButtonContainer" id="navbarRight">

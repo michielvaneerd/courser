@@ -111,7 +111,7 @@
             { className: "navbarButtonContainer", id: "navbarLeft" },
             React.createElement(
               "button",
-              { className: "fullwidthButton", onClick: this.props.onMain },
+              { className: "fullwidthButton", onClick: this.props.onBack },
               "<"
             )
           ),

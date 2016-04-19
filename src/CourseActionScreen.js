@@ -91,7 +91,7 @@
         <div id="screen">
           <div id="navbar">
             <div className="navbarButtonContainer" id="navbarLeft">
-              <button className="fullwidthButton" onClick={this.props.onMain}>&lt;</button>
+              <button className="fullwidthButton" onClick={this.props.onBack}>&lt;</button>
             </div>
             <div id="navbarTitle">{this.props.course.title}</div>
             <div className="navbarButtonContainer" id="navbarRight">

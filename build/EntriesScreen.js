@@ -69,12 +69,6 @@
     onActivate: function (e) {
       this.selectEntry(e.currentTarget.dataset.id);
     },
-    onBack: function () {
-      this.props.store.dispatch({
-        type: "SELECT_COURSE",
-        value: this.props.course.id
-      });
-    },
     onDelete: function () {
       this.props.store.dispatch({
         type: "REQUEST_DELETE_ENTRY"
@@ -131,7 +125,7 @@
           if (this.state.id || this.state.showCreate) {
             this.onCancel();
           } else {
-            this.onBack();
+            this.props.onBack();
           }
           break;
         case 40:
@@ -259,7 +253,7 @@
             { className: "navbarButtonContainer", id: "navbarLeft" },
             React.createElement(
               "button",
-              { onClick: this.onBack },
+              { onClick: this.props.onBack },
               "<"
             )
           ),

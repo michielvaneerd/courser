@@ -1,3 +1,5 @@
+// https://developers.google.com/web/updates/2015/10/display-mode
+
 (function (win) {
 
   function countDownForInRequestSpinner() {
@@ -40,6 +42,16 @@
         });
       }
     },
+    onPopState: function (e) {
+      this.store.dispatch({
+        type: "SCREEN_BACK"
+      });
+    },
+    onBack: function () {
+      this.store.dispatch({
+        type: "SCREEN_BACK"
+      });
+    },
     componentDidMount: function () {
       var me = this;
       win.Storage.ready().then(function () {
@@ -61,7 +73,9 @@
         console.log(error);
         alert(error);
       });
+      //history.pushState({screen : null}, ""); // will remove all forward history.
       win.addEventListener("beforeunload", this.beforeUnload);
+      win.addEventListener("popstate", this.onPopState);
       win.document.documentElement.addEventListener("keydown", this.onKeyDown);
     },
     componentWillUnmount: function () {
@@ -70,11 +84,6 @@
     },
     getInitialState: function () {
       return win.getDefaultState();
-    },
-    onMain: function () {
-      this.store.dispatch({
-        type: "SELECT_COURSES"
-      });
     },
     onClearType: function (type) {
       this.store.dispatch({
@@ -112,21 +121,21 @@
             forceBackToMainScreen: this.state.forceBackToMainScreen,
             store: this.store,
             course: course,
+            onBack: this.onBack,
             entry: entry,
-            onMain: this.onMain,
             entryIds: this.state.entryIds,
             entriesOrder: this.state.entriesOrder,
             entries: this.state.entries });
           break;
         case "COURSE_EDIT_SCREEN":
           screen = React.createElement(CourseScreen, {
-            onMain: this.onMain,
+            onBack: this.onBack,
             store: this.store,
             course: course });
           break;
         case "COURSE_ACTION_SCREEN":
           screen = React.createElement(CourseActionScreen, {
-            onMain: this.onMain,
+            onBack: this.onBack,
             courseActionMenuShow: this.state.courseActionMenuShow,
             sharedLink: this.state.sharedLink,
             dropboxAccount: this.state.dropboxAccount,
@@ -144,7 +153,7 @@
             doCourseSuccess: this.state.doCourseSuccess,
             forceBackToMainScreen: this.state.forceBackToMainScreen,
             store: this.store,
-            onMain: this.onMain,
+            onBack: this.onBack,
             entries: this.state.entries,
             success: this.state.success,
             implicitCourseId: this.state.implicitCourseId,
@@ -156,8 +165,8 @@
             shuffleMenuShow: this.state.shuffleMenuShow,
             store: this.store,
             course: course,
+            onBack: this.onBack,
             entry: entry,
-            onMain: this.onMain,
             entries: this.state.entries });
           break;
         default:

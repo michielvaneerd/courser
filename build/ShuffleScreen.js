@@ -15,12 +15,6 @@
         ids: shuffle(Object.keys(this.props.entries))
       };
     },
-    onBack: function () {
-      this.props.store.dispatch({
-        type: "SELECT_COURSE",
-        value: this.props.course.id
-      });
-    },
     onShuffle: function () {
       this.setState({
         selectedId: 0,
@@ -74,7 +68,7 @@
             { className: "navbarButtonContainer", id: "navbarLeft" },
             React.createElement(
               "button",
-              { onClick: this.onBack },
+              { onClick: this.props.onBack },
               "<"
             )
           ),

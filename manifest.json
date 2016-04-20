@@ -1,6 +1,6 @@
 {
   "name": "Courser",
-  "start_url": "index.html?homescreen=1",
+  "start_url": "index.html",
   "display": "standalone",
   "theme_color": "#01579B",
   "background_color": "#03A9F4",

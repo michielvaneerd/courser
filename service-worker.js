@@ -1,81 +1,72 @@
-var CACHE_NAME = 'dependencies-cache-1';
+var CACHE_NAME = 'courser-1';
 
 var REQUIRED_FILES = [
-  'dist/react.js',
-  'dist/react-dom.js',
+  '/',
+  'dist/react.min.js',
+  'dist/react-dom.min.js',
+  'dist/dropbox.js',
   'dist/verysimpleredux.js',
-  'storage-indexeddb.js',
+  'storage.js',
   'store.js',
   'build/CourseScreen.js',
   'build/CoursesList.js',
+  'build/CourseActionScreen.js',
   'build/Dialog.js',
   'build/DoCourseScreen.js',
   'build/EntriesScreen.js',
+  'build/ShuffleScreen.js',
   'build/index.js',
   'style.css',
-  'index.html'
+  'index.html',
+  'appicon.png'
 ];
 
-// http://www.html5rocks.com/en/tutorials/service-worker/introduction/
-
 self.addEventListener('install', function(event) {
+  
+  console.log("EVENT " + event.type);
   
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(function(cache) {
-        console.log('[install] Caches opened, adding all core components' +
-          'to cache');
+        console.log("Opened cache and now adding all files to cache");
         return cache.addAll(REQUIRED_FILES);
       })
-      .then(function() {
-        console.log('[install] All required resources have been cached, ' +
-          'we\'re good!');
-        return self.skipWaiting();
-      })
-    );
-  });
+  );
+
+});
 
 self.addEventListener('fetch', function(event) {
+
   event.respondWith(
     caches.match(event.request)
-      .then(function(response) {        
+      .then(function(response) {
         if (response) {
-          console.log(
-            '[fetch] Returning from ServiceWorker cache: ',
-            event.request.url
-          );
           return response;
         }
-        
-        var fetchRequest = event.request.clone();
-        
-        console.log('[fetch] Returning from server: ', fetchRequest.url);
-        return fetch(fetchRequest);
+        return fetch(event.request);
       }
     )
   );
+  
 });
 
-// https://ponyfoo.com/articles/serviceworker-revolution => delete old cache
 self.addEventListener('activate', function activator (event) {
+  
+  console.log("EVENT " + event.type);
+  
   event.waitUntil(
-    caches.keys().then(function (keys) {
-      return Promise.all(keys
-        .filter(function (key) {
-          return key.indexOf(CACHE_NAME) !== 0;
-        })
-        .map(function (key) {
-          console.log("delete " + key);
-          return caches.delete(key);
+    caches.keys().then(function(cacheNames) {
+      return Promise.all(
+        cacheNames.map(function(cacheName) {
+          console.log(cacheName);
+          //if (cacheWhitelist.indexOf(cacheName) === -1) {
+          if (cacheName !== CACHE_NAME) {
+            console.log("DELETE CACHE " + cacheName);
+            return caches.delete(cacheName);
+          }
         })
       );
     })
   );
+  
 });
-
-//self.addEventListener('activate', function(event) {
-//  console.log('[activate] Activating ServiceWorker!');
-//  
-//  console.log('[activate] Claiming this ServiceWorker!');
-//  event.waitUntil(self.clients.claim());
-//});

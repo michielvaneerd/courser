@@ -210,12 +210,12 @@
   ReactDOM.render(<App dropbox={dropbox} />, win.document.getElementById("app"));
   
   // Start service worker
-  // if ('serviceWorker' in navigator) {
-    // navigator.serviceWorker.register('service-worker.js', {
-      // scope: '.'
-    // }).then(function(registration) {
-      // console.log('The service worker has been registered ', registration);
-    // });
-  // }
+  if ('serviceWorker' in navigator) {
+    console.log("Probeer SW te registreren");
+    navigator.serviceWorker.register('service-worker.js')
+      .then(function(registration) {
+        console.log('The service worker has been registered ', registration);
+      });
+  }
 
 }(window));

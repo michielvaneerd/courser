@@ -105,6 +105,17 @@
             "About Courser"
           )
         ));
+        if (!this.props.fromHomeScreen) {
+          moreMenuItems.push(React.createElement(
+            "li",
+            { key: "homescreen" },
+            React.createElement(
+              "a",
+              { className: "menuLabel" },
+              "Add this to your homescreen for the best experience"
+            )
+          ));
+        }
         moreMenu = React.createElement(
           "ul",
           { id: "popup", className: "listView" },

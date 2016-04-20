@@ -2,6 +2,17 @@
 
 (function (win) {
 
+  //var fromHomeScreen = location.search.indexOf("homescreen") !== -1;
+
+  var fromHomeScreen = true;
+  if (window.matchMedia && !window.matchMedia('(min-width: 768px)').matches && !window.matchMedia('(display-mode: standalone)').matches) {
+    fromHomeScreen = false;
+  }
+
+  //if (window.matchMedia('(display-mode: standalone)').matches) {
+  //  console.log("Thank you for installing our app!");
+  //}
+
   function countDownForInRequestSpinner() {
     var t = setTimeout(function () {
       clearTimeout(t);
@@ -15,7 +26,7 @@
   win.noop = function () {};
 
   var App = React.createClass({
-    displayName: "App",
+    displayName: 'App',
 
     store: null,
     propTypes: {
@@ -108,8 +119,8 @@
       var progressSpinner = "";
       if (this.state.inRequest) {
         progressSpinner = React.createElement(
-          "div",
-          { id: "inProgress" },
+          'div',
+          { id: 'inProgress' },
           typeof this.state.inRequest === "string" ? this.state.inRequest : "Please wait, I'm doing something..."
         );
         countDownForInRequestSpinner();
@@ -173,6 +184,7 @@
           break;
         default:
           screen = React.createElement(CoursesList, {
+            fromHomeScreen: fromHomeScreen,
             coursesListMenuShow: this.state.coursesListMenuShow,
             dropboxAccount: this.state.dropboxAccount,
             store: this.store,
@@ -180,13 +192,13 @@
           break;
       }
       return React.createElement(
-        "div",
+        'div',
         null,
         screen,
         progressSpinner,
-        this.state.error ? React.createElement(Dialog, { onClear: this.onClearError, type: "error", message: this.state.error }) : null,
-        this.state.warning ? React.createElement(Dialog, { onClear: this.onClearWarning, type: "warning", message: this.state.warning }) : null,
-        this.state.success ? React.createElement(Dialog, { onClear: this.onClearSuccess, type: "success", message: this.state.success }) : null
+        this.state.error ? React.createElement(Dialog, { onClear: this.onClearError, type: 'error', message: this.state.error }) : null,
+        this.state.warning ? React.createElement(Dialog, { onClear: this.onClearWarning, type: 'warning', message: this.state.warning }) : null,
+        this.state.success ? React.createElement(Dialog, { onClear: this.onClearSuccess, type: 'success', message: this.state.success }) : null
       );
     }
   });
@@ -208,10 +220,11 @@
   ReactDOM.render(React.createElement(App, { dropbox: dropbox }), win.document.getElementById("app"));
 
   // Start service worker
-  if ('serviceWorker' in navigator) {
-    console.log("Probeer SW te registreren");
-    navigator.serviceWorker.register('service-worker.js').then(function (registration) {
-      console.log('The service worker has been registered ', registration);
-    });
-  }
+  // if ('serviceWorker' in navigator) {
+  // console.log("Probeer SW te registreren");
+  // navigator.serviceWorker.register('service-worker.js')
+  // .then(function(registration) {
+  // console.log('The service worker has been registered ', registration);
+  // });
+  // }
 })(window);

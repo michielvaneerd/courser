@@ -1,7 +1,6 @@
-var CACHE_NAME = 'courser-3';
+var CACHE_NAME = 'courser-7';
 
 var REQUIRED_FILES = [
-  '/',
   'dist/react.min.js',
   'dist/polyfills.js',
   'dist/react-dom.min.js',

@@ -1,8 +1,9 @@
-var CACHE_NAME = 'courser-2';
+var CACHE_NAME = 'courser-3';
 
 var REQUIRED_FILES = [
   '/',
   'dist/react.min.js',
+  'dist/polyfills.js',
   'dist/react-dom.min.js',
   'dist/dropbox.js',
   'dist/verysimpleredux.js',

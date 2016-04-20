@@ -52,6 +52,7 @@
       }
     },
     onPopState : function(e) {
+      if (!this.store) return; // safari I think because this is on first load.
       this.store.dispatch({
         type : "SCREEN_BACK"
       });

@@ -73,6 +73,7 @@
         alert(error);
       });
       history.pushState(null, null); // will remove all forward history.
+      // but also add a state...
       win.addEventListener("beforeunload", this.beforeUnload);
       win.addEventListener("popstate", this.onPopState);
       win.document.documentElement.addEventListener("keydown", this.onKeyDown);

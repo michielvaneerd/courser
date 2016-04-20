@@ -386,6 +386,7 @@
         // Back button clicked
         var currentScreen = screenHistory.pop(); // pop current
         if (currentScreen) {
+          history.pushState(null, null);
           var actionType = screenBackActions[currentScreen];
           console.log("Ga nu dispatchen " + actionType + " voor " + currentScreen + " en lengte hist = " + screenHistory.length);
           state.inRequest = false;
@@ -394,6 +395,8 @@
             value : actionType == "SELECT_COURSE" ? state.courseId : null,
             preventAddToScreenHistory : true
           });
+        } else {
+          history.back();
         }
         break;
       case "ESC_TYPED":
@@ -706,7 +709,7 @@
       && oldScreen != state.screen
       && !action.preventAddToScreenHistory) {
       console.log(oldScreen + " en " + state.screen);
-      history.pushState({screen : state.screen}, state.screen);
+      history.replaceState({screen : state.screen}, state.screen);
       screenHistory.push(state.screen);
       console.log(screenHistory);
     }

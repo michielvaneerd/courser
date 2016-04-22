@@ -54,10 +54,13 @@
       }
     },
     onPopState: function (e) {
+      if (!this.store) return; // safari I think because this is on first load.
       this.store.dispatch({
         type: "SCREEN_BACK"
       });
     },
+    // Bug safari ios 7 when added to homescreen and opening after first time...
+    // Bug is not present on simulator ios 8...
     onBack: function () {
       history.back();
       // this.store.dispatch({

@@ -523,6 +523,7 @@
         break;
       case "REQUEST_SAVE_ENTRY":
         state.keepInRequest = true;
+        console.log(action.value);
         storage.saveEntry(action.value, state.courseId, {hasLocalChange : true})
           .then(function(arg) {
             state.courses[state.courseId] = arg.course;
@@ -623,6 +624,14 @@
           });
         }).catch(function(error) {
           errorHandler(error, state);
+        });
+        break;
+      case "ENTRY_TOGGLE_FAVOURITE":
+        state.inRequest = false;
+        state.entries[action.value].isFavourite = !!!state.entries[action.value].isFavourite;
+        me.dispatch({
+          type : "REQUEST_SAVE_ENTRY",
+          value : state.entries[action.value]
         });
         break;
       case "REQUEST_DO_COURSE":        

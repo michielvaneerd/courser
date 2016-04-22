@@ -56,6 +56,19 @@
         value: !this.props.shuffleMenuShow
       });
     },
+    onFavourite: function (e) {
+      e.stopPropagation();
+      var id = e.target.parentNode.parentNode.dataset.id;
+      this.props.store.dispatch({
+        type: "ENTRY_TOGGLE_FAVOURITE",
+        value: id
+      });
+    },
+    onOnlyFavourites: function () {
+      this.setState({
+        onlyfavourites: !!!this.state.onlyfavourites
+      });
+    },
     render: function () {
       return React.createElement(
         "div",
@@ -94,6 +107,23 @@
             "ul",
             { className: "listView" },
             this.state.ids.map(function (id) {
+              var entry = this.props.entries[id];
+              if (this.state.onlyfavourites && !entry.isFavourite) {
+                return "";
+              }
+              var favourite = "";
+              if (this.state.mode == "ALL" || id == this.state.selectedId || entry.isFavourite) {
+                var favouriteClassName = "favouriteButton";
+                if (this.props.entries[id].isFavourite) {
+                  favouriteClassName += " favouriteActive";
+                }
+                favourite = React.createElement(
+                  "button",
+                  { onClick: this.onFavourite, className: favouriteClassName },
+                  "*"
+                );
+              }
+
               var styleSource = {
                 visibility: this.state.mode == "ALL" || this.state.mode == "SOURCE_DESTINATION" || id == this.state.selectedId ? "visible" : "hidden"
               };
@@ -109,20 +139,21 @@
                 React.createElement(
                   "a",
                   null,
+                  favourite,
                   React.createElement(
                     "div",
                     { className: "entryItemSource", style: styleSource },
-                    this.props.entries[id].source
+                    entry.source
                   ),
                   React.createElement(
                     "div",
                     { className: "entryItemDestination", style: styleDestination },
-                    this.props.entries[id].destination
+                    entry.destination
                   ),
                   React.createElement(
                     "div",
                     { className: "entryItemPhone", style: style },
-                    this.props.entries[id].phone
+                    entry.phone
                   )
                 )
               );
@@ -139,6 +170,23 @@
               "button",
               { className: "primaryButton normalButton fullwidthButton", onClick: this.onShuffle },
               "Shuffle"
+            )
+          ),
+          React.createElement(
+            "li",
+            null,
+            React.createElement(
+              "label",
+              { htmlFor: "onlyFavourites" },
+              React.createElement("input", { name: "mode", type: "checkbox",
+                checked: this.state.onlyfavourites,
+                id: "onlyFavourites",
+                onChange: this.onOnlyFavourites }),
+              React.createElement(
+                "span",
+                null,
+                "Favourites only"
+              )
             )
           ),
           React.createElement(

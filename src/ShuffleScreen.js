@@ -55,6 +55,19 @@
         value : !this.props.shuffleMenuShow
       });
     },
+    onFavourite : function(e) {
+      e.stopPropagation();
+      var id = e.target.parentNode.parentNode.dataset.id;
+      this.props.store.dispatch({
+        type : "ENTRY_TOGGLE_FAVOURITE",
+        value : id
+      });
+    },
+    onOnlyFavourites : function() {
+      this.setState({
+        onlyfavourites : !!!this.state.onlyfavourites
+      });
+    },
     render : function() {
       return (
         <div id="screen">
@@ -70,6 +83,19 @@
           <div id="main">          
             <ul className="listView">
             {this.state.ids.map(function(id) {
+              var entry = this.props.entries[id];
+              if (this.state.onlyfavourites && !entry.isFavourite) {
+                return "";
+              }
+              var favourite = "";
+              if (this.state.mode == "ALL" || id == this.state.selectedId || entry.isFavourite) {
+                var favouriteClassName = "favouriteButton";
+                if (this.props.entries[id].isFavourite) {
+                  favouriteClassName += " favouriteActive";
+                }
+                favourite = <button onClick={this.onFavourite} className={favouriteClassName}>*</button>
+              }
+                
               var styleSource = {
                 visibility : (this.state.mode == "ALL" || this.state.mode == "SOURCE_DESTINATION" || id == this.state.selectedId)
                   ? "visible" : "hidden"
@@ -83,10 +109,13 @@
                   ? "visible" : "hidden"
               };
               return (
-                <li onClick={this.onItemClick} data-id={id} key={id}><a>
-                  <div className="entryItemSource" style={styleSource}>{this.props.entries[id].source}</div>
-                  <div className="entryItemDestination" style={styleDestination}>{this.props.entries[id].destination}</div>
-                  <div className="entryItemPhone" style={style}>{this.props.entries[id].phone}</div></a>
+                <li onClick={this.onItemClick} data-id={id} key={id}>
+                  <a>
+                    {favourite}
+                    <div className="entryItemSource" style={styleSource}>{entry.source}</div>
+                    <div className="entryItemDestination" style={styleDestination}>{entry.destination}</div>
+                    <div className="entryItemPhone" style={style}>{entry.phone}</div>
+                  </a>
                 </li>
               );
             }, this)}
@@ -97,6 +126,13 @@
               <ul id="popup" className="listView">
                 <li>
                   <button className="primaryButton normalButton fullwidthButton" onClick={this.onShuffle}>Shuffle</button>
+                </li>
+                <li>
+                  <label htmlFor="onlyFavourites"><input name="mode" type="checkbox"
+                    checked={this.state.onlyfavourites}
+                    id="onlyFavourites"
+                    onChange={this.onOnlyFavourites} />
+                  <span>Favourites only</span></label>
                 </li>
                 <li>
                   <label htmlFor="modeSD"><input name="mode" type="radio"

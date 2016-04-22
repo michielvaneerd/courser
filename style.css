@@ -84,6 +84,7 @@ ul.listView li {
   display:block;
   min-height:56px;
   border-bottom:1px solid #B3E5FC;
+  position:relative;
 }
 
 ul.listView li a {
@@ -345,6 +346,25 @@ button:disabled {
 
 .menuLabel {
   opacity:.4;
+}
+
+.favouriteButton {
+  position:absolute;
+  right:10px;
+  top:10px;
+  width:28px;
+  height:28px;
+  border-radius:14px;
+  border:none;
+  background-color:gray;
+  color:black;
+  line-height:28px;
+  font-size:140%;
+}
+
+.favouriteActive {
+  background-color:#1B5E20;
+  color:white;
 }
 
 @media (min-width: 768px) {

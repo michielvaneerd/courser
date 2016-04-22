@@ -4,10 +4,10 @@
   
   //var fromHomeScreen = location.search.indexOf("homescreen") !== -1;
   
-  var fromHomeScreen = true;
-  if (window.matchMedia && !window.matchMedia('(min-width: 768px)').matches && !window.matchMedia('(display-mode: standalone)').matches) {
-    fromHomeScreen = false;
-  }
+  // var fromHomeScreen = true;
+  // if (window.matchMedia && !window.matchMedia('(min-width: 768px)').matches && !window.matchMedia('(display-mode: standalone)').matches) {
+    // fromHomeScreen = false;
+  // }
   
   //if (window.matchMedia('(display-mode: standalone)').matches) {
   //  console.log("Thank you for installing our app!");
@@ -180,7 +180,6 @@
           break;
         default:
           screen = <CoursesList
-            fromHomeScreen={fromHomeScreen}
             coursesListMenuShow={this.state.coursesListMenuShow}
             dropboxAccount={this.state.dropboxAccount}
             store={this.store}
@@ -222,12 +221,12 @@
   ReactDOM.render(<App dropbox={dropbox} />, win.document.getElementById("app"));
   
   // Start service worker
-  // if ('serviceWorker' in navigator) {
-    // console.log("Probeer SW te registreren");
-    // navigator.serviceWorker.register('service-worker.js')
-      // .then(function(registration) {
-        // console.log('The service worker has been registered ', registration);
-      // });
-  // }
+  if ('serviceWorker' in navigator) {
+    console.log("Probeer SW te registreren");
+    navigator.serviceWorker.register('service-worker.js')
+      .then(function(registration) {
+        console.log('The service worker has been registered ', registration);
+      });
+  }
 
 }(window));

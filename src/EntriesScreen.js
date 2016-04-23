@@ -226,7 +226,7 @@
             <div className="navbarButtonContainer" id="navbarLeft">
               <button onClick={this.props.onBack}>&lt;</button>
             </div>
-            <div id="navbarTitle">Entries ({this.props.course.count})</div>
+            <div id="navbarTitle">Entries ({this.props.entryIds.length}){this.props.entriesFilter.length ? " [filter]" : ""}</div>
             <div className="navbarButtonContainer" id="navbarRight">
               <button onClick={this.onMore}>=</button>
             </div>

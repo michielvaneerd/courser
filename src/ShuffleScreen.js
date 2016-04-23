@@ -75,7 +75,7 @@
             <div className="navbarButtonContainer" id="navbarLeft">
               <button onClick={this.props.onBack}>&lt;</button>
             </div>
-            <div id="navbarTitle">Shuffle</div>
+            <div id="navbarTitle">Shuffle{this.state.onlyfavourites ? " [favourites]" : ""}</div>
             <div className="navbarButtonContainer" id="navbarRight">
               <button onClick={this.onMore}>=</button>
             </div>

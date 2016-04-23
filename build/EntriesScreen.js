@@ -261,8 +261,9 @@
             "div",
             { id: "navbarTitle" },
             "Entries (",
-            this.props.course.count,
-            ")"
+            this.props.entryIds.length,
+            ")",
+            this.props.entriesFilter.length ? " [filter]" : ""
           ),
           React.createElement(
             "div",

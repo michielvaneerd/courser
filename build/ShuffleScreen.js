@@ -88,7 +88,8 @@
           React.createElement(
             "div",
             { id: "navbarTitle" },
-            "Shuffle"
+            "Shuffle",
+            this.state.onlyfavourites ? " [favourites]" : ""
           ),
           React.createElement(
             "div",

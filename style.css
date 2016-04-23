@@ -356,15 +356,17 @@ button:disabled {
   height:28px;
   border-radius:14px;
   border:none;
-  background-color:gray;
+  background-color:#03A9F4;
   color:black;
   line-height:28px;
   font-size:140%;
+  opacity:.5;
+  background-image:url('favicon.ico');
+  background-size:contain;
 }
 
 .favouriteActive {
-  background-color:#1B5E20;
-  color:white;
+  opacity:1;
 }
 
 @media (min-width: 768px) {

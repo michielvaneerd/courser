@@ -386,7 +386,7 @@
         // Back button clicked
         var currentScreen = screenHistory.pop(); // pop current
         if (currentScreen) {
-          history.pushState(null, null);
+          history.pushState({screen : currentScreen}, null);
           var actionType = screenBackActions[currentScreen];
           console.log("Ga nu dispatchen " + actionType + " voor " + currentScreen + " en lengte hist = " + screenHistory.length);
           state.inRequest = false;
@@ -396,7 +396,7 @@
             preventAddToScreenHistory : true
           });
         } else {
-          history.back();
+          history.go(-2);
         }
         break;
       case "ESC_TYPED":

@@ -1,19 +1,9 @@
 // https://developers.google.com/web/updates/2015/10/display-mode
 
-var COURSER_VERSION = "0.6";
+var COURSER_VERSION = "0.7";
+var STANDALONE = window.matchMedia('(display-mode: standalone)').matches;
 
 (function(win) {
-  
-  //var fromHomeScreen = location.search.indexOf("homescreen") !== -1;
-  
-  // var fromHomeScreen = true;
-  // if (window.matchMedia && !window.matchMedia('(min-width: 768px)').matches && !window.matchMedia('(display-mode: standalone)').matches) {
-    // fromHomeScreen = false;
-  // }
-  
-  //if (window.matchMedia('(display-mode: standalone)').matches) {
-  //  console.log("Thank you for installing our app!");
-  //}
   
   function countDownForInRequestSpinner() {
     var t = setTimeout(function() {
@@ -88,8 +78,11 @@ var COURSER_VERSION = "0.6";
         console.log(error);
         alert(error);
       });
-      history.pushState(null, null); // will remove all forward history.
-      // but also add a state...
+      // pushState will add entry to history
+      // but also remove all forward entries so a user cannot go forward.
+      if (!history.state) {
+        history.pushState({start : true}, null);
+      }
       win.addEventListener("beforeunload", this.beforeUnload);
       win.addEventListener("popstate", this.onPopState);
       win.document.documentElement.addEventListener("keydown", this.onKeyDown);

@@ -356,7 +356,7 @@ button:disabled {
   height:28px;
   border-radius:14px;
   border:none;
-  background-color:#03A9F4;
+  background-color:#C0C0C0;
   color:black;
   line-height:28px;
   font-size:140%;
@@ -367,6 +367,7 @@ button:disabled {
 
 .favouriteActive {
   opacity:1;
+  background-color:#03A9F4;
 }
 
 @media (min-width: 768px) {

@@ -39,7 +39,8 @@
       });
       this.props.store.dispatch({
         type: "REQUEST_SAVE_ENTRY",
-        value: entry
+        value: entry,
+        hasLocalChange: true
       });
     },
     onSrcChange: function (e) {

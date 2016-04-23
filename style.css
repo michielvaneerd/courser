@@ -206,14 +206,15 @@ ul#popup.listView li a, ul#popup.listView li label, ul#popup.listView li input[t
 }
 
 #answerOptionWrapper button {
-  width:50%;
-  min-height:100px;
+  width: 100%;
   border: none;
-  outline:1px solid #c0c0c0;
-  display:block;
-  float:left;
+  outline: 1px solid #c0c0c0;
+  display: block;
   background-color: rgba(158,158,158,.2);
-  font-size:16px;
+  font-size: 180%;
+  text-align: left;
+  margin-bottom: 4px;
+  padding: 4px;
 }
 
 #answerOptionWrapper button:focus, button:focus {
@@ -224,15 +225,16 @@ ul#popup.listView li a, ul#popup.listView li label, ul#popup.listView li input[t
   display:block;
 }
 
-#answerOptionWrapper button span.phone {
+div.phone, #answerOptionWrapper button span.phone {
   visibility:hidden;
   font-style:italic;
-  font-size:80%;
+  font-size:14px;
 }
 
 #answerOptionWrapper button.wrong span.phone,
 #answerOptionWrapper button.success span.phone,
-#answerOptionWrapper button.shouldbesuccess span.phone {
+#answerOptionWrapper button.shouldbesuccess span.phone,
+div.phone {
   visibility:visible;
 }
 
@@ -244,6 +246,7 @@ input.success, #answerOptionWrapper button.success {
 #answerOptionWrapper button.shouldbesuccess {
   color:#1B5E20;
   font-weight:bold;
+  outline: 1px solid #1B5E20;
 }
 
 input.wrong, #answerOptionWrapper button.wrong {
@@ -321,12 +324,12 @@ ul.editMode li#activeEditListItem {
 }
 
 .doCourseQuestionTitleSourceValue {
-  font-size:16px;
+  font-size:180%;
   font-weight:bold;
 }
 
 .entryItemSource, .entryItemDestination {
-  font-size:140%;
+  font-size:180%;
 }
 .entryItemPhone {
   font-style:italic;

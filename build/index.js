@@ -1,5 +1,7 @@
 // https://developers.google.com/web/updates/2015/10/display-mode
 
+var COURSER_VERSION = "0.6";
+
 (function (win) {
 
   //var fromHomeScreen = location.search.indexOf("homescreen") !== -1;

@@ -523,8 +523,7 @@
         break;
       case "REQUEST_SAVE_ENTRY":
         state.keepInRequest = true;
-        console.log(action.value);
-        storage.saveEntry(action.value, state.courseId, {hasLocalChange : true})
+        storage.saveEntry(action.value, state.courseId, {hasLocalChange : action.hasLocalChange})
           .then(function(arg) {
             state.courses[state.courseId] = arg.course;
             state.entries = arg.course.entries;

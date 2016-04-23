@@ -1,4 +1,4 @@
-var CACHE_NAME = 'courser-4';
+var CACHE_NAME = 'courser-06';
 
 var REQUIRED_FILES = [
   'dist/react.min.js',
@@ -18,7 +18,8 @@ var REQUIRED_FILES = [
   'build/index.js',
   'style.css',
   'index.html',
-  'appicon.png'
+  'appicon.png',
+  'favicon.ico'
 ];
 
 self.addEventListener('install', function(event) {

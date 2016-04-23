@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Version 2016-04-23 08:59:00
+# Version 2016-04-23 11:29:00
 style.css
 dist/dropbox.js
 dist/react.min.js
@@ -11,6 +11,7 @@ storage.js
 store.js
 manifest.json
 appicon.png
+favicon.ico
 build/CoursesList.js
 build/CourseScreen.js
 build/CourseActionScreen.js

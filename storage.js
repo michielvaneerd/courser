@@ -126,14 +126,12 @@
       if (options.hasLocalChange) {
         course.hasLocalChange = true;
       }
-      console.log("Ervoor: " + JSON.stringify(Object.keys(course.entries)));
       if (!entry.id) {
         entry.id = Object.keys(course.entries).length
           ? Math.max.apply(null, Object.keys(course.entries)) + 1 : 1;
       }
       entry.course_id = realCourseId;
       course.entries[entry.id] = entry;
-      console.log("Erna: " + JSON.stringify(Object.keys(course.entries)));
       _saveCourse(course);
       return Promise.resolve({
         course : course,

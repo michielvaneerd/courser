@@ -157,6 +157,18 @@
           <div className="row">
             <button className="normalButton primaryButton fullwidthButton" disabled={this.state.answer.length == 0 || this.props.doCourseSuccess !== null} onClick={this.onSave}>Save</button>
           </div>
+          {
+            this.props.doCourseSuccess !== null
+            ?
+            (
+              <div className="row">
+                <div className="doCourseQuestionTitleSourceValue">{doCourseEntry[otherKey]}</div>
+                {doCourseEntry.phone ? (<div className="phone">{doCourseEntry.phone}</div>) : ""}
+              </div>
+            )
+            :
+            ""
+          }
           <div id="bottombar" className="row floatright">
             <button disabled={this.props.doCourseSuccess === null}
               className="normalButton"
@@ -182,9 +194,6 @@
             <span className="doCourseQuestionTitleSource">{this.props.course[key + "_title"]}:</span>
             <span className="doCourseQuestionTitleSourceValue">{doCourseEntry[key]}</span>
           </div>
-          <div className="row">
-            <div className="doCourseQuestionTitle">{this.props.course[otherKey + "_title"]}?</div>
-          </div>
           <div className="row" id="answerOptionWrapper">
             {this.props.doCourseAnswerEntryIds.map(function(entryId, index) {
               var cName = "";
@@ -197,6 +206,9 @@
               if (this.props.answerEntryId) {
                 if (this.props.answerEntryId == entryId) {
                   cName = this.props.doCourseSuccess ? "success" : "wrong";
+                  if (!this.props.doCourseSuccess) {
+                    text.push(<span key="goodanswermeaning">{this.props.entries[entryId][key]}</span>);
+                  }
                 } else if (this.props.doCourseEntryId == entryId) {
                   cName = "shouldbesuccess";
                 }

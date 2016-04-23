@@ -174,6 +174,20 @@
             "Save"
           )
         ),
+        this.props.doCourseSuccess !== null ? React.createElement(
+          "div",
+          { className: "row" },
+          React.createElement(
+            "div",
+            { className: "doCourseQuestionTitleSourceValue" },
+            doCourseEntry[otherKey]
+          ),
+          doCourseEntry.phone ? React.createElement(
+            "div",
+            { className: "phone" },
+            doCourseEntry.phone
+          ) : ""
+        ) : "",
         React.createElement(
           "div",
           { id: "bottombar", className: "row floatright" },
@@ -217,16 +231,6 @@
         ),
         React.createElement(
           "div",
-          { className: "row" },
-          React.createElement(
-            "div",
-            { className: "doCourseQuestionTitle" },
-            this.props.course[otherKey + "_title"],
-            "?"
-          )
-        ),
-        React.createElement(
-          "div",
           { className: "row", id: "answerOptionWrapper" },
           this.props.doCourseAnswerEntryIds.map(function (entryId, index) {
             var cName = "";
@@ -245,6 +249,13 @@
             if (this.props.answerEntryId) {
               if (this.props.answerEntryId == entryId) {
                 cName = this.props.doCourseSuccess ? "success" : "wrong";
+                if (!this.props.doCourseSuccess) {
+                  text.push(React.createElement(
+                    "span",
+                    { key: "goodanswermeaning" },
+                    this.props.entries[entryId][key]
+                  ));
+                }
               } else if (this.props.doCourseEntryId == entryId) {
                 cName = "shouldbesuccess";
               }

@@ -102,7 +102,9 @@
           React.createElement(
             "a",
             { href: "https://github.com/michielvaneerd/courser", target: "_blank" },
-            "About Courser"
+            "About Courser (v.",
+            COURSER_VERSION,
+            ")"
           )
         ));
         //if (!this.props.fromHomeScreen) {

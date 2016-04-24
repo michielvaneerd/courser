@@ -104,6 +104,7 @@
             { href: "https://github.com/michielvaneerd/courser", target: "_blank" },
             "About Courser (v.",
             COURSER_VERSION,
+            STANDALONE ? " sa" : "",
             ")"
           )
         ));

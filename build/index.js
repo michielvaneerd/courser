@@ -1,6 +1,6 @@
 // https://developers.google.com/web/updates/2015/10/display-mode
 
-var COURSER_VERSION = "0.10";
+var COURSER_VERSION = "0.11";
 var STANDALONE = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
 (function (win) {
@@ -221,6 +221,12 @@ var STANDALONE = window.matchMedia('(display-mode: standalone)').matches || wind
     console.log("Probeer SW te registreren");
     navigator.serviceWorker.register('service-worker.js').then(function (registration) {
       console.log('The service worker has been registered ', registration);
+    });
+
+    // Triggered by clients.claim() inside the activate event of the service worker.
+    navigator.serviceWorker.addEventListener('controllerchange', function (e) {
+      var scriptURL = navigator.serviceWorker.controller.scriptURL;
+      window.location.reload();
     });
   }
 })(window);

@@ -1,4 +1,4 @@
-var CACHE_NAME = 'courser-07';
+var CACHE_NAME = 'courser-08';
 
 var REQUIRED_FILES = [
   'dist/react.min.js',

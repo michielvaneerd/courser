@@ -396,7 +396,8 @@
             preventAddToScreenHistory : true
           });
         } else {
-          history.go(-2);
+          console.log(history);
+          history.back();
         }
         break;
       case "ESC_TYPED":

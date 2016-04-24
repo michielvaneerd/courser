@@ -1,6 +1,6 @@
 // https://developers.google.com/web/updates/2015/10/display-mode
 
-var COURSER_VERSION = "0.7";
+var COURSER_VERSION = "0.8";
 var STANDALONE = window.matchMedia('(display-mode: standalone)').matches;
 
 (function(win) {
@@ -80,9 +80,9 @@ var STANDALONE = window.matchMedia('(display-mode: standalone)').matches;
       });
       // pushState will add entry to history
       // but also remove all forward entries so a user cannot go forward.
-      if (!history.state) {
-        history.pushState({start : true}, null);
-      }
+      //if (!history.state) {
+      //  history.pushState({start : true}, null);
+      //}
       win.addEventListener("beforeunload", this.beforeUnload);
       win.addEventListener("popstate", this.onPopState);
       win.document.documentElement.addEventListener("keydown", this.onKeyDown);

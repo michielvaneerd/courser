@@ -79,6 +79,8 @@
       if (!course.id) {
         course.id = Date.now();
         course.entries = {};
+        course.count_attempt_failure = 0;
+        course.count_attempt_success = 0;
       }
       if (!course.filename) {
         course.filename = storageCoursePrefix + course.id;

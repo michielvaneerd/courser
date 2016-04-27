@@ -359,7 +359,7 @@ button:disabled {
   height:28px;
   border-radius:14px;
   border:none;
-  background-color:#C0C0C0;
+  background-color:white;
   color:black;
   line-height:28px;
   font-size:140%;
@@ -371,6 +371,14 @@ button:disabled {
 .favouriteActive {
   opacity:1;
   background-color:#03A9F4;
+}
+
+#app #standaloneMessage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: auto;
 }
 
 @media (min-width: 768px) {

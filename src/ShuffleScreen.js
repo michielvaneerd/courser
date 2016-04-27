@@ -1,5 +1,8 @@
 (function(win) {
 
+  var scrollTop = null;
+  var preFavouriteScrollTop = null;
+
   function shuffle(o) {
     for (var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
     return o;
@@ -7,13 +10,24 @@
 
   win.ShuffleScreen = React.createClass({
     getInitialState : function() {
+      scrollTop = null;
       return {
         selectedId : 0,
         mode : "SOURCE_DESTINATION",
         ids : shuffle(Object.keys(this.props.entries))
       };
     },
+    componentDidUpdate : function() {
+      if (scrollTop !== null) {
+        var top = scrollTop;
+        scrollTop = null;
+        setTimeout(function() {
+          win.document.getElementById("main").scrollTop = top;
+        }, 300);
+      }
+    },
     onShuffle : function() {
+      scrollTop = 0;
       this.setState({
         selectedId : 0,
         ids : shuffle(Object.keys(this.props.entries))
@@ -64,6 +78,12 @@
       });
     },
     onOnlyFavourites : function() {
+      if (this.state.onlyfavourites) {
+        scrollTop = preFavouriteScrollTop;
+      } else {
+        preFavouriteScrollTop = win.document.getElementById("main").scrollTop;
+        scrollTop = null;
+      }
       this.setState({
         onlyfavourites : !!!this.state.onlyfavourites
       });

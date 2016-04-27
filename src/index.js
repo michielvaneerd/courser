@@ -1,6 +1,6 @@
 // https://developers.google.com/web/updates/2015/10/display-mode
 
-var COURSER_VERSION = "0.11";
+var COURSER_VERSION = "0.12";
 var STANDALONE = window.matchMedia('(display-mode: standalone)').matches
   || window.navigator.standalone;
 
@@ -45,6 +45,7 @@ var STANDALONE = window.matchMedia('(display-mode: standalone)').matches
       }
     },
     onPopState : function(e) {
+      console.log("POPSTATE");
       if (!this.store) return; // safari I think because this is on first load.
       this.store.dispatch({
         type : "SCREEN_BACK"
@@ -82,8 +83,14 @@ var STANDALONE = window.matchMedia('(display-mode: standalone)').matches
       // pushState will add entry to history
       // but also remove all forward entries so a user cannot go forward.
       if (!history.state) {
+        console.log("PUSH STATE STARTE TRUIE");
+        console.log("history.length = " + history.length);
         history.pushState({start : true}, null);
+        console.log("history.length = " + history.length);
+      } else {
+        console.log("IET history.length = " + history.length, history.state);
       }
+      
       win.addEventListener("beforeunload", this.beforeUnload);
       win.addEventListener("popstate", this.onPopState);
       win.document.documentElement.addEventListener("keydown", this.onKeyDown);
@@ -119,6 +126,12 @@ var STANDALONE = window.matchMedia('(display-mode: standalone)').matches
       if (this.state.inRequest) {
         progressSpinner = <div id="inProgress">{typeof this.state.inRequest === "string" ? this.state.inRequest : "Please wait, I'm doing something..."}</div>
         countDownForInRequestSpinner();
+      }
+      
+      if (this.state.standAloneCloseMessage) {
+        return (
+          <div id="standaloneMessage">{this.state.standAloneCloseMessage}</div>
+        );
       }
         
       switch (this.state.screen) {
@@ -227,13 +240,10 @@ var STANDALONE = window.matchMedia('(display-mode: standalone)').matches
         console.log('The service worker has been registered ', registration);
       });
       
-      // Triggered by clients.claim() inside the activate event of the service worker.
       navigator.serviceWorker.addEventListener('controllerchange', function(e) {
         var scriptURL = navigator.serviceWorker.controller.scriptURL;
         window.location.reload();
       });
-      
-      
   }
 
 }(window));

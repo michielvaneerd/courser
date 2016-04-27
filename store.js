@@ -382,9 +382,11 @@
     var oldScreen = state.screen;
 
     switch (action.type) {
+      case "STANDALONE_CLOSE_APP_MESSAGE":
+        state.standAloneCloseMessage = "Press back to close the app";
+        break;
       case "SCREEN_BACK":
-        // Back button clicked
-        var currentScreen = screenHistory.pop(); // pop current
+        var currentScreen = screenHistory.pop();
         if (currentScreen) {
           history.pushState({screen : currentScreen}, null);
           var actionType = screenBackActions[currentScreen];
@@ -396,8 +398,21 @@
             preventAddToScreenHistory : true
           });
         } else {
-          console.log(history);
+          // It is not possible to close a standaloneapp on
+          // Android Chrome in code. The user has to first get back to the
+          // first item, and then press back again to close the app.
+          // But at this point the app is not usable anymore, because we
+          // don't have the history entry,
+          // so show message to close the app.
           history.back();
+          // Normal browser app will navigate back and will not come here.
+          // Also iOS standalone won't come here, because they don't have
+          setTimeout(function() {
+            state.inRequest = false;
+            me.dispatch({
+              type : "STANDALONE_CLOSE_APP_MESSAGE"
+            });
+          }, 300);
         }
         break;
       case "ESC_TYPED":
@@ -509,7 +524,6 @@
             // page
             if (screenHistory.length == 1) {
               screenHistory.unshift("COURSE_ACTION_SCREEN");
-              console.log(screenHistory.length);
             }
             me.dispatch({
               type : "SCREEN_BACK"
@@ -727,7 +741,11 @@
       state.inRequest = false;
     }
     
-    if (!state.inRequest && !state.warning && !state.error && !state.success) {
+    if (!state.inRequest
+      && !state.warning
+      && !state.error
+      && !state.success
+      && !state.standAloneCloseMessage) {
       setStateToLocalStorage(Object.assign({}, state, {screen : null}));
     }
     return state;

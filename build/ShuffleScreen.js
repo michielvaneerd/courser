@@ -79,14 +79,15 @@
       });
     },
     onOnlyFavourites: function () {
-      if (this.state.onlyfavourites) {
+      var nowOnlyFav = !!this.state.onlyfavourites;
+      if (nowOnlyFav) {
         scrollTop = preFavouriteScrollTop;
       } else {
         preFavouriteScrollTop = win.document.getElementById("main").scrollTop;
-        scrollTop = null;
+        scrollTop = 0;
       }
       this.setState({
-        onlyfavourites: !!!this.state.onlyfavourites
+        onlyfavourites: !nowOnlyFav
       });
     },
     render: function () {

@@ -1,6 +1,6 @@
 // https://developers.google.com/web/updates/2015/10/display-mode
 
-var COURSER_VERSION = "0.12";
+var COURSER_VERSION = "0.13";
 var STANDALONE = window.matchMedia('(display-mode: standalone)').matches
   || window.navigator.standalone;
 

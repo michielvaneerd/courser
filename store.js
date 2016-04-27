@@ -388,9 +388,10 @@
       case "SCREEN_BACK":
         var currentScreen = screenHistory.pop();
         if (currentScreen) {
-          history.pushState({screen : currentScreen}, null);
+          if (!STANDALONE) {
+            history.pushState({screen : currentScreen}, null);
+          }
           var actionType = screenBackActions[currentScreen];
-          console.log("Ga nu dispatchen " + actionType + " voor " + currentScreen + " en lengte hist = " + screenHistory.length);
           state.inRequest = false;
           me.dispatch({
             type : actionType,
@@ -407,12 +408,12 @@
           history.back();
           // Normal browser app will navigate back and will not come here.
           // Also iOS standalone won't come here, because they don't have
-          setTimeout(function() {
-            state.inRequest = false;
-            me.dispatch({
-              type : "STANDALONE_CLOSE_APP_MESSAGE"
-            });
-          }, 300);
+          // setTimeout(function() {
+            // state.inRequest = false;
+            // me.dispatch({
+              // type : "STANDALONE_CLOSE_APP_MESSAGE"
+            // });
+          // }, 300);
         }
         break;
       case "ESC_TYPED":
@@ -725,16 +726,16 @@
         break;
     }
     
-    // See also maybe a better strategy for push state:
-    // http://stackoverflow.com/questions/28028297/js-window-history-delete-a-state
     if (state.screen
       && action.type != "SCREEN_BACK"
       && oldScreen != state.screen
       && !action.preventAddToScreenHistory) {
-      console.log(oldScreen + " en " + state.screen);
-      history.replaceState({screen : state.screen}, state.screen);
+      if (!STANDALONE) {
+        history.replaceState({screen : state.screen}, state.screen);
+      } else {
+        history.pushState({screen : state.screen}, state.screen);
+      }
       screenHistory.push(state.screen);
-      console.log(screenHistory);
     }
     
     if (!state.keepInRequest) {

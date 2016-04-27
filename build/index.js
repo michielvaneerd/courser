@@ -1,8 +1,5 @@
 // https://developers.google.com/web/updates/2015/10/display-mode
 
-var COURSER_VERSION = "0.13";
-var STANDALONE = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-
 (function (win) {
 
   function countDownForInRequestSpinner() {
@@ -46,7 +43,6 @@ var STANDALONE = window.matchMedia('(display-mode: standalone)').matches || wind
       }
     },
     onPopState: function (e) {
-      console.log("POPSTATE");
       if (!this.store) return; // safari I think because this is on first load.
       this.store.dispatch({
         type: "SCREEN_BACK"
@@ -56,9 +52,6 @@ var STANDALONE = window.matchMedia('(display-mode: standalone)').matches || wind
     // Bug is not present on simulator ios 8...
     onBack: function () {
       history.back();
-      // this.store.dispatch({
-      // type : "SCREEN_BACK"
-      // });
     },
     componentDidMount: function () {
       var me = this;
@@ -81,15 +74,12 @@ var STANDALONE = window.matchMedia('(display-mode: standalone)').matches || wind
         console.log(error);
         alert(error);
       });
-      // pushState will add entry to history
-      // but also remove all forward entries so a user cannot go forward.
-      if (!history.state) {
-        console.log("PUSH STATE STARTE TRUIE");
-        console.log("history.length = " + history.length);
-        history.pushState({ start: true }, null);
-        console.log("history.length = " + history.length);
-      } else {
-        console.log("IET history.length = " + history.length, history.state);
+      if (!STANDALONE) {
+        // pushState will add entry to history
+        // but also remove all forward entries so a user cannot go forward.
+        if (!history.state) {
+          history.pushState({ start: true }, null);
+        }
       }
 
       win.addEventListener("beforeunload", this.beforeUnload);
@@ -232,15 +222,17 @@ var STANDALONE = window.matchMedia('(display-mode: standalone)').matches || wind
   ReactDOM.render(React.createElement(App, { dropbox: dropbox }), win.document.getElementById("app"));
 
   // Start service worker
-  if ('serviceWorker' in navigator) {
-    console.log("Probeer SW te registreren");
-    navigator.serviceWorker.register('service-worker.js').then(function (registration) {
-      console.log('The service worker has been registered ', registration);
-    });
+  if (location.host != "localhost") {
+    if ('serviceWorker' in navigator) {
+      console.log("Probeer SW te registreren");
+      navigator.serviceWorker.register('service-worker.js').then(function (registration) {
+        console.log('The service worker has been registered ', registration);
+      });
 
-    navigator.serviceWorker.addEventListener('controllerchange', function (e) {
-      var scriptURL = navigator.serviceWorker.controller.scriptURL;
-      window.location.reload();
-    });
+      navigator.serviceWorker.addEventListener('controllerchange', function (e) {
+        var scriptURL = navigator.serviceWorker.controller.scriptURL;
+        window.location.reload();
+      });
+    }
   }
 })(window);

@@ -15,7 +15,7 @@
         type: "CREATE_COURSE"
       });
     },
-    onMore: function () {
+    onMore: function (e) {
       this.props.store.dispatch({
         type: "SHOW_COURSESLIST_MENU",
         value: !this.props.coursesListMenuShow

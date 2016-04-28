@@ -2,7 +2,7 @@
 <html manifest="manifest.appcache">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="favicon.ico">
 <title>Courser</title>
 
@@ -28,11 +28,16 @@
 <script src="dist/react.min.js"></script>
 <script src="dist/react-dom.min.js"></script>
 <script>
-var COURSER_VERSION = "0.14";
+var COURSER_VERSION = "0.15";
 var STANDALONE = window.matchMedia('(display-mode: standalone)').matches
   || window.navigator.standalone;
 if (typeof Promise === "undefined") {
   document.write('<script src="dist/bluebird.min.js"><\/script>');
+}
+if (window.navigator.standalone) {
+  // On iOS standalone even in 9.3 still 300ms delay...
+  console.log("Fastclick added!");
+  document.write('<script src="dist/fastclick.min.js"><\/script>');
 }
 </script>
 <script src="dist/dropbox.js"></script>
@@ -49,5 +54,11 @@ if (typeof Promise === "undefined") {
 <script src="build/ShuffleScreen.js"></script>
 <script src="build/Dialog.js"></script>
 <script src="build/index.js"></script>
+<script>
+  if (typeof FastClick !== "undefined") {
+    console.log("Fastclick enabled!");
+    FastClick.attach(document.body);
+  }
+</script>
 </body>
 </html>

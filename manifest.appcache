@@ -1,10 +1,11 @@
 CACHE MANIFEST
-# Version 2016-04-28 16:17:00
+# Version 2016-04-28 18:41:00
 style.css
 dist/dropbox.js
 dist/react.min.js
 dist/react-dom.min.js
 dist/bluebird.min.js
+dist/fastclick.min.js
 dist/polyfills.js
 dist/verysimpleredux.js
 storage.js

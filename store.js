@@ -249,6 +249,7 @@
       case "DROPBOX_DISCONNECT":
         state.coursesListMenuShow = false;
         win.localStorage.removeItem("access_token");
+        win.localStorage.removeItem("courser_cursor");
         state.dropboxAccount = null;
         break;
       case "REQUEST_ADD_COURSE_FROM_SHARED_LINK":

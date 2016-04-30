@@ -123,6 +123,14 @@
         break;
       }
     },
+    onFavourite : function(e) {
+      e.stopPropagation();
+      var id = this.props.doCourseEntryId;
+      this.props.store.dispatch({
+        type : "ENTRY_TOGGLE_FAVOURITE",
+        value : id
+      });
+    },
     showWrite : function() {
       var me = this;
       var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
@@ -188,6 +196,14 @@
       var key = this.props.doCourseTestType == "SOURCE_DESTINATION_CHOOSE"
         ? "source" : "destination";
       var otherKey = key == "source" ? "destination" : "source";
+      var bottomBarClass = "row";
+      if (this.props.doCourseSuccess !== null) {
+        bottomBarClass += " activeBottomBar";
+      }
+      var favouriteButtonClass = "favouriteButton";
+      if (doCourseEntry.isFavourite) {
+        favouriteButtonClass += " favouriteActive";
+      }
       return (
         <div>
           <div className="row">
@@ -226,14 +242,19 @@
               );
             }, this)}
           </div>
-          <div id="bottombar" className="row floatright">
+          <div id="bottombar" className={bottomBarClass}>
+            {this.props.doCourseSuccess !== null
+            ?
+            (<button title="Toggle favourite" onClick={this.onFavourite} className={favouriteButtonClass}></button>)
+            :
+            null}
             <button
               ref={function(el) {
                 if (el && me.props.doCourseSuccess !== null) {
                   el.focus();
                 }
               }}
-              className="normalButton"
+              className="normalButton floatright"
               disabled={this.props.doCourseSuccess === null}
               onClick={this.dispatchNewItem}>Next</button>
           </div>

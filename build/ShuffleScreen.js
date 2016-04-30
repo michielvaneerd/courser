@@ -135,15 +135,11 @@
               }
               var favourite = "";
               if (this.state.mode == "ALL" || id == this.state.selectedId || entry.isFavourite) {
-                var favouriteClassName = "favouriteButton";
+                var favouriteClassName = "favouriteButton rightTop";
                 if (this.props.entries[id].isFavourite) {
                   favouriteClassName += " favouriteActive";
                 }
-                favourite = React.createElement(
-                  "button",
-                  { onClick: this.onFavourite, className: favouriteClassName },
-                  "*"
-                );
+                favourite = React.createElement("button", { title: "Toggle favourite", onClick: this.onFavourite, className: favouriteClassName });
               }
 
               var styleSource = {

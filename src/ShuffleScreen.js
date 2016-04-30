@@ -110,11 +110,11 @@
               }
               var favourite = "";
               if (this.state.mode == "ALL" || id == this.state.selectedId || entry.isFavourite) {
-                var favouriteClassName = "favouriteButton";
+                var favouriteClassName = "favouriteButton rightTop";
                 if (this.props.entries[id].isFavourite) {
                   favouriteClassName += " favouriteActive";
                 }
-                favourite = <button onClick={this.onFavourite} className={favouriteClassName}>*</button>
+                favourite = <button title="Toggle favourite" onClick={this.onFavourite} className={favouriteClassName}></button>
               }
                 
               var styleSource = {

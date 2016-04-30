@@ -71,6 +71,11 @@
             </div>
             <div id="navbarTitle">{this.props.course.id
               ? this.props.course.title : "Create course"}</div>
+            <div className="navbarButtonContainer" id="navbarRight">
+              <button
+                disabled={!!!this.state.title || !!!this.state.destination_title || !!!this.state.source_title}
+                onClick={this.onSave}>Save</button>
+            </div>
           </div>
           <div id="main">
             <div className="row">
@@ -113,11 +118,6 @@
                   </div>
                 );
               }, this)}
-            </div>
-            <div className="row">
-              <button className="normalButton fullwidthButton primaryButton"
-                disabled={!!!this.state.title || !!!this.state.destination_title || !!!this.state.source_title}
-                onClick={this.onSave}>Save</button>
             </div>
           </div>
         </div>

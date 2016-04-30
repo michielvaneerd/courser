@@ -84,6 +84,17 @@
             "div",
             { id: "navbarTitle" },
             this.props.course.id ? this.props.course.title : "Create course"
+          ),
+          React.createElement(
+            "div",
+            { className: "navbarButtonContainer", id: "navbarRight" },
+            React.createElement(
+              "button",
+              {
+                disabled: !!!this.state.title || !!!this.state.destination_title || !!!this.state.source_title,
+                onClick: this.onSave },
+              "Save"
+            )
           )
         ),
         React.createElement(
@@ -161,17 +172,6 @@
                 )
               );
             }, this)
-          ),
-          React.createElement(
-            "div",
-            { className: "row" },
-            React.createElement(
-              "button",
-              { className: "normalButton fullwidthButton primaryButton",
-                disabled: !!!this.state.title || !!!this.state.destination_title || !!!this.state.source_title,
-                onClick: this.onSave },
-              "Save"
-            )
           )
         )
       );

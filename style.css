@@ -50,6 +50,7 @@ a, button {
   line-height:56px;
   color:white;
   font-weight:bold;
+  text-overflow: ellipsis;
 }
 
 #navbarRight {
@@ -207,6 +208,17 @@ ul#popup.listView li a, ul#popup.listView li label, ul#popup.listView li input[t
   box-sizing:border-box;
 }
 
+.activeBottomBar {
+  background-color: white;
+  border-top:1px solid #B3E5FC;
+  z-index: 2;
+}
+
+#answerOptionWrapper {
+  position:relative;
+  z-index:1;
+}
+
 #answerOptionWrapper button {
   width: 100%;
   border: none;
@@ -217,6 +229,7 @@ ul#popup.listView li a, ul#popup.listView li label, ul#popup.listView li input[t
   text-align: left;
   margin-bottom: 4px;
   padding: 4px;
+  word-wrap: break-word;
 }
 
 #answerOptionWrapper button:focus, button:focus {
@@ -258,7 +271,7 @@ input.wrong, #answerOptionWrapper button.wrong {
 button.fullwidthButton {
   width:100%;
 }
-.floatright button {
+.floatright {
   float:right;
 }
 #dialog, #inProgress {
@@ -328,10 +341,12 @@ ul.editMode li#activeEditListItem {
 .doCourseQuestionTitleSourceValue {
   font-size:180%;
   font-weight:bold;
+  word-wrap: break-word;
 }
 
 .entryItemSource, .entryItemDestination {
   font-size:180%;
+  word-wrap: break-word;
 }
 .entryItemPhone {
   font-style:italic;
@@ -355,8 +370,6 @@ button:disabled {
 
 .favouriteButton {
   position:absolute;
-  right:10px;
-  top:10px;
   width:28px;
   height:28px;
   border-radius:14px;
@@ -373,6 +386,11 @@ button:disabled {
 .favouriteActive {
   opacity:1;
   background-color:#03A9F4;
+}
+
+.rightTop {
+  right:10px;
+  top:10px;
 }
 
 #app #standaloneMessage {

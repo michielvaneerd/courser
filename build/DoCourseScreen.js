@@ -121,6 +121,14 @@
           break;
       }
     },
+    onFavourite: function (e) {
+      e.stopPropagation();
+      var id = this.props.doCourseEntryId;
+      this.props.store.dispatch({
+        type: "ENTRY_TOGGLE_FAVOURITE",
+        value: id
+      });
+    },
     showWrite: function () {
       var me = this;
       var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
@@ -211,6 +219,14 @@
       var doCourseEntry = this.props.entries[this.props.doCourseEntryId];
       var key = this.props.doCourseTestType == "SOURCE_DESTINATION_CHOOSE" ? "source" : "destination";
       var otherKey = key == "source" ? "destination" : "source";
+      var bottomBarClass = "row";
+      if (this.props.doCourseSuccess !== null) {
+        bottomBarClass += " activeBottomBar";
+      }
+      var favouriteButtonClass = "favouriteButton";
+      if (doCourseEntry.isFavourite) {
+        favouriteButtonClass += " favouriteActive";
+      }
       return React.createElement(
         "div",
         null,
@@ -277,7 +293,8 @@
         ),
         React.createElement(
           "div",
-          { id: "bottombar", className: "row floatright" },
+          { id: "bottombar", className: bottomBarClass },
+          this.props.doCourseSuccess !== null ? React.createElement("button", { title: "Toggle favourite", onClick: this.onFavourite, className: favouriteButtonClass }) : null,
           React.createElement(
             "button",
             {
@@ -286,7 +303,7 @@
                   el.focus();
                 }
               },
-              className: "normalButton",
+              className: "normalButton floatright",
               disabled: this.props.doCourseSuccess === null,
               onClick: this.dispatchNewItem },
             "Next"

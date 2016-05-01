@@ -124,6 +124,31 @@
           break;
         }
       }
+
+      var courseListItems = Object.keys(this.props.courses).map(function (courseId) {
+        var course = this.props.courses[courseId];
+        return React.createElement(
+          "li",
+          { key: course.id },
+          React.createElement(
+            "a",
+            { href: "#", className: "linkButton", onClick: this.onCourseClick,
+              "data-id": courseId },
+            course.title,
+            course.dropbox_id && course.hasLocalChange ? " *" : ""
+          )
+        );
+      }, this);
+      var content = courseListItems.length ? React.createElement(
+        "ul",
+        { className: "listView" },
+        courseListItems
+      ) : React.createElement(
+        "div",
+        { className: "row fullCenter" },
+        "No courses yet"
+      );
+
       return React.createElement(
         "div",
         { id: "screen" },
@@ -149,24 +174,7 @@
         React.createElement(
           "div",
           { id: "main" },
-          React.createElement(
-            "ul",
-            { className: "listView" },
-            Object.keys(this.props.courses).map(function (courseId) {
-              var course = this.props.courses[courseId];
-              return React.createElement(
-                "li",
-                { key: course.id },
-                React.createElement(
-                  "a",
-                  { href: "#", className: "linkButton", onClick: this.onCourseClick,
-                    "data-id": courseId },
-                  course.title,
-                  course.dropbox_id && course.hasLocalChange ? " *" : ""
-                )
-              );
-            }, this)
-          )
+          content
         ),
         React.createElement(
           "button",

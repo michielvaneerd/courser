@@ -1,5 +1,7 @@
 (function(win) {
 
+  // https://www.dropbox.com/developers/documentation/http/documentation
+
   /**
    * Some remarks:
    * 
@@ -23,42 +25,55 @@
   var apiSubdomain = "api";
 
   // Constructor
-  var Dropbox = win.Dropbox = function(appKey, options) {
+  var Dropbox = win.Dropbox = function(appKey, onAccessToken, options) {
     options = options || {};
-    if (!appKey || !options.onAccessToken) {
+    if (!appKey || !onAccessToken) {
       throw new Error("Pass appKey and onAccessToken callback");
     }
     this.appKey = appKey;
     this.accessToken = options.accessToken;
-    this.onAccessToken = options.onAccessToken;
+    this.onAccessToken = onAccessToken;
   };
   
-  // Private static methods 
-  function get_url(subdomain, endpoint, parameters, domain, version) {
+  // Private static methods
+  function get_url(endpoint, options) {
+    options = options || {};
+    //subdomain, endpoint, parameters, domain, version
     var url = apiProtocol
       + "://"
-      + (subdomain || apiSubdomain)
+      + (options.subdomain || apiSubdomain)
       + "."
-      + (domain || apiDomain)
+      + (options.domain || apiDomain)
       + "/"
-      + (version || apiVersion);
+      + (options.version || apiVersion);
     if (endpoint) {
       url += endpoint;
     }
-    if (parameters) {
-      var pars = Object.keys(parameters).map(function(par) {
-        return par + "=" + encodeURIComponent(parameters[par])
+    if (options.parameters) {
+      var pars = Object.keys(options.parameters).map(function(par) {
+        return par + "=" + encodeURIComponent(options.parameters[par])
       });
       url += "?" + pars.join("&");
     }
     return url;
   }
 
-  var request = function(dropbox, url, options) {
+  /**
+   * @return: {Promise}
+   * The Promise can resolves with multiple argument types:
+   * - just the response of the request
+   * - object with {content : object|string, apiResult : object}
+   * The Promise can reject with:
+   * - object with {error : string, tag : string, status : number} in case of
+   *   Dropbox API error
+   * - object|string in case of connection error
+   */
+  Dropbox.prototype.request = function(url, options) {
     options = options || {};
     var headers = options.headers || {};
+    var me = this;
     return new Promise(function(resolve, reject) {
-      var xhr = new XMLHttpRequest();
+      var xhr = me.xhr = new XMLHttpRequest();
       xhr.onload = function() {
         try {
           if (xhr.status == 200) {
@@ -97,6 +112,7 @@
           reject(ex);
         } finally {
           xhr = null;
+          delete me.xhr;
         }
       };
       xhr.onerror = function(error) {
@@ -114,9 +130,9 @@
       // be visible, as they are plain text response body.
       //xhr.responseType = (typeof options.responseType !== "undefined")
       //  ? options.responseType : "json";
-      if (dropbox.accessToken) {
+      if (me.accessToken) {
         xhr.setRequestHeader("Authorization",
-          "Bearer " + dropbox.accessToken);
+          "Bearer " + me.accessToken);
       }
       Object.keys(headers).forEach(function(h) {
         xhr.setRequestHeader(h, headers[h]);
@@ -128,28 +144,29 @@
     });
   };
 
-  /**
-   * Goes to the Dropbox authorization page. After authorization the user
-   * will be redirected back with the access_token attached to the URL.
-   * @return void
-   */
+  // https://www.dropbox.com/developers/documentation/http/documentation#authorization
+  // Right now we only support implicit flow (used by client side)
   Dropbox.prototype.authorize = function() {
-    win.location.assign(get_url("www", "/oauth2/authorize", {
-      "client_id" : this.appKey,
-      "response_type" : "token",
-      // No hashes are allowed, so we cannot blindly use win.location.href
-      "redirect_uri" : win.location.origin + win.location.pathname,
-      "state" : "123"
-    }, "dropbox.com", 1));
+    win.location.assign(get_url("/oauth2/authorize", {
+      subdomain : "www",
+      parameters : {
+        "client_id" : this.appKey,
+        "response_type" : "token", // "token" indicates implicit flow
+        // No hashes are allowed, so we cannot use win.location.href
+        "redirect_uri" : win.location.origin + win.location.pathname,
+        "state" : "123"
+      },
+      domain : "dropbox.com",
+      version : 1
+    }));
   };
 
   /**
-   * Handles the redirect after authorization. Should always be called on
-   * page load so the access_token can be saved for use.
-   * @return {boolean|string} Set to a string in case of an error;
-   * set to true in case the access_token was saved and redirection started;
-   * set to false in case nothing happened;
+   * @return: {bool} True when we received an access token from Dropbox and we
+   * now redirect again to a clean URL. False when nothing happened, so we can
+   * look if we have an access token and start communicating with the Dropbox API.
    */
+  // https://www.dropbox.com/developers/documentation/http/documentation#authorization
   Dropbox.prototype.handleAuthorizationRedirect = function() {
     if (win.location.hash) {
       var parts = win.location.hash.substr(1).split("&");
@@ -170,11 +187,8 @@
     return false;
   };
 
-  /**
-   * @returns {Promise} Resolves with JSON response
-   */
   Dropbox.prototype.getCurrentAccount = function() {
-    return request(this, get_url("api", "/users/get_current_account"), {
+    return this.request(get_url("/users/get_current_account"), {
       headers : {
         // Prevent default application/json
         "Content-Type" : ""
@@ -182,21 +196,16 @@
     });
   };
   
-  /**
-   * @returns {Promise} Resolves with JSON response
-   */
   Dropbox.prototype.getAccount = function(accountId) {
-    return request(this, get_url("api", "/users/get_account"), {
+    return this.request(get_url("/users/get_account"), {
       body : JSON.stringify({account_id : accountId})
     });
   };
   
-  /**
-   * @returns {Promise} Resolves with JSON response
-   */
   Dropbox.prototype.upload = function(path, content) {
-    return request(this, get_url("content", "/files/upload"), {
-      //body : encodeURIComponent(content),
+    return this.request(get_url("/files/upload", {
+      subdomain : "content"
+    }), {
       body : content,
       headers : {
         "Content-Type" : "application/octet-stream",
@@ -208,23 +217,24 @@
     });
   };
   
-  /**
-   * @returns {Promise} Resolves with JSON response
-   */
+  // https://www.dropbox.com/developers/documentation/http/documentation#files-list_folder
   Dropbox.prototype.listFolder = function(path) {
-    return request(this, get_url("api", "/files/list_folder"), {
+    return this.request(get_url("/files/list_folder"), {
       body : JSON.stringify({"path" : path})
     });
   };
   
+  // https://www.dropbox.com/developers/documentation/http/documentation#files-list_folder-continue
   Dropbox.prototype.listFolderContinue = function(cursor) {
-    return request(this, get_url("api", "/files/list_folder/continue"), {
+    return this.request(get_url("/files/list_folder/continue"), {
       body : JSON.stringify({"cursor" : cursor})
     });
   };
   
   Dropbox.prototype.download = function(path) {
-    return request(this, get_url("content", "/files/download"), {
+    return this.request(get_url("/files/download", {
+      subdomain : "content"
+    }), {
       responseType : "text",
       headers : {
         "Content-Type" : "",
@@ -236,19 +246,22 @@
   };
   
   Dropbox.prototype.delete = function(path) {
-    return request(this, get_url("api", "/files/delete"), {
+    return this.request(get_url("/files/delete"), {
       body : JSON.stringify({"path" : path})
     });
   };
   
+  
   Dropbox.prototype.createSharedLink = function(path) {
-    return request(this, get_url("api", "/sharing/create_shared_link_with_settings"), {
+    return this.request(get_url("/sharing/create_shared_link_with_settings"), {
       body : JSON.stringify({"path" : path})
     });
   };
   
   Dropbox.prototype.getSharedLinkFile = function(url) {
-    return request(this, get_url("content", "/sharing/get_shared_link_file"), {
+    return this.request(get_url("/sharing/get_shared_link_file", {
+      subdomain : "content"
+    }), {
       responseType : "text",
       headers : {
         "Content-Type" : "",

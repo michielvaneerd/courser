@@ -75,6 +75,22 @@
           break;
         }
       }
+      
+      var courseListItems = Object.keys(this.props.courses).map(function(courseId) {
+        var course = this.props.courses[courseId];
+        return (
+          <li key={course.id}>
+            <a href="#" className="linkButton" onClick={this.onCourseClick}
+              data-id={courseId}>{course.title}{course.dropbox_id && course.hasLocalChange ? " *" : ""}</a>
+          </li>
+        );
+      }, this);
+      var content = courseListItems.length
+        ?
+        <ul className="listView">{courseListItems}</ul>
+        :
+        <div className="row fullCenter">No courses yet</div>;
+      
       return (
         <div id="screen">
           <div id="navbar">
@@ -83,19 +99,7 @@
               <button onClick={this.onMore}>=</button>
             </div>
           </div>
-          <div id="main">
-            <ul className="listView">
-              {Object.keys(this.props.courses).map(function(courseId) {
-                var course = this.props.courses[courseId];
-                return (
-                  <li key={course.id}>
-                    <a href="#" className="linkButton" onClick={this.onCourseClick}
-                      data-id={courseId}>{course.title}{course.dropbox_id && course.hasLocalChange ? " *" : ""}</a>
-                  </li>
-                );
-              }, this)}
-            </ul>
-          </div>
+          <div id="main">{content}</div>
           <button className="floatingButton" id="floatingBottomButton" onClick={this.onCreateCourse}>+</button>
             {moreMenu}
         </div>

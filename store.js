@@ -400,21 +400,7 @@
             preventAddToScreenHistory : true
           });
         } else {
-          // It is not possible to close a standaloneapp on
-          // Android Chrome in code. The user has to first get back to the
-          // first item, and then press back again to close the app.
-          // But at this point the app is not usable anymore, because we
-          // don't have the history entry,
-          // so show message to close the app.
           history.back();
-          // Normal browser app will navigate back and will not come here.
-          // Also iOS standalone won't come here, because they don't have
-          // setTimeout(function() {
-            // state.inRequest = false;
-            // me.dispatch({
-              // type : "STANDALONE_CLOSE_APP_MESSAGE"
-            // });
-          // }, 300);
         }
         break;
       case "ESC_TYPED":

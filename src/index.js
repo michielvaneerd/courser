@@ -105,6 +105,12 @@
     onClearWarning : function() {
       this.onClearType("WARNING");
     },
+    abortDropboxXHR : function() {
+      if (this.props.dropbox.xhr) {
+        // TODO: should be action dispatch...
+        this.props.dropbox.xhr.abort();
+      }
+    },
     render : function() {
       var screen = null;
       var course = this.state.courseId
@@ -113,7 +119,10 @@
         ? this.state.entries[this.state.entryId] : {};
       var progressSpinner = "";
       if (this.state.inRequest) {
-        progressSpinner = <div id="inProgress">{typeof this.state.inRequest === "string" ? this.state.inRequest : "Please wait, I'm doing something..."}</div>
+        var dropboxAbort = this.props.dropbox.xhr
+          ? <button className="normalButton progressCloseButton" onClick={this.abortDropboxXHR}>X</button>
+          : null;
+        progressSpinner = <div id="inProgress">{typeof this.state.inRequest === "string" ? this.state.inRequest : "Please wait, I'm doing something..."}{dropboxAbort}</div>
         countDownForInRequestSpinner();
       }
       
@@ -181,6 +190,7 @@
           break;
         default:
           screen = <CoursesList
+            onBack={this.onBack}
             coursesListMenuShow={this.state.coursesListMenuShow}
             dropboxAccount={this.state.dropboxAccount}
             store={this.store}
@@ -205,17 +215,19 @@
     }
   });
   
-  var dropbox = new Dropbox("r0rft8iznsi5atw", {
-    accessToken : window.localStorage.getItem("access_token"),
-    onAccessToken : function(accessToken) {
-      window.localStorage.setItem("access_token", accessToken);
-    }
+  function onAccessToken(token) {
+    localStorage.setItem("access_token", token);
+  }
+  var dropbox = new Dropbox("r0rft8iznsi5atw", onAccessToken, {
+    accessToken : localStorage.getItem("access_token")
   });
+  
   try {
     if (dropbox.handleAuthorizationRedirect()) {
       return;
     }
   } catch (ex) {
+    // Maybe user did not approve link
     alert(ex);
   }
   
@@ -224,7 +236,6 @@
   // Start service worker
   if (location.host != "localhost") {
     if ('serviceWorker' in navigator) {
-      console.log("Probeer SW te registreren");
       navigator.serviceWorker.register('service-worker.js')
         .then(function(registration) {
           console.log('The service worker has been registered ', registration);

@@ -203,15 +203,15 @@
             onKeyDown: this.onKeyDown,
             value: this.state.destination })
         ),
-        React.createElement(
+        this.props.course.phone_title ? React.createElement(
           "div",
           { className: "row formLabelInputPair" },
           React.createElement("input", { type: "text",
-            placeholder: "Phonetic",
+            placeholder: this.props.course.phone_title,
             onChange: this.onPhoneChange,
             onKeyDown: this.onKeyDown,
             value: this.state.phone })
-        ),
+        ) : "",
         React.createElement(
           "div",
           { className: "row buttonbar buttonbar-3" },

@@ -8,11 +8,11 @@
   win.CourseScreen = React.createClass({
     getInitialState : function() {
       return Object.assign({
-        source_title : "Source",
-        destination_title : "Destination",
+        source_title : "Question",
+        destination_title : "Answer",
+        thirdfield_title : "",
         test_ok_success_count : 1,
         title : "",
-        DESTINATION_SOURCE_CHOOSE : true,
         SOURCE_DESTINATION_CHOOSE : true,
       }, invalidity, this.props.course);
     },
@@ -57,6 +57,11 @@
         destination_title : e.target.value
       });
     },
+    onPhoneTitleInputChange : function(e) {
+      this.setState({
+        phone_title : e.target.value
+      });
+    },
     onMore : function() {
       this.setState({
         showMore : !this.state.showMore
@@ -85,17 +90,24 @@
                 value={this.state.title} />
             </div>
             <div className="row">
-              <label className="titleLabel" htmlFor="courseSourceTitleInput">Source</label>
-              <input id="courseSourceTitleInput" placeholder="Source title" required={true}
+              <label className="titleLabel" htmlFor="courseSourceTitleInput">Question</label>
+              <input id="courseSourceTitleInput" placeholder="Question" required={true}
                 type="text" onChange={this.onSourceTitleInputChange}
                 value={this.state.source_title} />
             </div>
             <div className="row">
-              <label className="titleLabel" htmlFor="courseDestinationTitleInput">Destination</label>
-              <input id="courseDestinationTitleInput" placeholder="Destination title" required={true}
+              <label className="titleLabel" htmlFor="courseDestinationTitleInput">Answer</label>
+              <input id="courseDestinationTitleInput" placeholder="Answer" required={true}
                 type="text" onChange={this.onDestinationTitleInputChange}
                 value={this.state.destination_title} />
             </div>
+            <div className="row">
+              <label className="titleLabel" htmlFor="coursePhoneTitleInput">Optional third field</label>
+              <input id="coursePhoneTitleInput" placeholder="Leave empty when not used" required={true}
+                type="text" onChange={this.onPhoneTitleInputChange}
+                value={this.state.phone_title} />
+            </div>
+            {/*
             <div className="row">
               <label className="titleLabel" htmlFor="courseTestOkSuccessCountInput">Test success count</label>
               <input id="courseTestOkSuccessCountInput" type="number"
@@ -103,6 +115,7 @@
                 min="1" step="1"
                 onChange={this.onTestOkSuccessCountChange} />
             </div>
+            */}
             <div className="row">
               <label className="titleLabel">Test types</label>
               {win.Constants.testTypes.map(function(testType) {

@@ -10,11 +10,11 @@
 
     getInitialState: function () {
       return Object.assign({
-        source_title: "Source",
-        destination_title: "Destination",
+        source_title: "Question",
+        destination_title: "Answer",
+        thirdfield_title: "",
         test_ok_success_count: 1,
         title: "",
-        DESTINATION_SOURCE_CHOOSE: true,
         SOURCE_DESTINATION_CHOOSE: true
       }, invalidity, this.props.course);
     },
@@ -57,6 +57,11 @@
     onDestinationTitleInputChange: function (e) {
       this.setState({
         destination_title: e.target.value
+      });
+    },
+    onPhoneTitleInputChange: function (e) {
+      this.setState({
+        phone_title: e.target.value
       });
     },
     onMore: function () {
@@ -118,9 +123,9 @@
             React.createElement(
               "label",
               { className: "titleLabel", htmlFor: "courseSourceTitleInput" },
-              "Source"
+              "Question"
             ),
-            React.createElement("input", { id: "courseSourceTitleInput", placeholder: "Source title", required: true,
+            React.createElement("input", { id: "courseSourceTitleInput", placeholder: "Question", required: true,
               type: "text", onChange: this.onSourceTitleInputChange,
               value: this.state.source_title })
           ),
@@ -130,9 +135,9 @@
             React.createElement(
               "label",
               { className: "titleLabel", htmlFor: "courseDestinationTitleInput" },
-              "Destination"
+              "Answer"
             ),
-            React.createElement("input", { id: "courseDestinationTitleInput", placeholder: "Destination title", required: true,
+            React.createElement("input", { id: "courseDestinationTitleInput", placeholder: "Answer", required: true,
               type: "text", onChange: this.onDestinationTitleInputChange,
               value: this.state.destination_title })
           ),
@@ -141,13 +146,12 @@
             { className: "row" },
             React.createElement(
               "label",
-              { className: "titleLabel", htmlFor: "courseTestOkSuccessCountInput" },
-              "Test success count"
+              { className: "titleLabel", htmlFor: "coursePhoneTitleInput" },
+              "Optional third field"
             ),
-            React.createElement("input", { id: "courseTestOkSuccessCountInput", type: "number",
-              value: this.state.test_ok_success_count,
-              min: "1", step: "1",
-              onChange: this.onTestOkSuccessCountChange })
+            React.createElement("input", { id: "coursePhoneTitleInput", placeholder: "Leave empty when not used", required: true,
+              type: "text", onChange: this.onPhoneTitleInputChange,
+              value: this.state.phone_title })
           ),
           React.createElement(
             "div",

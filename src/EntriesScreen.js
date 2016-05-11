@@ -195,13 +195,17 @@
               onKeyDown={this.onKeyDown}
               value={this.state.destination} />
           </div>
+          {this.props.course.phone_title
+          ? 
           <div className="row formLabelInputPair">
             <input type="text"
-              placeholder="Phonetic"
+              placeholder={this.props.course.phone_title}
               onChange={this.onPhoneChange}
               onKeyDown={this.onKeyDown}
               value={this.state.phone} />
           </div>
+          :
+          ""}
           <div className="row buttonbar buttonbar-3">
               <button
                 className="normalButton primaryButton"

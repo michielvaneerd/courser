@@ -12,7 +12,7 @@
       return Object.assign({
         source_title: "Question",
         destination_title: "Answer",
-        thirdfield_title: "",
+        phone_title: "",
         test_ok_success_count: 1,
         title: "",
         SOURCE_DESTINATION_CHOOSE: true

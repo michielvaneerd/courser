@@ -4,18 +4,18 @@ With Courser you can learn words by creating a courses, add words to them and le
 # Usage
 Creating a course is a 2 step process: 1) create the course 2) add entries.
 
-__In the below explanation the example is a course to learn Chinese from English. But you can learn everuthing as long it has a source and a destination!__
+__In the below explanation the example is a course to learn Chinese from English. But you can learn everything as long it has a question and an answer.__
 
 __Create the course by entering some information__
 * Title _Chinese - English Course_
-* Source _Chinese_
-* Destination _English_
-* Test success count _1_ (this means that when doing the test we have to succeed for each entry 1 time)
+* Question _Chinese_
+* Answer _English_
+* Optional third field (leave empty when you don't need this) - _Pinyin_
 * Test types _Show Chinese, select English_ and _Show English, select Chinese_ (this means the test will show a Chinese word and let you choose between 4 English words, or vice versa)
 * Other test types are _Show Chinese, type English_ and _Show English, type Chinese_ that will allow you to type the correct answer instead of choosing between 4 answers.
 
 __Add some entries__
-Each entry can have the source (in our example Chinse), destination (English) and phonetic (pronounciation, so in the case of Chinese you could enter the pinyin).
+Now add as much questions (Chinese), answers (English) and pinyin as you wish.
 
 __Shuffle__
 While learning words, it's best to have the order of the list be random. This can be done with the _Shuffle_ function. You can choose if you want to see the Chinese or English words en you can shuffle the list. Click a listitem to display the meaning.
@@ -33,6 +33,12 @@ To use these course, paste the links below in the "Add course from shared link" 
 1) Create a course
 2) Click the "Get shared link" menu item
 3) Copy the link that is displayed
+
+# FAQ
+## When are the changes saved to Dropbox?
+Every 10 seconds the app looks if somethings has changed and if so (and you are online and connected to Dropbox), the changes are saved. You can always save it yourself by choosing the option from the menu on the main screen.
+## How can I use it fullscreen on mobile?
+Go to [https://michielvaneerd.github.io/courser/index.html](https://michielvaneerd.github.io/courser/index.html) and on Android choose settings and then add to homescreen. Then it will just look like a standalone app.
 
 # Acknowledgements
 The app icon is designed by Freepik.

@@ -418,6 +418,39 @@ button:disabled {
   transform: translate(0, -50%);
 }
 
+/* http://tobiasahlin.com/spinkit/ */
+#inBackgroundProgress {
+  position:absolute;
+  z-index:2;
+  height:56px;
+  width:56px;
+  right:0;
+  top:0;
+  background-color:white;
+  border-radius: 100%;  
+  -webkit-animation: sk-scaleout 1.0s infinite ease-in-out;
+  animation: sk-scaleout 1.0s infinite ease-in-out;
+}
+
+@-webkit-keyframes sk-scaleout {
+  0% { -webkit-transform: scale(0) }
+  100% {
+    -webkit-transform: scale(1.0);
+    opacity: 0;
+  }
+}
+
+@keyframes sk-scaleout {
+  0% { 
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 100% {
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+    opacity: 0;
+  }
+}
+
 @media (min-width: 768px) {
   
   #app {

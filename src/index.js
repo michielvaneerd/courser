@@ -20,7 +20,7 @@
         me.store.dispatch({
           type : "DROPBOX_SAVE",
           nextAction : me.state.screen ? null : "SELECT_COURSES",
-          background : true
+          inBackgroundRequest : true
         });
       }
     }, 10000);
@@ -142,12 +142,16 @@
       var entry = this.state.entryId
         ? this.state.entries[this.state.entryId] : {};
       var progressSpinner = "";
+      var backgroundProgressSpinner = "";
       if (this.state.inRequest) {
-        var dropboxAbort = this.props.dropbox.xhr
-          ? <button className="normalButton progressCloseButton" onClick={this.abortDropboxXHR}>X</button>
-          : null;
-        progressSpinner = <div id="inProgress">{typeof this.state.inRequest === "string" ? this.state.inRequest : "Please wait, I'm doing something..."}{dropboxAbort}</div>
-        countDownForInRequestSpinner();
+        if (!this.state.inBackgroundRequest) {
+          var dropboxAbort = this.props.dropbox.xhr
+            ? <button className="normalButton progressCloseButton" onClick={this.abortDropboxXHR}>X</button>
+            : null;
+          progressSpinner = <div id="inProgress">{typeof this.state.inRequest === "string" ? this.state.inRequest : "Please wait, I'm doing something..."}{dropboxAbort}</div>
+          countDownForInRequestSpinner();
+        }
+        backgroundProgressSpinner = <div id="inBackgroundProgress"></div>
       }
       
       if (this.state.standAloneCloseMessage) {
@@ -225,6 +229,7 @@
         <div>
           {screen}
           {progressSpinner}
+          {backgroundProgressSpinner}
           {this.state.error
             ? <Dialog onClear={this.onClearError} type="error" message={this.state.error} />
             : null}

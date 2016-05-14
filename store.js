@@ -36,6 +36,7 @@
     doCourseMenuShow : false,
     entriesFilter : "",
 	  inRequest : false,
+    inBackgroundRequest : false,
     error : false,
     courseId : 0,
     entryId : 0,
@@ -204,6 +205,7 @@
         state.keepInRequest = true;
         state.coursesListMenuShow = false;
         state.inRequest = "Saving to Dropbox...";
+        state.inBackgroundRequest = !!action.inBackgroundRequest;
         var courses = storage._getCourses();
         var requests = [];
         Object.keys(courses).forEach(function(courseId) {
@@ -579,6 +581,7 @@
         break;
       case "REQUEST_DELETE_COURSE":
         state.keepInRequest = true;
+        state.inRequest = "Deleting course...";
         storage.deleteCourse(state.courseId).then(function() {
           var course = me.state.courses[state.courseId];
           if (course.dropbox_id) {
@@ -727,6 +730,7 @@
     
     if (!state.keepInRequest) {
       state.inRequest = false;
+      state.inBackgroundRequest = false;
     }
     
     if (!state.inRequest

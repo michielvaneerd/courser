@@ -20,7 +20,7 @@
         me.store.dispatch({
           type: "DROPBOX_SAVE",
           nextAction: me.state.screen ? null : "SELECT_COURSES",
-          background: true
+          inBackgroundRequest: true
         });
       }
     }, 10000);
@@ -142,19 +142,23 @@
       var course = this.state.courseId ? this.state.courses[this.state.courseId] : {};
       var entry = this.state.entryId ? this.state.entries[this.state.entryId] : {};
       var progressSpinner = "";
+      var backgroundProgressSpinner = "";
       if (this.state.inRequest) {
-        var dropboxAbort = this.props.dropbox.xhr ? React.createElement(
-          "button",
-          { className: "normalButton progressCloseButton", onClick: this.abortDropboxXHR },
-          "X"
-        ) : null;
-        progressSpinner = React.createElement(
-          "div",
-          { id: "inProgress" },
-          typeof this.state.inRequest === "string" ? this.state.inRequest : "Please wait, I'm doing something...",
-          dropboxAbort
-        );
-        countDownForInRequestSpinner();
+        if (!this.state.inBackgroundRequest) {
+          var dropboxAbort = this.props.dropbox.xhr ? React.createElement(
+            "button",
+            { className: "normalButton progressCloseButton", onClick: this.abortDropboxXHR },
+            "X"
+          ) : null;
+          progressSpinner = React.createElement(
+            "div",
+            { id: "inProgress" },
+            typeof this.state.inRequest === "string" ? this.state.inRequest : "Please wait, I'm doing something...",
+            dropboxAbort
+          );
+          countDownForInRequestSpinner();
+        }
+        backgroundProgressSpinner = React.createElement("div", { id: "inBackgroundProgress" });
       }
 
       if (this.state.standAloneCloseMessage) {
@@ -235,6 +239,7 @@
         null,
         screen,
         progressSpinner,
+        backgroundProgressSpinner,
         this.state.error ? React.createElement(Dialog, { onClear: this.onClearError, type: "error", message: this.state.error }) : null,
         this.state.warning ? React.createElement(Dialog, { onClear: this.onClearWarning, type: "warning", message: this.state.warning }) : null,
         this.state.success ? React.createElement(Dialog, { onClear: this.onClearSuccess, type: "success", message: this.state.success }) : null

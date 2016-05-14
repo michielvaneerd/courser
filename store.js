@@ -209,13 +209,13 @@
         Object.keys(courses).forEach(function(courseId) {
           var course = courses[courseId];
           if (course.hasLocalChange) {
-            console.log("save course " + course.title);
+            //console.log("save course " + course.title);
             // TODO: if Dropbox save did not succees, we have lost the hasLocalChange!
             delete course.hasLocalChange;
             requests.push(dropbox.upload("/" + course.filename + ".json",
               JSON.stringify(course)));
           } else {
-            console.log("SKIP course " + course.title);
+            //console.log("SKIP course " + course.title);
           }
         });
         Promise.all(requests).then(function(responses) {
@@ -238,7 +238,7 @@
         .then(function() {
           state.inRequest = false;
           me.dispatch({
-            type : "SELECT_COURSES"
+            type : action.nextAction || ""
           });
         })
         .catch(function(error) {
@@ -736,6 +736,7 @@
       && !state.standAloneCloseMessage) {
       setStateToLocalStorage(Object.assign({}, state, {screen : null}));
     }
+    
     return state;
 
   };

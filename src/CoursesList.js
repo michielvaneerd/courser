@@ -26,7 +26,8 @@
     },
     onDropboxSave : function() {
       this.props.store.dispatch({
-        type : "DROPBOX_SAVE"
+        type : "DROPBOX_SAVE",
+        nextAction : "SELECT_COURSES"
       });
     },
     onDropboxDisconnect : function() {

@@ -23,7 +23,8 @@
       if (scrollTop !== null) {
         var top = scrollTop;
         scrollTop = null;
-        setTimeout(function () {
+        var t = setTimeout(function () {
+          clearTimeout(t);
           win.document.getElementById("main").scrollTop = top;
         }, 300);
       }

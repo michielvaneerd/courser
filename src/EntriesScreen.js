@@ -23,9 +23,14 @@
       return Object.assign({}, emptyEntry, invalidity, this.props.entry);
     },
     componentWillReceiveProps : function(nextProps) {
-      this.setState(Object.assign({}, invalidity, emptyEntry, nextProps.entry));
+      if (this.state.showCreate || (this.state.id && nextProps.entry.id == this.state.id)) {
+        
+      } else {
+        this.setState(Object.assign({}, invalidity, emptyEntry, nextProps.entry));
+      }
       if (scrollTop) {
-        setTimeout(function() {
+        var t = setTimeout(function() {
+          clearTimeout(t);
           win.document.getElementById("main").scrollTop = scrollTop;
         }, 300);
       }
@@ -34,6 +39,9 @@
       var entry = Object.assign({}, this.state);
       Object.keys(invalidity).forEach(function(key) {
         delete entry[key];
+      });
+      this.setState({
+        showCreate : false
       });
       this.props.store.dispatch({
         type : "REQUEST_SAVE_ENTRY",
@@ -74,6 +82,11 @@
       });
     },
     onCancel : function() {
+      // Local state
+      this.setState({
+        showCreate : false
+      });
+      // Global state
       this.props.store.dispatch({
         type : "SELECT_ENTRY"
       });
@@ -164,6 +177,7 @@
       this.setState(Object.assign({}, emptyEntry, invalidity, {showCreate : true}));
     },
     render : function() {
+      console.log("render");
       var me = this;
       var propsEntry = this.props.entry || {};
       var editOrCreateRow = propsEntry.id || this.state.showCreate

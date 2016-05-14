@@ -19,7 +19,9 @@
       }, invalidity, this.props.course);
     },
     componentWillReceiveProps: function (nextProps) {
-      this.setState(Object.assign({}, invalidity, nextProps.course));
+      if (this.state.id && this.state.id == nextProps.course.id) {} else {
+        this.setState(Object.assign({}, invalidity, nextProps.course));
+      }
     },
     onSave: function () {
       var course = Object.assign({}, this.state);

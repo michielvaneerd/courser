@@ -12,6 +12,20 @@
     }, 500);
   }
   
+  function dropboxSavePoller(me) {
+    console.log("Start dropboxSavePoller");
+    var v = setInterval(function() {
+      if (navigator.onLine && me.state.dropboxAccount) {
+        console.log("SAVE 2 DROPBOX TRY");
+        me.store.dispatch({
+          type : "DROPBOX_SAVE",
+          nextAction : me.state.screen ? null : "SELECT_COURSES",
+          background : true
+        });
+      }
+    }, 10000);
+  }
+  
   win.noop = function() {};
 
   var App = React.createClass({
@@ -24,11 +38,13 @@
       })
     },
     beforeUnload : function(event) {
-      for (var key in this.state.courses) {
-        if (this.state.courses[key].dropbox_id && this.state.courses[key].hasLocalChange) {
-          var msg = "Some changes have not been saved to Dropbox yet and may be overwritten when you start the app the next time. If you don't want this, save to Dropbox first before leaving this page.";
-          event.returnValue = msg;
-          return msg;
+      if (navigator.onLine && this.state.dropboxAccount) {
+        for (var key in this.state.courses) {
+          if (this.state.courses[key].dropbox_id && this.state.courses[key].hasLocalChange) {
+            var msg = "Some changes have not been saved to Dropbox yet.";
+            event.returnValue = msg;
+            return msg;
+          }
         }
       }
     },
@@ -42,6 +58,10 @@
     },
     onPopState : function(e) {
       if (!this.store) return; // safari I think because this is on first load.
+      if (this.state.inRequest) {
+        console.log("push niewe state!");
+        history.pushState({screen : this.state.screen}, null);
+      }
       this.store.dispatch({
         type : "SCREEN_BACK"
       });
@@ -59,7 +79,11 @@
         me.store.subscribe(function() {
           me.setState(me.store.getState());
         });
+        
         if (me.props.dropbox.accessToken && navigator.onLine) {
+          
+          dropboxSavePoller(me);
+          
           me.store.dispatch({
             type : "REQUEST_DROPBOX_ACCOUNT" // will call SELECT_COURSES
           });

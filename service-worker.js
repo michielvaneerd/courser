@@ -1,4 +1,4 @@
-var CACHE_NAME = 'courser-20160514114500';
+var CACHE_NAME = 'courser-20160514175900';
 
 // See for immediate claim:
 // together with index.js window.location.reload() inside

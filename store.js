@@ -375,7 +375,7 @@
       state.success = false;
     }
     
-    if (action.type != "SHARE_COURSE") {
+    if (action.type && action.type != "DROPBOX_SAVE" && action.type != "SHARE_COURSE") {
       state.sharedLink = "";
     }
 	  
@@ -591,7 +591,6 @@
               // We have deleted a course local, but in Dropbox it is still available.
               // So invalidate the cursor, so next time we will download the course again.
               localStorage.removeItem("courser_cursor");
-              dropbox.cursor
               return Promise.resolve();
             }
           } else {

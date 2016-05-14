@@ -13,10 +13,10 @@
   }
   
   function dropboxSavePoller(me) {
-    console.log("Start dropboxSavePoller");
+    //console.log("Start dropboxSavePoller");
     var v = setInterval(function() {
       if (navigator.onLine && me.state.dropboxAccount) {
-        console.log("SAVE 2 DROPBOX TRY");
+        //console.log("SAVE 2 DROPBOX TRY");
         me.store.dispatch({
           type : "DROPBOX_SAVE",
           nextAction : me.state.screen ? null : "SELECT_COURSES",
@@ -59,7 +59,7 @@
     onPopState : function(e) {
       if (!this.store) return; // safari I think because this is on first load.
       if (this.state.inRequest) {
-        console.log("push niewe state!");
+        //console.log("push niewe state!");
         history.pushState({screen : this.state.screen}, null);
       }
       this.store.dispatch({

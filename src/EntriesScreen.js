@@ -23,7 +23,7 @@
       return Object.assign({}, emptyEntry, invalidity, this.props.entry);
     },
     componentWillReceiveProps : function(nextProps) {
-      if (this.state.showCreate || (this.state.id && nextProps.entry.id == this.state.id)) {
+      if (this.state.showCreate || (this.state.id && nextProps.entry && nextProps.entry.id == this.state.id)) {
         
       } else {
         this.setState(Object.assign({}, invalidity, emptyEntry, nextProps.entry));

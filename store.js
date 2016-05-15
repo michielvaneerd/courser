@@ -203,7 +203,9 @@
         break;
       case "DROPBOX_SAVE":
         state.keepInRequest = true;
-        state.coursesListMenuShow = false;
+        if (!action.inBackgroundRequest) {
+          state.coursesListMenuShow = false;
+        }
         state.inRequest = "Saving to Dropbox...";
         state.inBackgroundRequest = !!action.inBackgroundRequest;
         var courses = storage._getCourses();
@@ -211,13 +213,10 @@
         Object.keys(courses).forEach(function(courseId) {
           var course = courses[courseId];
           if (course.hasLocalChange) {
-            //console.log("save course " + course.title);
             // TODO: if Dropbox save did not succees, we have lost the hasLocalChange!
             delete course.hasLocalChange;
             requests.push(dropbox.upload("/" + course.filename + ".json",
               JSON.stringify(course)));
-          } else {
-            //console.log("SKIP course " + course.title);
           }
         });
         Promise.all(requests).then(function(responses) {
@@ -502,6 +501,7 @@
           state.error = "Enter title";
         } else {
           state.keepInRequest = true;
+          state.inRequest = "Saving course...";
           action.value.hasLocalChange = true;
           storage.saveCourse(action.value).then(function(course) {
             state.inRequest = false;
@@ -512,9 +512,15 @@
             if (screenHistory.length == 1) {
               screenHistory.unshift("COURSE_ACTION_SCREEN");
             }
-            me.dispatch({
-              type : "SCREEN_BACK"
-            });
+            // TODO: when saving existing course, we end of with 2 entries
+            // in history, so standalone app requires 2 clicks on
+            // back button.
+            var timeout = setTimeout(function() {
+              clearTimeout(timeout);
+              me.dispatch({
+                type : "SCREEN_BACK"
+              });
+            }, 500);
           }).catch(function(error) {
             errorHandler(error, state);
           });
@@ -603,12 +609,16 @@
           // Not sure why, but after deleting one or more courses in standalone
           // mode, you always have one history entry more, so closing has to be
           // done by clicking the back button twice. This is the solution.
-          if (STANDALONE) {
-            history.back();
-          }
-          me.dispatch({
-           type : "SCREEN_BACK"
-          });
+          
+          var timeout = setTimeout(function() {
+            clearTimeout(timeout);
+            if (STANDALONE) {
+              history.back();
+            }
+            me.dispatch({
+             type : "SCREEN_BACK"
+            });
+          }, 500);
         })
         .catch(function(error) {
           state.inRequest = false;

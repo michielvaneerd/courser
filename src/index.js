@@ -13,14 +13,13 @@
   }
   
   function dropboxSavePoller(me) {
-    //console.log("Start dropboxSavePoller");
     var v = setInterval(function() {
       if (navigator.onLine && me.state.dropboxAccount) {
-        //console.log("SAVE 2 DROPBOX TRY");
         me.store.dispatch({
           type : "DROPBOX_SAVE",
           nextAction : me.state.screen ? null : "SELECT_COURSES",
-          inBackgroundRequest : true
+          inBackgroundRequest : true,
+          preventAddToScreenHistory : true
         });
       }
     }, 10000);
@@ -262,18 +261,18 @@
   ReactDOM.render(<App dropbox={dropbox} />, win.document.getElementById("app"));
   
   // Start service worker
-  // if (location.host != "localhost") {
-    // if ('serviceWorker' in navigator) {
-      // navigator.serviceWorker.register('service-worker.js')
-        // .then(function(registration) {
-          // console.log('The service worker has been registered ', registration);
-        // });
+  if (location.host != "localhost") {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(function(registration) {
+          console.log('The service worker has been registered ', registration);
+        });
         
-        // navigator.serviceWorker.addEventListener('controllerchange', function(e) {
-          // var scriptURL = navigator.serviceWorker.controller.scriptURL;
-          // window.location.reload();
-        // });
-    // }
-  // }
+        navigator.serviceWorker.addEventListener('controllerchange', function(e) {
+          var scriptURL = navigator.serviceWorker.controller.scriptURL;
+          window.location.reload();
+        });
+    }
+  }
 
 }(window));

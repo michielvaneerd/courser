@@ -385,9 +385,6 @@
     var oldScreen = state.screen;
 
     switch (action.type) {
-      case "STANDALONE_CLOSE_APP_MESSAGE":
-        state.standAloneCloseMessage = "Press back to close the app";
-        break;
       case "SCREEN_BACK":
         var currentScreen = screenHistory.pop();
         if (currentScreen) {
@@ -603,8 +600,14 @@
           state.courseId = 0;
           state.courseActionMenuShow = false;
           state.courseActionMenuShow = false;
+          // Not sure why, but after deleting one or more courses in standalone
+          // mode, you always have one history entry more, so closing has to be
+          // done by clicking the back button twice. This is the solution.
+          if (STANDALONE) {
+            history.back();
+          }
           me.dispatch({
-            type : "SCREEN_BACK"
+           type : "SCREEN_BACK"
           });
         })
         .catch(function(error) {
@@ -735,8 +738,7 @@
     if (!state.inRequest
       && !state.warning
       && !state.error
-      && !state.success
-      && !state.standAloneCloseMessage) {
+      && !state.success) {
       setStateToLocalStorage(Object.assign({}, state, {screen : null}));
     }
     

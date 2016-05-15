@@ -59,7 +59,6 @@
     onPopState : function(e) {
       if (!this.store) return; // safari I think because this is on first load.
       if (this.state.inRequest) {
-        //console.log("push niewe state!");
         history.pushState({screen : this.state.screen}, null);
       }
       this.store.dispatch({
@@ -263,18 +262,18 @@
   ReactDOM.render(<App dropbox={dropbox} />, win.document.getElementById("app"));
   
   // Start service worker
-  if (location.host != "localhost") {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(function(registration) {
-          console.log('The service worker has been registered ', registration);
-        });
+  // if (location.host != "localhost") {
+    // if ('serviceWorker' in navigator) {
+      // navigator.serviceWorker.register('service-worker.js')
+        // .then(function(registration) {
+          // console.log('The service worker has been registered ', registration);
+        // });
         
-        navigator.serviceWorker.addEventListener('controllerchange', function(e) {
-          var scriptURL = navigator.serviceWorker.controller.scriptURL;
-          window.location.reload();
-        });
-    }
-  }
+        // navigator.serviceWorker.addEventListener('controllerchange', function(e) {
+          // var scriptURL = navigator.serviceWorker.controller.scriptURL;
+          // window.location.reload();
+        // });
+    // }
+  // }
 
 }(window));

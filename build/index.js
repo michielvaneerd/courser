@@ -59,9 +59,10 @@
     },
     onPopState: function (e) {
       if (!this.store) return; // safari I think because this is on first load.
-      if (this.state.inRequest) {
+      if (this.state.inRequest && !win.disableExtraPushOnPopstateWhileInRequest) {
         history.pushState({ screen: this.state.screen }, null);
       }
+      win.disableExtraPushOnPopstateWhileInRequest = false;
       this.store.dispatch({
         type: "SCREEN_BACK"
       });

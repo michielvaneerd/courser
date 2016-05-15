@@ -509,6 +509,7 @@
             state.courses[state.courseId] = course;
             // When we add a new course we do this directly from the main
             // page
+            win.disableExtraPushOnPopstateWhileInRequest = screenHistory.length > 1;
             if (screenHistory.length == 1) {
               screenHistory.unshift("COURSE_ACTION_SCREEN");
             }
@@ -517,9 +518,14 @@
             // back button.
             var timeout = setTimeout(function() {
               clearTimeout(timeout);
-              me.dispatch({
-                type : "SCREEN_BACK"
-              });
+              //me.dispatch({
+              //  type : "SCREEN_BACK"
+              //});
+              //if () {
+                
+              //}
+              
+              history.back();
             }, 500);
           }).catch(function(error) {
             errorHandler(error, state);

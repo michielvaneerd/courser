@@ -297,7 +297,10 @@
         state.keepInRequest = true;
         state.coursesListMenuShow = false;
         state.inRequest = "Requesting Dropbox info...";
-        dropbox.getCurrentAccount().then(function(response) {
+        var promise = state.dropboxAccount
+          ? Promise.resolve(state.dropboxAccount)
+          : dropbox.getCurrentAccount();
+        promise.then(function(response) {
           state.dropboxAccount = response;
           if (localStorage.getItem("courser_cursor")) {
             return dropbox.listFolderContinue(localStorage.getItem("courser_cursor"))

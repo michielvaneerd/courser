@@ -144,7 +144,11 @@
       var backgroundProgressSpinner = "";
       if (this.state.inRequest) {
         if (!this.state.inBackgroundRequest) {
-          var dropboxAbort = this.props.dropbox.xhr
+          var dropboxAbort =
+            this.props.dropbox.xhr
+            ||
+            // TODO: very bad fix...
+            (typeof this.state.inRequest == "string" && this.state.inRequest.toLowerCase().indexOf("dropbox") != -1)
             ? <button className="normalButton progressCloseButton" onClick={this.abortDropboxXHR}>X</button>
             : null;
           progressSpinner = <div id="inProgress">{typeof this.state.inRequest === "string" ? this.state.inRequest : "Please wait, I'm doing something..."}{dropboxAbort}</div>
@@ -153,12 +157,6 @@
         backgroundProgressSpinner = <div id="inBackgroundProgress"></div>
       }
       
-      if (this.state.standAloneCloseMessage) {
-        return (
-          <div id="standaloneMessage">{this.state.standAloneCloseMessage}</div>
-        );
-      }
-        
       switch (this.state.screen) {
         case "ENTRIES_SCREEN":
           screen = <EntriesScreen

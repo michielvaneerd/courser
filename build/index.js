@@ -144,7 +144,9 @@
       var backgroundProgressSpinner = "";
       if (this.state.inRequest) {
         if (!this.state.inBackgroundRequest) {
-          var dropboxAbort = this.props.dropbox.xhr ? React.createElement(
+          var dropboxAbort = this.props.dropbox.xhr ||
+          // TODO: very bad fix...
+          typeof this.state.inRequest == "string" && this.state.inRequest.toLowerCase().indexOf("dropbox") != -1 ? React.createElement(
             "button",
             { className: "normalButton progressCloseButton", onClick: this.abortDropboxXHR },
             "X"
@@ -158,14 +160,6 @@
           countDownForInRequestSpinner();
         }
         backgroundProgressSpinner = React.createElement("div", { id: "inBackgroundProgress" });
-      }
-
-      if (this.state.standAloneCloseMessage) {
-        return React.createElement(
-          "div",
-          { id: "standaloneMessage" },
-          this.state.standAloneCloseMessage
-        );
       }
 
       switch (this.state.screen) {

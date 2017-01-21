@@ -251,6 +251,14 @@
     });
   };
   
+  Dropbox.prototype.listSharedLinks = function(path) {
+    return this.request(get_url("/sharing/list_shared_links"), {
+      body : JSON.stringify({
+        "path" : path,
+        "direct_only" : true
+      })
+    });
+  }
   
   Dropbox.prototype.createSharedLink = function(path) {
     return this.request(get_url("/sharing/create_shared_link_with_settings"), {

@@ -277,7 +277,15 @@
         state.keepInRequest = true;
         state.inRequest = "Requesting shared link...";
         var course = state.courses[state.courseId];
-        dropbox.createSharedLink("/" + course.filename + ".json")
+
+        dropbox.listSharedLinks("/" + course.filename + ".json")
+          .then(function(response) {
+            if (response.links && response.links.length) {
+              return Promise.resolve({url: response.links[0].url});
+            } else {
+              return dropbox.createSharedLink("/" + course.filename + ".json");
+            }
+          })
           .then(function(response) {
             state.inRequest = false;
             me.dispatch({

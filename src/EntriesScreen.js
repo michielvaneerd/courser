@@ -177,7 +177,6 @@
       this.setState(Object.assign({}, emptyEntry, invalidity, {showCreate : true}));
     },
     render : function() {
-      console.log("render");
       var me = this;
       var propsEntry = this.props.entry || {};
       var editOrCreateRow = propsEntry.id || this.state.showCreate
@@ -246,6 +245,7 @@
               <button onClick={this.props.onBack}>&lt;</button>
             </div>
             <div id="navbarTitle">Entries ({this.props.entryIds.length}){this.props.entriesFilter.length ? " [filter]" : ""}</div>
+            <div id="navbarPrintTitle">{this.props.course.title}</div>
             <div className="navbarButtonContainer" id="navbarRight">
               <button onClick={this.onMore}>=</button>
             </div>

@@ -19,3 +19,11 @@ ul.listView li {
   border-bottom:none;
   padding-bottom:14px;
 }
+
+#navbarTitle {
+  display:none;
+}
+
+#navbarPrintTitle {
+  display:block;
+}

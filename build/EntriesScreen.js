@@ -181,7 +181,6 @@
       this.setState(Object.assign({}, emptyEntry, invalidity, { showCreate: true }));
     },
     render: function () {
-      console.log("render");
       var me = this;
       var propsEntry = this.props.entry || {};
       var editOrCreateRow = propsEntry.id || this.state.showCreate ? React.createElement(
@@ -277,6 +276,11 @@
             this.props.entryIds.length,
             ")",
             this.props.entriesFilter.length ? " [filter]" : ""
+          ),
+          React.createElement(
+            "div",
+            { id: "navbarPrintTitle" },
+            this.props.course.title
           ),
           React.createElement(
             "div",

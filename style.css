@@ -42,7 +42,7 @@ a, button {
   -webkit-overflow-scrolling: touch;
 }
 
-#navbarTitle {
+#navbarTitle, #navbarPrintTitle {
   top:0;
   position:absolute;
   margin-left:56px;
@@ -51,6 +51,12 @@ a, button {
   color:white;
   font-weight:bold;
   text-overflow: ellipsis;
+}
+
+#navbarPrintTitle {
+  display:none;
+  color:black;
+  margin-left:0;
 }
 
 #navbarRight {

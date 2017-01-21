@@ -110,7 +110,7 @@
           React.createElement(
             "div",
             { id: "navbarTitle" },
-            "Shuffle",
+            "Practice",
             this.state.onlyfavourites ? " [favourites]" : ""
           ),
           React.createElement(
@@ -188,7 +188,7 @@
             React.createElement(
               "button",
               { className: "primaryButton normalButton fullwidthButton", onClick: this.onShuffle },
-              "Shuffle"
+              "Practice"
             )
           ),
           React.createElement(

@@ -106,7 +106,7 @@
               <button
                 className="normalButton fullwidthButton"
                 disabled={this.props.course.count == 0}
-                onClick={this.onShuffleClick}>Shuffle</button>
+                onClick={this.onShuffleClick}>Practice</button>
             </div>
             <div className="row">
               <button

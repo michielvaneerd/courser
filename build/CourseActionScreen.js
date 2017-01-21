@@ -153,7 +153,7 @@
                 className: "normalButton fullwidthButton",
                 disabled: this.props.course.count == 0,
                 onClick: this.onShuffleClick },
-              "Shuffle"
+              "Practice"
             )
           ),
           React.createElement(

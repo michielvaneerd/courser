@@ -97,7 +97,7 @@
             <div className="navbarButtonContainer" id="navbarLeft">
               <button onClick={this.props.onBack}>&lt;</button>
             </div>
-            <div id="navbarTitle">Shuffle{this.state.onlyfavourites ? " [favourites]" : ""}</div>
+            <div id="navbarTitle">Practice{this.state.onlyfavourites ? " [favourites]" : ""}</div>
             <div className="navbarButtonContainer" id="navbarRight">
               <button onClick={this.onMore}>=</button>
             </div>
@@ -147,7 +147,7 @@
             ? (
               <ul id="popup" className="listView">
                 <li>
-                  <button className="primaryButton normalButton fullwidthButton" onClick={this.onShuffle}>Shuffle</button>
+                  <button className="primaryButton normalButton fullwidthButton" onClick={this.onShuffle}>Practice</button>
                 </li>
                 <li>
                   <label htmlFor="onlyFavourites"><input name="mode" type="checkbox"

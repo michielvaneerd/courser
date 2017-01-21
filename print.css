@@ -1,0 +1,21 @@
+#main {
+  overflow: unset;
+}
+
+button {
+  display:none;
+}
+
+.entryItemSource, .entryItemDestination {
+  font-size:100%;
+}
+
+ul.listView li a {
+  padding:2px;
+}
+
+ul.listView li {
+  min-height:auto;
+  border-bottom:none;
+  padding-bottom:14px;
+}

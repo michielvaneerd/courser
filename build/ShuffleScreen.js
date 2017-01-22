@@ -15,7 +15,7 @@
       scrollTop = null;
       return {
         selectedId: 0,
-        mode: "SOURCE_DESTINATION",
+        mode: ["SOURCE_DESTINATION"],
         ids: shuffle(Object.keys(this.props.entries))
       };
     },
@@ -41,29 +41,44 @@
         selectedId: this.state.selectedId == e.currentTarget.dataset.id ? 0 : e.currentTarget.dataset.id
       });
     },
-    onModeChangeSD: function (e) {
+    handleModeChange: function (e, mode) {
+      var index = this.state.mode.indexOf(mode);
       if (e.target.checked) {
-        this.setState({
-          mode: "SOURCE_DESTINATION"
-        });
+        if (index === -1) {
+          var newMode = this.state.mode.slice();
+          newMode.push(mode);
+          this.setState({
+            mode: newMode
+          });
+        }
+      } else {
+        if (index > -1) {
+          var newMode = this.state.mode.slice();
+          newMode.splice(index, 1);
+          this.setState({
+            mode: newMode
+          });
+        }
       }
+    },
+    onModeChangeSD: function (e) {
+      this.handleModeChange(e, "SOURCE_DESTINATION");
     },
     onModeChangeDS: function (e) {
-      if (e.target.checked) {
-        this.setState({
-          mode: "DESTINATION_SOURCE"
-        });
-      }
+      this.handleModeChange(e, "DESTINATION_SOURCE");
+    },
+    onModeChangeThird: function (e) {
+      this.handleModeChange(e, "THIRD");
     },
     onModeChangeAll: function (e) {
-      if (e.target.checked) {
-        this.setState({
-          mode: "ALL",
-          selectedId: 0,
-          // TODO: order alphabetically
-          ids: Object.keys(this.props.entries)
-        });
-      }
+      // if (e.target.checked) {
+      //   this.setState({
+      //     mode : "ALL",
+      //     selectedId : 0,
+      //     // TODO: order alphabetically
+      //     ids : Object.keys(this.props.entries)
+      //   });
+      // }
     },
     onMore: function () {
       this.props.store.dispatch({
@@ -115,6 +130,11 @@
           ),
           React.createElement(
             "div",
+            { id: "navbarPrintTitle" },
+            this.props.course.title
+          ),
+          React.createElement(
+            "div",
             { className: "navbarButtonContainer", id: "navbarRight" },
             React.createElement(
               "button",
@@ -144,10 +164,13 @@
               }
 
               var styleSource = {
-                visibility: this.state.mode == "ALL" || this.state.mode == "SOURCE_DESTINATION" || id == this.state.selectedId ? "visible" : "hidden"
+                visibility: this.state.mode.indexOf("SOURCE_DESTINATION") > -1 || id == this.state.selectedId ? "visible" : "hidden"
               };
               var styleDestination = {
-                visibility: this.state.mode == "ALL" || this.state.mode == "DESTINATION_SOURCE" || id == this.state.selectedId ? "visible" : "hidden"
+                visibility: this.state.mode.indexOf("DESTINATION_SOURCE") > -1 || id == this.state.selectedId ? "visible" : "hidden"
+              };
+              var styleThird = {
+                visibility: this.state.mode.indexOf("THIRD") > -1 || id == this.state.selectedId ? "visible" : "hidden"
               };
               var style = {
                 visibility: this.state.mode == "ALL" || id == this.state.selectedId ? "visible" : "hidden"
@@ -171,7 +194,7 @@
                   ),
                   React.createElement(
                     "div",
-                    { className: "entryItemPhone", style: style },
+                    { className: "entryItemPhone", style: styleThird },
                     entry.phone
                   )
                 )
@@ -214,8 +237,8 @@
             React.createElement(
               "label",
               { htmlFor: "modeSD" },
-              React.createElement("input", { name: "mode", type: "radio",
-                checked: this.state.mode == "SOURCE_DESTINATION",
+              React.createElement("input", { name: "mode", type: "checkbox",
+                checked: this.state.mode.indexOf("SOURCE_DESTINATION") > -1,
                 id: "modeSD",
                 onChange: this.onModeChangeSD }),
               React.createElement(
@@ -232,9 +255,9 @@
             React.createElement(
               "label",
               { htmlFor: "modeDS" },
-              React.createElement("input", { name: "mode", type: "radio",
+              React.createElement("input", { name: "mode", type: "checkbox",
                 id: "modeDS",
-                checked: this.state.mode == "DESTINATION_SOURCE",
+                checked: this.state.mode.indexOf("DESTINATION_SOURCE") > -1,
                 onChange: this.onModeChangeDS }),
               React.createElement(
                 "span",
@@ -249,15 +272,16 @@
             null,
             React.createElement(
               "label",
-              { htmlFor: "modeALL" },
-              React.createElement("input", { name: "mode", type: "radio",
-                id: "modeALL",
-                checked: this.state.mode == "ALL",
-                onChange: this.onModeChangeAll }),
+              { htmlFor: "modeThird" },
+              React.createElement("input", { name: "mode", type: "checkbox",
+                checked: this.state.mode.indexOf("THIRD") > -1,
+                id: "modeThird",
+                onChange: this.onModeChangeThird }),
               React.createElement(
                 "span",
                 null,
-                "Show all"
+                "Show ",
+                this.props.course.phone_title
               )
             )
           )

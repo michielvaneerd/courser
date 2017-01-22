@@ -13,7 +13,7 @@
       scrollTop = null;
       return {
         selectedId : 0,
-        mode : "SOURCE_DESTINATION",
+        mode : ["SOURCE_DESTINATION"],
         ids : shuffle(Object.keys(this.props.entries))
       };
     },
@@ -40,29 +40,44 @@
           ? 0 : e.currentTarget.dataset.id
       });
     },
-    onModeChangeSD : function(e) {
+    handleModeChange : function(e, mode) {
+      var index = this.state.mode.indexOf(mode);
       if (e.target.checked) {
-        this.setState({
-          mode : "SOURCE_DESTINATION"
-        });
+        if (index === -1) {
+          var newMode = this.state.mode.slice();
+          newMode.push(mode);
+          this.setState({
+            mode : newMode
+          });
+        }
+      } else {
+        if (index > -1) {
+          var newMode = this.state.mode.slice();
+          newMode.splice(index, 1);
+          this.setState({
+            mode : newMode
+          });
+        }
       }
+    },
+    onModeChangeSD : function(e) {
+      this.handleModeChange(e, "SOURCE_DESTINATION");
     },
     onModeChangeDS : function(e) {
-      if (e.target.checked) {
-        this.setState({
-          mode : "DESTINATION_SOURCE"
-        });
-      }
+      this.handleModeChange(e, "DESTINATION_SOURCE");
+    },
+    onModeChangeThird : function(e) {
+      this.handleModeChange(e, "THIRD");
     },
     onModeChangeAll : function(e) {
-      if (e.target.checked) {
-        this.setState({
-          mode : "ALL",
-          selectedId : 0,
-          // TODO: order alphabetically
-          ids : Object.keys(this.props.entries)
-        });
-      }
+      // if (e.target.checked) {
+      //   this.setState({
+      //     mode : "ALL",
+      //     selectedId : 0,
+      //     // TODO: order alphabetically
+      //     ids : Object.keys(this.props.entries)
+      //   });
+      // }
     },
     onMore : function() {
       this.props.store.dispatch({
@@ -98,6 +113,7 @@
               <button onClick={this.props.onBack}>&lt;</button>
             </div>
             <div id="navbarTitle">Practice{this.state.onlyfavourites ? " [favourites]" : ""}</div>
+            <div id="navbarPrintTitle">{this.props.course.title}</div>
             <div className="navbarButtonContainer" id="navbarRight">
               <button onClick={this.onMore}>=</button>
             </div>
@@ -117,13 +133,17 @@
                 }
                 favourite = <button title="Toggle favourite" onClick={this.onFavourite} className={favouriteClassName}></button>
               }
-                
+
               var styleSource = {
-                visibility : (this.state.mode == "ALL" || this.state.mode == "SOURCE_DESTINATION" || id == this.state.selectedId)
+                visibility : (this.state.mode.indexOf("SOURCE_DESTINATION") > -1 || id == this.state.selectedId)
                   ? "visible" : "hidden"
               };
               var styleDestination = {
-                visibility : (this.state.mode == "ALL" || this.state.mode == "DESTINATION_SOURCE" || id == this.state.selectedId)
+                visibility : (this.state.mode.indexOf("DESTINATION_SOURCE") > -1 || id == this.state.selectedId)
+                  ? "visible" : "hidden"
+              };
+              var styleThird = {
+                visibility : (this.state.mode.indexOf("THIRD") > -1 || id == this.state.selectedId)
                   ? "visible" : "hidden"
               };
               var style = {
@@ -136,7 +156,7 @@
                     {favourite}
                     <div className="entryItemSource" style={styleSource}>{entry.source}</div>
                     <div className="entryItemDestination" style={styleDestination}>{entry.destination}</div>
-                    <div className="entryItemPhone" style={style}>{entry.phone}</div>
+                    <div className="entryItemPhone" style={styleThird}>{entry.phone}</div>
                   </a>
                 </li>
               );
@@ -157,25 +177,25 @@
                   <span>Favourites only</span></label>
                 </li>
                 <li>
-                  <label htmlFor="modeSD"><input name="mode" type="radio"
-                    checked={this.state.mode == "SOURCE_DESTINATION"}
+                  <label htmlFor="modeSD"><input name="mode" type="checkbox"
+                    checked={this.state.mode.indexOf("SOURCE_DESTINATION") > -1}
                     id="modeSD"
                     onChange={this.onModeChangeSD} />
                   <span>Show {this.props.course.source_title}</span></label>
                 </li>
                 <li>
-                  <label htmlFor="modeDS"><input name="mode" type="radio"
+                  <label htmlFor="modeDS"><input name="mode" type="checkbox"
                     id="modeDS"
-                    checked={this.state.mode == "DESTINATION_SOURCE"}
+                    checked={this.state.mode.indexOf("DESTINATION_SOURCE") > -1}
                     onChange={this.onModeChangeDS} />
                   <span>Show {this.props.course.destination_title}</span></label>
                 </li>
                 <li>
-                  <label htmlFor="modeALL"><input name="mode" type="radio"
-                    id="modeALL"
-                    checked={this.state.mode == "ALL"}
-                    onChange={this.onModeChangeAll} />
-                  <span>Show all</span></label>
+                  <label htmlFor="modeThird"><input name="mode" type="checkbox"
+                    checked={this.state.mode.indexOf("THIRD") > -1}
+                    id="modeThird"
+                    onChange={this.onModeChangeThird} />
+                  <span>Show {this.props.course.phone_title}</span></label>
                 </li>
               </ul>
             ) : ""}

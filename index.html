@@ -1,5 +1,5 @@
 <!doctype html>
-<html manifestt="manifest.appcache">
+<html manifest="manifest.appcache">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -34,7 +34,7 @@ if (window.location.host == host && window.location.protocol != "https:") {
   window.location.protocol = "https:"
 }
 
-var COURSER_VERSION = "0.28";
+var COURSER_VERSION = "0.29";
 var STANDALONE = window.matchMedia('(display-mode: standalone)').matches
   || window.navigator.standalone;
 if (typeof Promise === "undefined") {

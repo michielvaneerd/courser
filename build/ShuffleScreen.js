@@ -70,16 +70,6 @@
     onModeChangeThird: function (e) {
       this.handleModeChange(e, "THIRD");
     },
-    onModeChangeAll: function (e) {
-      // if (e.target.checked) {
-      //   this.setState({
-      //     mode : "ALL",
-      //     selectedId : 0,
-      //     // TODO: order alphabetically
-      //     ids : Object.keys(this.props.entries)
-      //   });
-      // }
-    },
     onMore: function () {
       this.props.store.dispatch({
         type: "SHOW_SHUFFLE_MENU",
@@ -107,6 +97,24 @@
       });
     },
     render: function () {
+      var thirdModeOption = this.props.course.phone_title ? React.createElement(
+        "li",
+        null,
+        React.createElement(
+          "label",
+          { htmlFor: "modeThird" },
+          React.createElement("input", { name: "mode", type: "checkbox",
+            checked: this.state.mode.indexOf("THIRD") > -1,
+            id: "modeThird",
+            onChange: this.onModeChangeThird }),
+          React.createElement(
+            "span",
+            null,
+            "Show ",
+            this.props.course.phone_title
+          )
+        )
+      ) : null;
       return React.createElement(
         "div",
         { id: "screen" },
@@ -155,7 +163,7 @@
                 return "";
               }
               var favourite = "";
-              if (this.state.mode == "ALL" || id == this.state.selectedId || entry.isFavourite) {
+              if (id == this.state.selectedId || entry.isFavourite) {
                 var favouriteClassName = "favouriteButton rightTop";
                 if (this.props.entries[id].isFavourite) {
                   favouriteClassName += " favouriteActive";
@@ -171,9 +179,6 @@
               };
               var styleThird = {
                 visibility: this.state.mode.indexOf("THIRD") > -1 || id == this.state.selectedId ? "visible" : "hidden"
-              };
-              var style = {
-                visibility: this.state.mode == "ALL" || id == this.state.selectedId ? "visible" : "hidden"
               };
               return React.createElement(
                 "li",
@@ -267,24 +272,7 @@
               )
             )
           ),
-          React.createElement(
-            "li",
-            null,
-            React.createElement(
-              "label",
-              { htmlFor: "modeThird" },
-              React.createElement("input", { name: "mode", type: "checkbox",
-                checked: this.state.mode.indexOf("THIRD") > -1,
-                id: "modeThird",
-                onChange: this.onModeChangeThird }),
-              React.createElement(
-                "span",
-                null,
-                "Show ",
-                this.props.course.phone_title
-              )
-            )
-          )
+          thirdModeOption
         ) : ""
       );
     }

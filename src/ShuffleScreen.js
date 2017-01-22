@@ -69,16 +69,6 @@
     onModeChangeThird : function(e) {
       this.handleModeChange(e, "THIRD");
     },
-    onModeChangeAll : function(e) {
-      // if (e.target.checked) {
-      //   this.setState({
-      //     mode : "ALL",
-      //     selectedId : 0,
-      //     // TODO: order alphabetically
-      //     ids : Object.keys(this.props.entries)
-      //   });
-      // }
-    },
     onMore : function() {
       this.props.store.dispatch({
         type : "SHOW_SHUFFLE_MENU",
@@ -106,6 +96,15 @@
       });
     },
     render : function() {
+      var thirdModeOption = this.props.course.phone_title ? (
+        <li>
+          <label htmlFor="modeThird"><input name="mode" type="checkbox"
+            checked={this.state.mode.indexOf("THIRD") > -1}
+            id="modeThird"
+            onChange={this.onModeChangeThird} />
+          <span>Show {this.props.course.phone_title}</span></label>
+        </li>
+      ) : null;
       return (
         <div id="screen">
           <div id="navbar">
@@ -126,7 +125,7 @@
                 return "";
               }
               var favourite = "";
-              if (this.state.mode == "ALL" || id == this.state.selectedId || entry.isFavourite) {
+              if (id == this.state.selectedId || entry.isFavourite) {
                 var favouriteClassName = "favouriteButton rightTop";
                 if (this.props.entries[id].isFavourite) {
                   favouriteClassName += " favouriteActive";
@@ -144,10 +143,6 @@
               };
               var styleThird = {
                 visibility : (this.state.mode.indexOf("THIRD") > -1 || id == this.state.selectedId)
-                  ? "visible" : "hidden"
-              };
-              var style = {
-                visibility : (this.state.mode == "ALL" || id == this.state.selectedId)
                   ? "visible" : "hidden"
               };
               return (
@@ -190,13 +185,7 @@
                     onChange={this.onModeChangeDS} />
                   <span>Show {this.props.course.destination_title}</span></label>
                 </li>
-                <li>
-                  <label htmlFor="modeThird"><input name="mode" type="checkbox"
-                    checked={this.state.mode.indexOf("THIRD") > -1}
-                    id="modeThird"
-                    onChange={this.onModeChangeThird} />
-                  <span>Show {this.props.course.phone_title}</span></label>
-                </li>
+                {thirdModeOption}
               </ul>
             ) : ""}
         </div>

@@ -462,9 +462,25 @@ button:disabled {
   #app {
     max-width:768px;
     margin:0 auto;
-    box-shadow:0 0 2px black;
+  }
+
+  #main {
+    overflow:visible;
+  }
+
+  .entryItemSource, .entryItemDestination {
+    font-size:100%;
   }
   
+  #navbar {
+    background-color:transparent;
+    box-shadow:none;
+  }
+
+  #navbarTitle, #navbarPrintTitle, .navbarButtonContainer button {
+    color:black;
+  }
+
   #inProgress {
     width:728px;
     margin:0 auto;
@@ -491,7 +507,7 @@ button:disabled {
     box-sizing: border-box;
     border: none;
     background-color: transparent;
-    color: white;
+    color: black;
     border-radius:0;
     box-shadow:none;
   }

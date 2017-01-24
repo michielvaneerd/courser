@@ -475,6 +475,7 @@ button:disabled {
   #navbar {
     background-color:transparent;
     box-shadow:none;
+    border-bottom:1px solid gainsboro;
   }
 
   #navbarTitle, #navbarPrintTitle, .navbarButtonContainer button {
@@ -510,8 +511,9 @@ button:disabled {
     border: 1px solid transparent;
     background-color: transparent;
     color: black;
-    border-radius:23px;
+    border-radius:0;
     box-shadow:none;
+    outline:none;
   }
 
   .navbarButtonContainer button {
@@ -521,23 +523,41 @@ button:disabled {
     margin:5px;
     line-height:46px;
     background-color: transparent;
-    border-radius:23px;
+    border-radius:0;
     border: 1px solid transparent;
     outline:none;
   }
   
   #floatingBottomButton:active, #floatingBottomButton:focus,
   .navbarButtonContainer button:active, .navbarButtonContainer button:focus {
+    /*background-color: gainsboro;*/
     background-color: transparent;
-    border-color:gray;
+    border-bottom-color:black;
   }
 
   ul.listView li {
     min-height:auto;
+    border-bottom-color: gainsboro;
+  }
+
+  ul.listView li a:active {
+    background-color: gainsboro;
+  }
+
+  input[type='text'], input[type='number'] {
+    border-bottom-color: gainsboro;
   }
 
   ul.listView li a {
     padding:8px;
+  }
+
+  #bottombar {
+    border:none;
+  }
+
+  .row {
+    padding:14px 0;
   }
   
 }

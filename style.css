@@ -466,6 +466,7 @@ button:disabled {
 
   #main {
     overflow:visible;
+    height:auto;
   }
 
   .entryItemSource, .entryItemDestination {
@@ -537,6 +538,14 @@ button:disabled {
   ul.listView li {
     min-height:auto;
     border-bottom-color: gainsboro;
+  }
+
+  ul.listView li:hover {
+    background-color:#f0f0f0;
+  }
+
+  ul.listView.editMode li:hover {
+    background-color:transparent;
   }
 
   ul.listView li a:active {

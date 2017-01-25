@@ -162,7 +162,7 @@
             ? (
               <ul id="popup" className="listView">
                 <li>
-                  <button className="primaryButton normalButton fullwidthButton" onClick={this.onShuffle}>Practice</button>
+                  <button className="primaryButton normalButton fullwidthButton" onClick={this.onShuffle}>Randomize</button>
                 </li>
                 <li>
                   <label htmlFor="onlyFavourites"><input name="mode" type="checkbox"

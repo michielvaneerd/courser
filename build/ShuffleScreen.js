@@ -216,7 +216,7 @@
             React.createElement(
               "button",
               { className: "primaryButton normalButton fullwidthButton", onClick: this.onShuffle },
-              "Practice"
+              "Randomize"
             )
           ),
           React.createElement(

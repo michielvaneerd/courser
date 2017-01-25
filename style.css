@@ -238,7 +238,7 @@ ul#popup.listView li a, ul#popup.listView li label, ul#popup.listView li input[t
   border: none;
   outline: 1px solid #c0c0c0;
   display: block;
-  background-color: rgba(158,158,158,.2);
+  background-color: #f0f0f0;
   font-size: 180%;
   text-align: left;
   margin-bottom: 4px;
@@ -530,7 +530,6 @@ button:disabled {
   
   #floatingBottomButton:active, #floatingBottomButton:focus,
   .navbarButtonContainer button:active, .navbarButtonContainer button:focus {
-    /*background-color: gainsboro;*/
     background-color: transparent;
     border-bottom-color:black;
   }
@@ -558,6 +557,36 @@ button:disabled {
 
   .row {
     padding:14px 0;
+  }
+
+  button.normalButton {
+    outline:none;
+  }
+
+  button.normalButton:hover, #answerOptionWrapper button:hover {
+    background-color:#e0e0e0;
+  }
+
+  button.normalButton:active, button.normalButton:focus,
+  #answerOptionWrapper button:active, #answerOptionWrapper button:focus {
+    background-color:#d0d0d0;
+  }
+
+  #answerOptionWrapper button, #answerOptionWrapper button.shouldbesuccess {
+    outline:none;
+  }
+
+  #answerOptionWrapper button.success:hover {
+    background-color:#1B5E20;
+  }
+
+  button.primaryButton {
+    background-color: #f0f0f0;
+    color:#03A9F4;
+  }
+
+  #answerOptionWrapper button.wrong:hover {
+    background-color:#DD2C00;
   }
   
 }

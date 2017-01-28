@@ -20,6 +20,11 @@ ul.listView li {
   padding-bottom:14px;
 }
 
+ul.listView li:after {
+  content: "__________";
+  opacity:.1;
+}
+
 #navbarTitle {
   display:none;
 }

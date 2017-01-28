@@ -1,5 +1,11 @@
 <!doctype html>
-<html manifest="manifest.appcache">
+<script>
+if (location.host == "localhost") {
+  document.write('<html>');
+} else {
+  document.write('<html manifest="manifest.appcache">');
+}
+</script>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">

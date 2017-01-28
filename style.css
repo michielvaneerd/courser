@@ -25,6 +25,12 @@ a, button {
   touch-action: manipulation;
 }
 
+
+button::-moz-focus-inner {
+  padding: 0;
+  border: 0
+}
+
 #navbar {
   height:56px;
   background-color:#03A9F4;
@@ -182,10 +188,6 @@ button.progressCloseButton {
 button.primaryButton {
   background: #03A9F4;
   color: #FFFFFF;
-}
-
-.buttonbar {
-  
 }
 
 .buttonbar-3 button {
@@ -553,10 +555,6 @@ button:disabled {
 
   ul.listView li a:active {
     background-color: gainsboro;
-  }
-
-  input[type='text'], input[type='number'] {
-    border-bottom-color: gainsboro;
   }
 
   ul.listView li a {

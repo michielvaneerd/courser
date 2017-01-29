@@ -1,11 +1,5 @@
-<!doctype html>
-<script>
-if (location.host == "localhost") {
-  document.write('<html>');
-} else {
-  document.write('<html manifest="manifest.appcache">');
-}
-</script>
+<!DOCTYPE html>
+<html manifest="manifest.appcache">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -40,11 +34,15 @@ if (window.location.host == host && window.location.protocol != "https:") {
   window.location.protocol = "https:"
 }
 
-var COURSER_VERSION = "0.31";
+var COURSER_VERSION = "0.32";
 var STANDALONE = window.matchMedia('(display-mode: standalone)').matches
   || window.navigator.standalone;
 if (typeof Promise === "undefined") {
   document.write('<script src="dist/bluebird.min.js"><\/script>');
+}
+if (typeof TextEncoder === "undefined") {
+  console.log("JAJAJAJ");
+  document.write('<script src="dist/encoding.js"><\/script>');
 }
 </script>
 <script src="dist/dropbox.js"></script>

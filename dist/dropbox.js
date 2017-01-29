@@ -36,8 +36,9 @@
   };
   
   // Private static methods
-  function get_url(endpoint, options) {
+  Dropbox.prototype.get_url = function(endpoint, options) {
     options = options || {};
+    options.parameters = options.parameters || {};
     //subdomain, endpoint, parameters, domain, version
     var url = apiProtocol
       + "://"
@@ -49,12 +50,20 @@
     if (endpoint) {
       url += endpoint;
     }
-    if (options.parameters) {
-      var pars = Object.keys(options.parameters).map(function(par) {
-        return par + "=" + encodeURIComponent(options.parameters[par])
-      });
-      url += "?" + pars.join("&");
+
+    if (!options.noAccessToken) {
+      options.parameters.reject_cors_preflight = "true";
+      if (this.accessToken) {
+        options.parameters.authorization = "Bearer " + this.accessToken;
+      }
     }
+
+    var pars = Object.keys(options.parameters).map(function(par) {
+      return par + "=" + encodeURIComponent(options.parameters[par])
+    });
+    
+    url += "?" + pars.join("&");
+    
     return url;
   }
 
@@ -126,28 +135,35 @@
       };
       xhr.open(options.method || "POST", url);
       xhr.timeout = 10000; // 10 seconds
-      // It is tempting to use responseType "json", but then errors won't
-      // be visible, as they are plain text response body.
-      //xhr.responseType = (typeof options.responseType !== "undefined")
-      //  ? options.responseType : "json";
-      if (me.accessToken) {
-        xhr.setRequestHeader("Authorization",
-          "Bearer " + me.accessToken);
-      }
       Object.keys(headers).forEach(function(h) {
         xhr.setRequestHeader(h, headers[h]);
       });
-      if (!("Content-Type" in headers)) {
-        xhr.setRequestHeader("Content-Type", "application/json");
+      var body = null;
+      if (!("Content-Type" in headers) && !options.suppressContentType) {
+        xhr.setRequestHeader("Content-Type", "text/plain; charset=dropbox-cors-hack");
+        if (options.body) {
+          // Need to explicitly encode to utf-8 binary blob,
+          // otherwise the browser overwrites the content type...
+          // http://stackoverflow.com/questions/33902289/using-dropbox-v2-api-from-browser
+          // Polyfill: https://github.com/inexorabletash/text-encoding (for IE, Safari)
+          body = new TextEncoder("utf-8").encode(options.body);
+        } else {
+          body = new TextEncoder("utf-8").encode(null);
+        }
+      } else {
+        if (options.body) {
+          body = options.body;
+        }
       }
-      xhr.send(options.body || null);
+      
+      xhr.send(body);
     });
   };
 
   // https://www.dropbox.com/developers/documentation/http/documentation#authorization
   // Right now we only support implicit flow (used by client side)
   Dropbox.prototype.authorize = function() {
-    win.location.assign(get_url("/oauth2/authorize", {
+    win.location.assign(this.get_url("/oauth2/authorize", {
       subdomain : "www",
       parameters : {
         "client_id" : this.appKey,
@@ -156,6 +172,7 @@
         "redirect_uri" : win.location.origin + win.location.pathname,
         "state" : "123"
       },
+      noAccessToken : true,
       domain : "dropbox.com",
       version : 1
     }));
@@ -188,71 +205,68 @@
   };
 
   Dropbox.prototype.getCurrentAccount = function() {
-    return this.request(get_url("/users/get_current_account"), {
-      headers : {
-        // Prevent default application/json
-        "Content-Type" : ""
-      }
-    });
+    return this.request(this.get_url("/users/get_current_account"));
   };
   
   Dropbox.prototype.getAccount = function(accountId) {
-    return this.request(get_url("/users/get_account"), {
+    return this.request(this.get_url("/users/get_account"), {
       body : JSON.stringify({account_id : accountId})
     });
   };
   
   Dropbox.prototype.upload = function(path, content) {
-    return this.request(get_url("/files/upload", {
-      subdomain : "content"
-    }), {
-      body : content,
-      headers : {
-        "Content-Type" : "application/octet-stream",
-        "Dropbox-API-Arg" : JSON.stringify({
+    return this.request(this.get_url("/files/upload", {
+      subdomain : "content",
+      parameters : {
+        arg :  JSON.stringify({
           path : path,
           mode : "overwrite"
         })
+      }
+    }), {
+      body : content,
+      headers : {
+        
       }
     });
   };
   
   // https://www.dropbox.com/developers/documentation/http/documentation#files-list_folder
   Dropbox.prototype.listFolder = function(path) {
-    return this.request(get_url("/files/list_folder"), {
+    return this.request(this.get_url("/files/list_folder"), {
       body : JSON.stringify({"path" : path})
     });
   };
   
   // https://www.dropbox.com/developers/documentation/http/documentation#files-list_folder-continue
   Dropbox.prototype.listFolderContinue = function(cursor) {
-    return this.request(get_url("/files/list_folder/continue"), {
+    return this.request(this.get_url("/files/list_folder/continue"), {
       body : JSON.stringify({"cursor" : cursor})
     });
   };
   
   Dropbox.prototype.download = function(path) {
-    return this.request(get_url("/files/download", {
-      subdomain : "content"
-    }), {
-      responseType : "text",
-      headers : {
-        "Content-Type" : "",
-        "Dropbox-API-Arg" : JSON.stringify({
+    return this.request(this.get_url("/files/download", {
+      subdomain : "content",
+      parameters : {
+        arg : JSON.stringify({
           "path" : path
         })
       }
+    }), {
+      responseType : "text",
+      suppressContentType: true
     });
   };
   
   Dropbox.prototype.delete = function(path) {
-    return this.request(get_url("/files/delete"), {
+    return this.request(this.get_url("/files/delete"), {
       body : JSON.stringify({"path" : path})
     });
   };
   
   Dropbox.prototype.listSharedLinks = function(path) {
-    return this.request(get_url("/sharing/list_shared_links"), {
+    return this.request(this.get_url("/sharing/list_shared_links"), {
       body : JSON.stringify({
         "path" : path,
         "direct_only" : true
@@ -261,22 +275,22 @@
   }
   
   Dropbox.prototype.createSharedLink = function(path) {
-    return this.request(get_url("/sharing/create_shared_link_with_settings"), {
+    return this.request(this.get_url("/sharing/create_shared_link_with_settings"), {
       body : JSON.stringify({"path" : path})
     });
   };
   
   Dropbox.prototype.getSharedLinkFile = function(url) {
-    return this.request(get_url("/sharing/get_shared_link_file", {
-      subdomain : "content"
-    }), {
-      responseType : "text",
-      headers : {
-        "Content-Type" : "",
-        "Dropbox-API-Arg" : JSON.stringify({
+    return this.request(this.get_url("/sharing/get_shared_link_file", {
+      subdomain : "content",
+      parameters : {
+        arg : JSON.stringify({
           "url" : url
         })
       }
+    }), {
+      responseType : "text",
+      suppressContentType: true
     });
   };
 

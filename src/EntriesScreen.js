@@ -17,6 +17,11 @@
     attempt_failure : 0
   };
 
+  var getScrollElement = function() {
+    return DESKTOP_LAYOUT
+        ? win.document.body : win.document.getElementById("main");
+  };
+
   win.EntriesScreen = React.createClass({
     getInitialState : function() {
       scrollTop = 0;
@@ -31,7 +36,7 @@
       if (scrollTop) {
         var t = setTimeout(function() {
           clearTimeout(t);
-          win.document.getElementById("main").scrollTop = scrollTop;
+          getScrollElement().scrollTop = scrollTop;
         }, 300);
       }
     },
@@ -67,7 +72,7 @@
       });
     },
     selectEntry : function(id) {
-      scrollTop = win.document.getElementById("main").scrollTop;
+      scrollTop = getScrollElement().scrollTop;
       this.props.store.dispatch({
         type : "SELECT_ENTRY",
         value : id
@@ -173,7 +178,7 @@
       });
     },
     onCreateEntry : function() {
-      scrollTop = win.document.getElementById("main").scrollTop;
+      scrollTop = getScrollElement().scrollTop;
       this.setState(Object.assign({}, emptyEntry, invalidity, {showCreate : true}));
     },
     render : function() {

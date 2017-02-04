@@ -34,6 +34,8 @@ if (window.location.host == host && window.location.protocol != "https:") {
   window.location.protocol = "https:"
 }
 
+var DESKTOP_LAYOUT = window.matchMedia('(min-width: 768px)').matches;
+
 var COURSER_VERSION = "0.32";
 var STANDALONE = window.matchMedia('(display-mode: standalone)').matches
   || window.navigator.standalone;
@@ -41,7 +43,6 @@ if (typeof Promise === "undefined") {
   document.write('<script src="dist/bluebird.min.js"><\/script>');
 }
 if (typeof TextEncoder === "undefined") {
-  console.log("JAJAJAJ");
   document.write('<script src="dist/encoding.js"><\/script>');
 }
 </script>
